@@ -17,7 +17,7 @@ public class CheckBuildFile extends BukkitRunnable {
         if (exists) {
             System.out.println("[GeyserUpdater] New update is available! Server needs to be restarted before the updated build loads!");
         } else if (notExists) {
-            System.out.println("[GeyserUpdater] No new update is available in the update folder! ");
+            System.out.println("[GeyserUpdater] No updated build is present in the update folder ");
         } else {
             System.out.println("[GeyserUpdater] Oops something went wrong in the Build folder in the Geyser-Updater!");
         }
