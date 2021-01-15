@@ -3,7 +3,7 @@
 
 ###################################################################################################
 #  NOTICE!!! If you use the auto updating it will always download the latest build from jenkins!  #
-#  you will need to restart server before the updating takes place!                           #
+#  you will need to restart server before the updating takes place!                               #
 #  If anything breaks due to this plugin we are not responsible!                                  #
 #  Auto updater will update each 24H since the server has been started.                           #
 ###################################################################################################

@@ -1,6 +1,6 @@
 package com.geyserupdater.spigot.Util;
 
-import com.geyserupdater.spigot.Me.SpigotUpdater;
+import com.geyserupdater.spigot.SpigotUpdater;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.geysermc.connector.utils.FileUtils;
 import org.geysermc.connector.utils.WebUtils;

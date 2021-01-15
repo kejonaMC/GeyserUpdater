@@ -1,4 +1,4 @@
-package com.geyserupdater.spigot.Command;
+package com.geyserupdater.spigot.command;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -21,7 +21,7 @@ public class GeyserCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            player.hasPermission("gasupdater.geyserupdate");
+            player.hasPermission("gupdater.geyserupdate");
             {
                 if (command.getName().equalsIgnoreCase("geyserupdate")) {
                     sender.sendMessage(ChatColor.GOLD + "[Geyser-Spigot-Updater] Checking current Geyser version!");

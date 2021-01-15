@@ -1,5 +1,5 @@
 name: Geyser-Spigot-Updater
-main: com.geyserupdater.spigot.Me.SpigotUpdater
+main: com.geyserupdater.spigot.SpigotUpdater
 version: 0.2.1
 api-version: 1.15
 depend: [Geyser-Spigot]
@@ -8,5 +8,5 @@ description: Geyser Auto Updating Plugin Addon.
 commands:
   geyserupdate:
     description: updating Geyser command
-    permission: geyserupdater.geyserupdate
+    permission: gupdater.geyserupdate
     aliases: /geyserupdate

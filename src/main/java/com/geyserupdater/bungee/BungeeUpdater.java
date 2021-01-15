@@ -16,9 +16,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
-public final class Gabu extends Plugin {
+public final class BungeeUpdater extends Plugin {
 
-    public static Gabu plugin;
+    public static BungeeUpdater plugin;
     public static Configuration configuration;
 
     @Override

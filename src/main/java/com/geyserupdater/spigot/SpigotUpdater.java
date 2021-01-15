@@ -1,6 +1,6 @@
-package com.geyserupdater.spigot.Me;
+package com.geyserupdater.spigot;
 
-import com.geyserupdater.spigot.Command.GeyserCommand;
+import com.geyserupdater.spigot.command.GeyserCommand;
 import com.geyserupdater.spigot.Util.AutoUpdateGeyser;
 import com.geyserupdater.common.Util.CheckBuildFile;
 

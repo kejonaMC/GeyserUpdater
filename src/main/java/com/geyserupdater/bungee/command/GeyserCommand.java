@@ -7,7 +7,7 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class GeyserCommand extends Command {
     public GeyserCommand() {
-        super("geyserupdate","gabu.geyserupdate");
+        super("geyserupdate","gupdater.geyserupdate");
     }
 
     public void execute(CommandSender commandSender, String[] args) {
