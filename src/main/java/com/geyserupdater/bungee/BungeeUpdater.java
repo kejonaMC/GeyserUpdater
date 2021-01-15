@@ -11,9 +11,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.concurrent.TimeUnit;
 
 public final class BungeeUpdater extends Plugin {
@@ -35,16 +33,19 @@ public final class BungeeUpdater extends Plugin {
     public void onDisable() {
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         System.out.println("[GeyserUpdater] Checking if updated build is present!");
-        Path fileToMove = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
-        Path targetFile = Paths.get("plugins/Geyser-BungeeCord.jar");
-        try {
-            Files.move(fileToMove, targetFile);
-        } catch (IOException e) {
-            System.out.println("[GeyserUpdater] No updates were found.");
-        }
-        System.out.println("[GeyserUpdater] Is now being shutdown.");
-    }
+        Path sourcePath = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
+        Path destinationPath = Paths.get("plugins");
 
+        try {
+            Files.copy(sourcePath, destinationPath,
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (FileAlreadyExistsException e) {
+            //destination file already exists
+        } catch (IOException e) {
+            //something else went wrong
+            e.printStackTrace();
+        }
+    }
     public void onConfig() {
         try {
             configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(Config.startConfig(this, "config.yml"));
