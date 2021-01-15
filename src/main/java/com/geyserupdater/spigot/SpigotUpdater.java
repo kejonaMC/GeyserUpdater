@@ -24,7 +24,7 @@ public class SpigotUpdater extends JavaPlugin {
         createFiles();
         plugin = this;
         // If true start auto updating
-        if (getConfig().getBoolean("EnableGeyserAutoUpdating")) {
+        if (getConfig().getBoolean("EnableAutoUpdateGeyser")) {
             AutoUpdate = new AutoUpdateGeyser(this);
             AutoUpdate.runTaskTimer(this, 0, 1728000);
         }
