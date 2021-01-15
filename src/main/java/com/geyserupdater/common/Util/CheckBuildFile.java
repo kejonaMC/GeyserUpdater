@@ -15,11 +15,11 @@ public class CheckBuildFile extends BukkitRunnable {
         boolean notExists = Files.notExists(p);
 
         if (exists) {
-            System.out.println("[Geyser-Spigot-Updater] New update is available! Server needs to be restarted before the updated build loads!");
+            System.out.println("[GeyserUpdater] New update is available! Server needs to be restarted before the updated build loads!");
         } else if (notExists) {
-            System.out.println("[Geyser-Spigot-Updater] No new update is available! ");
+            System.out.println("[GeyserUpdater] No new update is available! ");
         } else {
-            System.out.println("[Geyser-Spigot-Updater] Oops something went wrong in the Build folder in the Geyser-Updater!");
+            System.out.println("[GeyserUpdater] Oops something went wrong in the Build folder in the Geyser-Updater!");
         }
     }
 }

@@ -17,7 +17,7 @@ public class AutoUpdateGeyser extends BukkitRunnable {
 
     @Override
     public void run() {
-        System.out.println("[Geyser-Spigot-Updater] Checking current Geyser version!");
+        System.out.println("[GeyserUpdater] Checking current Geyser version!");
         try {
             Properties gitProp = new Properties();
             gitProp.load(FileUtils.getResource("git.properties"));
@@ -27,9 +27,9 @@ public class AutoUpdateGeyser extends BukkitRunnable {
                 int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
                 // Compare build numbers.
                 if (latestBuildNum == buildNum) {
-                    System.out.println("[Geyser-Spigot-Updater] Geyser is already on the latest build!");
+                    System.out.println("[GeyserUpdater] Geyser is already on the latest build!");
                 } else {
-                    System.out.println("[Geyser-Spigot-Updater] Geyser build is outdated. now downloading latest build!");
+                    System.out.println("[GeyserUpdater] Geyser build is outdated. now downloading latest build!");
                     try {
                         // Download build
                         OutputStream os = null;
@@ -70,7 +70,7 @@ public class AutoUpdateGeyser extends BukkitRunnable {
                                 }
                             }
                         }
-                        System.out.println("[Geyser-Spigot-Updater] Geyser has been updated! Changes will take place once server has been restarted!");
+                        System.out.println("[GeyserUpdater] Geyser has been updated! Changes will take place once server has been restarted!");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

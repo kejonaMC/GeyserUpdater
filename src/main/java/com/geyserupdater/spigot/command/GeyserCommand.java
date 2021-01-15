@@ -24,7 +24,7 @@ public class GeyserCommand implements CommandExecutor {
             player.hasPermission("gupdater.geyserupdate");
             {
                 if (command.getName().equalsIgnoreCase("geyserupdate")) {
-                    sender.sendMessage(ChatColor.GOLD + "[Geyser-Spigot-Updater] Checking current Geyser version!");
+                    sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] Checking current Geyser version!");
                     try {
                         Properties gitProp = new Properties();
                         gitProp.load(FileUtils.getResource("git.properties"));
@@ -35,9 +35,9 @@ public class GeyserCommand implements CommandExecutor {
                             int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
                             // Compare build numbers.
                             if (latestBuildNum == buildNum) {
-                                sender.sendMessage(ChatColor.GREEN + "[Geyser-Spigot-Updater] Geyser is on the latest build!");
+                                sender.sendMessage("[GeyserUpdater] Geyser is on the latest build!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "[Geyser-Spigot-Updater] Geyser build is outdated. now downloading latest build!");
+                                sender.sendMessage("[GeyserUpdater] Geyser build is outdated. now downloading latest build!");
                                 // Download Build
                                 OutputStream os = null;
                                 InputStream is = null;
@@ -77,7 +77,7 @@ public class GeyserCommand implements CommandExecutor {
                                         }
                                     }
                                 }
-                                sender.sendMessage(ChatColor.GREEN + "[Geyser-Spigot-Updater] Geyser has been updated! Changes will take place once the server has been restarted!");
+                                sender.sendMessage("[GeyserUpdater] Geyser has been updated! Changes will take place once the server has been restarted!");
                             }
                         }
                     } catch (UnsupportedEncodingException e) {

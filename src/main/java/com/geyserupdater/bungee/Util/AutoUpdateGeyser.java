@@ -18,7 +18,7 @@ import java.util.Properties;
 
 public class AutoUpdateGeyser {
     public static void checkUpdate(CommandSender sender) {
-        sender.sendMessage(new TextComponent(ChatColor.GOLD + "[Geyser-Updater] Checking current Geyser version"));
+        sender.sendMessage(new TextComponent("[GeyserUpdater] Checking current Geyser version"));
         try {
             Properties gitProp = new Properties();
             gitProp.load(FileUtils.getResource("git.properties"));
@@ -28,14 +28,14 @@ public class AutoUpdateGeyser {
                 int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
                 // Compare build numbers.
                 if (latestBuildNum == buildNum) {
-                    sender.sendMessage(new TextComponent(ChatColor.GREEN + "[Geyser-BungeeCord-Updater] Geyser is on the latest build!"));
+                    sender.sendMessage(new TextComponent("[GeyserUpdater] Geyser is on the latest build!"));
                 } else {
-                    sender.sendMessage(new TextComponent(ChatColor.RED + "[Geyser-BungeeCord-Updater] Geyser build is outdated. Geyser is now downloading latest build!"));
+                    sender.sendMessage(new TextComponent("[GeyserUpdater] Geyser build is outdated. Geyser is now downloading latest build!"));
                     try {
                         OutputStream os = null;
                         InputStream is = null;
                         String fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar";
-                        String outputPath = ("plugins/Geyser-BungeeCord-Updater/BuildUpdate/Geyser-BungeeCord.jar");
+                        String outputPath = ("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
                         try {
                             // create a url object
                             URL url = new URL(fileUrl);
@@ -75,7 +75,7 @@ public class AutoUpdateGeyser {
                                 }
                             }
 
-                            sender.sendMessage(new TextComponent(ChatColor.GREEN + "[Geyser-BungeeCord-Updater] Geyser has been updated. Changes take place once the server has been restarted!"));
+                            sender.sendMessage(new TextComponent("[GeyserUpdater] Geyser has been updated. Changes take place once the server has been restarted!"));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -88,16 +88,16 @@ public class AutoUpdateGeyser {
     }
 
     public static void checkFile() {
-        Path p = Paths.get("plugins/Geyser-BungeeCord-Updater/BuildUpdate/Geyser-BungeeCord.jar");
+        Path p = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         boolean exists = Files.exists(p);
         boolean notExists = Files.notExists(p);
 
         if (exists) {
-            System.out.println("[Geyser-BungeeCord-Updater] New update is available! Bungeecord needs to be restarted before the updated build loads!");
+            System.out.println(new TextComponent("[GeyserUpdater] New update is available! BungeeCord needs to be restarted before the updated build loads!"));
         } else if (notExists) {
-            System.out.println("[Geyser-BungeeCord-Updater] There is no updated build yet in the Geyser-Updater folder! this can happen because you are already on the latest build, if not you can download it with the geyserupdate command or if you have enabled auto updating you will need to wait! ");
+            System.out.println(new TextComponent("[GeyserUpdater] There is no updated build yet in the Geyser-Updater folder! this can happen because you are already on the latest build, if not you can download it with the geyserupdate command or if you have enabled auto updating you will need to wait! "));
         } else {
-            System.out.println("[Geyser-BungeeCord-Updater] Oops something went wrong in the Build folder in the Geyser-Updater!");
+            System.out.println(new TextComponent("[GeyserUpdater] Oops something went wrong in the Build folder in the Geyser-Updater!"));
         }
     }
 }

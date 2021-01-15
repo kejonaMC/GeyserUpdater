@@ -1,5 +1,5 @@
-name: Geyser-BungeeCord-Updater
+name: GeyserUpdater
 main: com.geyserupdater.bungee.BungeeUpdater
-version: 0.2.1
-author: AlysaaKobe"Jens"
+version: 0.2.2
+author: Jens
 depends: ["Geyser-BungeeCord"]

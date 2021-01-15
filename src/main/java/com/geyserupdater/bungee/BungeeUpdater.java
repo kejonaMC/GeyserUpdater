@@ -34,15 +34,15 @@ public final class BungeeUpdater extends Plugin {
 
     public void onDisable() {
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
-        System.out.println("[Geyser-BungeeCord-Updater] Checking if updated build is present!");
-        Path fileToMove = Paths.get("plugins/Geyser-BungeeCord-Updater/BuildUpdate/Geyser-BungeeCord.jar");
+        System.out.println("[GeyserUpdater] Checking if updated build is present!");
+        Path fileToMove = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         Path targetFile = Paths.get("plugins/Geyser-BungeeCord.jar");
         try {
             Files.move(fileToMove, targetFile);
         } catch (IOException e) {
-            System.out.println("[Geyser-BungeeCord-Updater] No updates were found.");
+            System.out.println("[GeyserUpdater] No updates were found.");
         }
-        System.out.println("[Geyser-BungeeCord-Updater] Is now being shutdown.");
+        System.out.println("[GeyserUpdater] Is now being shutdown.");
     }
 
     public void onConfig() {
@@ -54,7 +54,7 @@ public final class BungeeUpdater extends Plugin {
     }
 
     public void createUpdateFolder() {
-        File thedir = new File("plugins/Geyser-BungeeCord-Updater/BuildUpdate");
+        File thedir = new File("plugins/GeyserUpdater/BuildUpdate");
         if (!thedir.exists()) {
             try {
                 thedir.mkdirs();
