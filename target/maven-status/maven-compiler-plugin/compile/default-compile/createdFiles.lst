@@ -1,4 +1,8 @@
-src\com\Alysaa\Command\GeyserCommand.class
-src\com\Alysaa\Util\CheckBuildFile.class
-src\com\Alysaa\Me\Gasu.class
-src\com\Alysaa\Util\AutoUpdateGeyser.class
+com\geyserupdater\bungee\Util\AutoUpdateGeyser.class
+com\geyserupdater\spigot\Command\GeyserCommand.class
+com\geyserupdater\bungee\command\GeyserCommand.class
+com\geyserupdater\common\Util\CheckBuildFile.class
+com\geyserupdater\spigot\Me\SpigotUpdater.class
+com\geyserupdater\bungee\Util\Config.class
+com\geyserupdater\spigot\Util\AutoUpdateGeyser.class
+com\geyserupdater\bungee\Gabu.class
