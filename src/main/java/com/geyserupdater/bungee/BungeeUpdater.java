@@ -34,7 +34,7 @@ public final class BungeeUpdater extends Plugin {
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         System.out.println("[GeyserUpdater] Checking if updated build is present!");
         Path sourcePath = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
-        Path destinationPath = Paths.get("plugins");
+        Path destinationPath = Paths.get("plugins/Geyser-BungeeCord.jar");
 
         try {
             Files.copy(sourcePath, destinationPath,
