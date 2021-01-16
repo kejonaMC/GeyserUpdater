@@ -1,4 +1,4 @@
-package com.geyserupdater.bungee.Util;
+package com.alysaa.geyserupdater.bungee.util;
 
 import net.md_5.bungee.api.plugin.Plugin;
 

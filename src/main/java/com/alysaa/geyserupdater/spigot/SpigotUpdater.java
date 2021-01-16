@@ -1,8 +1,8 @@
-package com.geyserupdater.spigot;
+package com.alysaa.geyserupdater.spigot;
 
-import com.geyserupdater.spigot.command.GeyserCommand;
-import com.geyserupdater.spigot.Util.AutoUpdateGeyser;
-import com.geyserupdater.common.Util.CheckBuildFile;
+import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
+import com.alysaa.geyserupdater.spigot.util.AutoUpdateGeyser;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,8 +14,9 @@ import java.io.IOException;
 
 public class SpigotUpdater extends JavaPlugin {
     public static SpigotUpdater plugin;
-    AutoUpdateGeyser AutoUpdate;
-    CheckBuildFile CheckFile;
+    private AutoUpdateGeyser AutoUpdate;
+    private CheckBuildFile CheckFile;
+    private FileConfiguration config;
 
     @Override
     public void onEnable() {
@@ -36,25 +37,24 @@ public class SpigotUpdater extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Plugin has been disabled");
     }
-    private File configf;
-    private FileConfiguration config;
+
     private void createFiles() {
-        configf = new File(getDataFolder(), "config.yml");
-        if (!configf.exists()) {
-            configf.getParentFile().mkdirs();
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            configFile.getParentFile().mkdirs();
             saveResource("config.yml", false);
         }
         config = new YamlConfiguration();
         try {
-            config.load(configf);
+            config.load(configFile);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
-        File thedir = new File("plugins/update");
-        if (!thedir.exists()) {
+        File updateDir = new File("plugins/update");
+        if (!updateDir.exists()) {
             try {
-                thedir.mkdirs();
-            } catch (Exception e) {
+                updateDir.mkdirs();
+            } catch (Exception ignored) {
             }
         }
     }

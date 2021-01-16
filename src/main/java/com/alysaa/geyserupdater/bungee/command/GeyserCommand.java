@@ -1,6 +1,6 @@
-package com.geyserupdater.bungee.command;
+package com.alysaa.geyserupdater.bungee.command;
 
-import com.geyserupdater.bungee.Util.AutoUpdateGeyser;
+import com.alysaa.geyserupdater.bungee.util.AutoUpdateGeyser;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;

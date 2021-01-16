@@ -1,4 +1,4 @@
-package com.geyserupdater.common.Util;
+package com.alysaa.geyserupdater.common.util;
 
 import org.bukkit.scheduler.BukkitRunnable;
 

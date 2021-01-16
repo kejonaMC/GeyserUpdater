@@ -8,5 +8,4 @@
 #  Auto updater will update each 24H since the server has been started.                           #
 ###################################################################################################
 
-
 EnableAutoUpdateGeyser: false
