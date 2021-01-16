@@ -35,6 +35,7 @@ public final class BungeeUpdater extends Plugin {
     }
 
     public void onDisable() {
+        getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         try {
             this.MoveGeyser();
         } catch (IOException e) {
