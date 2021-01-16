@@ -35,50 +35,32 @@ public final class BungeeUpdater extends Plugin {
 
     public void onDisable() {
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
-        System.out.println("[GeyserUpdater] Checking if updated build is present!");
-        File fileToCopy = new File("/tmp/frontbackend.txt");
-        FileInputStream input = null;
         try {
-            input = new FileInputStream(fileToCopy);
+            this.MoveGeyser();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-
-        File newFile = new File("/tmp/frontbackend.copy.txt");
-        FileOutputStream output = null;
-        try {
-            output = new FileOutputStream(newFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        byte[] buf = new byte[1024];
-        int bytesRead = 8000;
-
-        while (true) {
-            try {
-                if (!((bytesRead = input.read(buf)) > 0)) break;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                output.write(buf, 0, bytesRead);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            input.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            output.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public void MoveGeyser() throws IOException {
+            File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
+            FileInputStream input = new FileInputStream(fileToCopy);
+
+            File newFile = new File("plugins/Geyser-BungeeCord.jar");
+            FileOutputStream output = new FileOutputStream(newFile);
+
+            byte[] buf = new byte[1024];
+            int bytesRead;
+
+            while ((bytesRead = input.read(buf)) > 0) {
+                output.write(buf, 0, bytesRead);
+            }
+
+            input.close();
+            output.close();
+        }
 
     public void onConfig() {
         try {
