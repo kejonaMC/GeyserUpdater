@@ -39,14 +39,12 @@ public final class BungeeUpdater extends Plugin {
         try {
             this.MoveGeyser();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.print("[GeyserUpdater] No updates are being implemented.");
         }
         try {
             this.DeleteBuild();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) { }
         }
-    }
 
     public void onConfig() {
         try {
