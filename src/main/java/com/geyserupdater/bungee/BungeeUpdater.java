@@ -11,8 +11,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 import org.geysermc.connector.utils.LanguageUtils;
 
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,15 +24,6 @@ public final class BungeeUpdater extends Plugin {
 
     @Override
     public void onEnable() {
-        System.out.println("[GeyserUpdater] Checking if updated build is present!");
-        Path fileToMove = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
-        Path targetFile = Paths.get("plugins/Geyser-BungeeCord.jar");
-        try {
-            Files.move(fileToMove, targetFile);
-        } catch (IOException e) {
-            System.out.println("[GeyserUpdater] No updates were found.");
-        }
-        System.out.println("[GeyserUpdater] Is now being shutdown.");
         plugin = this;
         getLogger().info("has loaded!");
         this.getProxy().getPluginManager().registerCommand(this, new com.geyserupdater.bungee.command.GeyserCommand());
@@ -45,6 +35,49 @@ public final class BungeeUpdater extends Plugin {
 
     public void onDisable() {
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
+        System.out.println("[GeyserUpdater] Checking if updated build is present!");
+        File fileToCopy = new File("/tmp/frontbackend.txt");
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream(fileToCopy);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        File newFile = new File("/tmp/frontbackend.copy.txt");
+        FileOutputStream output = null;
+        try {
+            output = new FileOutputStream(newFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        byte[] buf = new byte[1024];
+        int bytesRead = 8000;
+
+        while (true) {
+            try {
+                if (!((bytesRead = input.read(buf)) > 0)) break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                output.write(buf, 0, bytesRead);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onConfig() {
