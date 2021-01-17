@@ -1,5 +1,5 @@
 name: GeyserUpdater
-main: com.geyserupdater.spigot.SpigotUpdater
+main: com.alysaa.geyserupdater.spigot.SpigotUpdater
 version: 0.2.2
 api-version: 1.15
 depend: [Geyser-Spigot]
