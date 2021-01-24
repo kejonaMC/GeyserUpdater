@@ -5,6 +5,9 @@
 This plugin allows you to update geyser without much effort.
 Update Geyser with Command or you can set an Auto Update.
 
+## Downloading
+
+To download you can either go to the actions button in the github bar and download a zip with a jar inside or go to releases on the right of your screen and download the jar there.
 
 ## Installation
 
