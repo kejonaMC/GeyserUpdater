@@ -8,15 +8,12 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        stage('Deploy') {
-             when {
-                expression {
-                  currentBuild.result == null || currentBuild.result == 'SUCCESS'
-                }
-             }
-             steps {
-                  sh "mvn clean deploy"
-             }
+        stage('Post') {
+                 post {
+                     success {
+                         archiveArtifacts 'target/GeyserUpdater-1.0-SNAPSHOT.jar'
+                     }
+                 }
         }
     }
 }
