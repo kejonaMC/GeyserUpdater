@@ -9,12 +9,11 @@ pipeline {
             }
         }
         stage('Post') {
-                    steps {
-                         success {
-                               archiveArtifacts 'target/GeyserUpdater-1.0-SNAPSHOT.jar'
-                                 }
+            steps {
+                archiveArtifacts 'target/GeyserUpdater-1.0-SNAPSHOT.jar'
+                  }
 
-                          }
-                       }
-            }
+                }
+
+        }
 }
