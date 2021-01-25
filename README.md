@@ -33,12 +33,13 @@ You can set Auto-Updating on true in the config.yml.
 
 ## Usage
 
-After you ran the command or enabled auto updating, it will check the current running geyser version. if its outdated it will automatic download the latest Geyser Build!
+After you ran the command or enabled auto updating, it will check the current running Geyser version. If it's outdated it will automatic download the latest Geyser build!
 Changes will only take place once the server has been restarted.
 
 ## Restart/reload
 
 Please do not use the /reload command. this can cause errors on the Geyser part, and most likely will break your server.
+
 
 
 ## Release History
