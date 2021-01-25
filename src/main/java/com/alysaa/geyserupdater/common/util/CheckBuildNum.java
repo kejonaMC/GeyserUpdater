@@ -51,7 +51,6 @@ public class CheckBuildNum {
             }
         }
     }
-
     public static void CheckBuildNumberSpigotAuto() throws IOException {
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
@@ -76,7 +75,6 @@ public class CheckBuildNum {
             }
         }
     }
-
     public static void CheckBuildNumberBungeeAuto() throws IOException {
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
@@ -101,7 +99,6 @@ public class CheckBuildNum {
             }
         }
     }
-
     public static void CheckBuildNumberBungee() throws IOException {
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
