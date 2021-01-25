@@ -15,7 +15,7 @@ pipeline {
                 }
              }
              steps {
-                  sh './deploy production'
+                  sh "mvn clean deploy"
              }
         }
     }
