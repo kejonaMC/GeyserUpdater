@@ -1,17 +1,15 @@
 pipeline {
     agent any
+    tools {
+       maven 'Maven 3'
+       jdk 'Java 8'
+       }
 
     stages {
-            stage ("Clone") {
-                steps {
-                    git url: "https://github.com/YHDiamond/GeyserUpdater"
-                    }
-                }
-            }
-            stage ("Build") {
-                steps {
-                    sh "mvn clean install"
-                }
+        stage('Build') {
+            steps {
+                echo 'Building..'
+                sh 'mvn clean package'
             }
         }
     }
