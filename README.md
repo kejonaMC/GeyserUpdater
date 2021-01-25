@@ -2,16 +2,16 @@
 > Updating Geyser with ease.
 
 
-This plugin allows you to update geyser without much effort.
+This plugin allows you to update Geyser without much effort.
 Update Geyser with Command or you can set an Auto Update.
 
 ## Downloading
 
-To download you can either go to the actions button in the github bar and download a zip with a jar inside or go to releases on the right of your screen and download the jar there.
+To download you can either go to https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/ or the actions button in the GitHub bar and download a zip with a jar inside.
 
 ## Installation
 
-GeyserUpdater can be installed on Spigot & Bungeecord. Place the updater in the plugins folder and restart the server.
+GeyserUpdater can be installed on Spigot & Bungeecord. Place the GeyserUpdater plugin file in the plugins folder and restart the server.
 
 
 Permissions:
@@ -38,7 +38,7 @@ Changes will only take place once the server has been restarted.
 
 ## Restart/reload
 
-Please do not use the Reload command. this can cause errors on the geyser part. and most likely will break your server.
+Please do not use the /reload command. this can cause errors on the Geyser part, and most likely will break your server.
 
 
 ## Release History
