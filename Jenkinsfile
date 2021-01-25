@@ -14,9 +14,7 @@ pipeline {
                        success {
                          archiveArtifacts 'target/GeyserUpdater-1.0-SNAPSHOT.jar'
                                 }
-                         }
+                            }
                        }
                     }
-                }
-        }
 }
