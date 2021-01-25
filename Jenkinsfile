@@ -10,9 +10,9 @@ pipeline {
         }
         stage('Post') {
                     steps {
-                        post {
-                           success {
-                                 archiveArtifacts 'target/GeyserUpdater-1.0-SNAPSHOT.jar'
+                        publishers {
+                                 success {
+                                        archiveArtifacts 'target/GeyserUpdater-1.0-SNAPSHOT.jar'
                                     }
                              }
                           }
