@@ -15,7 +15,7 @@ pipeline {
                 }
              }
              steps {
-                  sh 'make publish'
+                  sh './deploy production'
              }
         }
     }
