@@ -2,7 +2,6 @@ package com.alysaa.geyserupdater.bungee;
 
 import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
-
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import net.md_5.bungee.api.ProxyServer;
@@ -10,7 +9,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,11 +19,9 @@ public final class BungeeUpdater extends Plugin {
 
     public static BungeeUpdater plugin;
     public static Configuration configuration;
-
     public static ProxyServer getInstance() {
         return null;
     }
-
     @Override
     public void onEnable() {
         getLogger().info("| GeyserUpdater   V 0.2.2 By Jens |");
@@ -52,8 +48,6 @@ public final class BungeeUpdater extends Plugin {
             this.deleteBuild();
         } catch (Exception ignored) { }
     }
-
-
     public void onConfig() {
         try {
             configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(Config.startConfig(this, "config.yml"));
@@ -61,7 +55,6 @@ public final class BungeeUpdater extends Plugin {
             exception.printStackTrace();
         }
     }
-
     public void createUpdateFolder() {
         // Creating BuildUpdate folder
         File updateDir = new File("plugins/GeyserUpdater/BuildUpdate");
@@ -75,7 +68,6 @@ public final class BungeeUpdater extends Plugin {
     public void checkFile() {
         getProxy().getScheduler().schedule(this, CheckBuildFile::checkBungeeFile, 30, 30, TimeUnit.MINUTES);
     }
-
     public void startAutoUpdate() throws IOException {
         if (this.getConfiguration().getBoolean("EnableAutoUpdateGeyser")) {
             getProxy().getScheduler().schedule(this, () -> {
