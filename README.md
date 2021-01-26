@@ -1,4 +1,5 @@
 [![Build Status](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/badge/icon)](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/)
+
 # GeyserUpdater
 
 
