@@ -1,5 +1,3 @@
-[![forthebadge made-with-java](http://ForTheBadge.com/images/badges/made-with-java.svg)](https://java.com/)
-
 [![Build Status](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/badge/icon)](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/)
 
 # GeyserUpdater
