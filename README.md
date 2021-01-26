@@ -1,13 +1,13 @@
+[![Build Status](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/badge/icon)](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/)
 # GeyserUpdater
-> Updating Geyser with ease.
 
 
-This plugin allows you to update Geyser without much effort.
-Update Geyser with Command or you can set an Auto Update.
+> GeyserUpdater is a plugin that can update Geyser-Spigot | Geyser-BungeeCord manually or automatic. 
 
 ## Downloading
 
-To download you can either go to https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/ or the actions button in the GitHub bar and download a zip with a jar inside.
+You can download the plugin here |> https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/ <|
+or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
 
 ## Installation
 
@@ -33,16 +33,15 @@ You can set Auto-Updating on true in the config.yml.
 
 ## Usage
 
-After you ran the command or enabled auto updating, it will check the current running Geyser version. If it's outdated it will automatic download the latest Geyser build!
-Changes will only take place once the server has been restarted.
+After you ran the command or enabled auto updating, it will check the current running Geyser version. If it's outdated it will automatic download the latest Geyser build! Changes will only take place once the server has been shutdown correctly and restarted. Do not kill "Hard shutdown" the server/proxy or the updater wont update Geyser!
 
-## Restart/reload
-
-Please do not use the /reload command. this can cause errors on the Geyser part, and most likely will break your server.
 
 ## Release History
-
-* 0.0.1
+* 0.2.2
+    * Mini-rework > Common classes.
+    * Jenkins CI has been setup.
+    * Pipeline has been added.
+* 0.1.0
     * Merged Spigot & Bungeecord updater into 1 plugin.
     * Added maven
 
