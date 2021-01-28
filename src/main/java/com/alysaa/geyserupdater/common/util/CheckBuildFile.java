@@ -14,27 +14,27 @@ public class CheckBuildFile {
         boolean exists = Files.exists(p);
         boolean notExists = Files.notExists(p);
         if (exists) {
-            System.out.println("[GeyserUpdater] New update is downloaded! BungeeCord Restart is required!");
+            System.out.println("[GeyserUpdater]  New Geyser build has been downloaded! BungeeCord restart is required!");
             for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
                 if (all.hasPermission("gupdater.geyserupdate")) ;
                 {
-                    all.sendMessage("[GeyserUpdater] New update is downloaded! BungeeCord Restart is required!");
+                    all.sendMessage("[GeyserUpdater] New Geyser build has been downloaded! BungeeCord restart is required!");
                 }
             }
         } else if (notExists) {
-            System.out.println("[GeyserUpdater] There is no updated Geyser build yet in the Update folder!");
+            System.out.println("[GeyserUpdater] There is no updated Geyser build yet in the update folder!");
             for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
                 if (all.hasPermission("gupdater.geyserupdate")) ;
                 {
-                    all.sendMessage("[GeyserUpdater] There is no updated Geyser build yet in the Update folder!");
+                    all.sendMessage("[GeyserUpdater] There is no updated Geyser build yet in the update folder!");
                 }
             }
         } else {
-            System.out.println("[GeyserUpdater] Oops something went wrong in the Build update folder!");
+            System.out.println("[GeyserUpdater] Oops?!? something went wrong in the build update folder!");
             for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
                 if (all.hasPermission("gupdater.geyserupdate"));
                 {
-                    all.sendMessage("[GeyserUpdater] Oops something went wrong in the Build update folder!");
+                    all.sendMessage("[GeyserUpdater] Oops?!? something went wrong in the build update folder!");
                 }
             }
         }
@@ -46,9 +46,9 @@ public class CheckBuildFile {
         if (exists) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (player.isOp())
-                    player.sendMessage("[GeyserUpdater] New Geyser update is downloaded! Server restart is required!");
+                    player.sendMessage("[GeyserUpdater] New Geyser build has been downloaded! Server restart is required!");
             }
-            System.out.println("[GeyserUpdater] New Geyser update is downloaded! Server restart is required!");
+            System.out.println("[GeyserUpdater] New Geyser build has been downloaded! Server restart is required!");
         } else if (notExists) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (player.isOp())
@@ -58,9 +58,9 @@ public class CheckBuildFile {
         } else {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (player.isOp())
-                    player.sendMessage("[GeyserUpdater] Oops something went wrong in the update folder!");
+                    player.sendMessage("[GeyserUpdater] Oops?!? something went wrong in the update folder!");
             }
-            System.out.println("[GeyserUpdater] Oops something went wrong in the update folder!");
+            System.out.println("[GeyserUpdater] Oops?!? something went wrong in the update folder!");
         }
     }
 }

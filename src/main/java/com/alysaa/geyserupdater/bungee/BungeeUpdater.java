@@ -98,7 +98,7 @@ public final class BungeeUpdater extends Plugin {
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         Files.delete(file);
     }
-    public Configuration getConfiguration() {
+    public static Configuration getConfiguration() {
         return configuration;
     }
 }

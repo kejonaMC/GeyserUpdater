@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.bungee.util;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
