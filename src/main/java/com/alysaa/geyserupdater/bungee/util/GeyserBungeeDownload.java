@@ -1,6 +1,8 @@
 package com.alysaa.geyserupdater.bungee.util;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,6 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+
+import static com.alysaa.geyserupdater.bungee.BungeeUpdater.getConfiguration;
 
 public class GeyserBungeeDownload {
     public static void GeyserDownload() {
@@ -54,5 +58,20 @@ public class GeyserBungeeDownload {
             e.printStackTrace();
         }
         CheckBuildFile.checkBungeeFile();
+        if (getConfiguration().getBoolean("EnableAutoRestart")) {
+            try {
+                System.out.println("[GeyserUpdater] The Server will restart in 10 Seconds!");
+                for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
+                    if (all.hasPermission("gupdater.geyserupdate")) ;
+                    {
+                        all.sendMessage("[GeyserUpdater] The Server will restart in 10 Seconds!");
+                    }
+                }
+                Thread.sleep(10000);
+                ProxyServer.getInstance().stop();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

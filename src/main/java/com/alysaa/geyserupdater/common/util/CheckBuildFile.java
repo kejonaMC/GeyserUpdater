@@ -14,7 +14,7 @@ public class CheckBuildFile {
         boolean exists = Files.exists(p);
         boolean notExists = Files.notExists(p);
         if (exists) {
-            System.out.println("[GeyserUpdater]  New Geyser build has been downloaded! BungeeCord restart is required!");
+            System.out.println("[GeyserUpdater] New Geyser build has been downloaded! BungeeCord restart is required!");
             for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
                 if (all.hasPermission("gupdater.geyserupdate")) ;
                 {

@@ -1,6 +1,9 @@
 package com.alysaa.geyserupdater.spigot.util;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import com.alysaa.geyserupdater.spigot.SpigotUpdater;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.io.*;
 import java.net.URL;
@@ -45,11 +48,24 @@ public class GeyserSpigotDownload {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    CheckBuildFile.CheckSpigotFile();
+                }
+            }
+            if (SpigotUpdater.plugin.getConfig().getBoolean("EnableAutoRestart")) {
+                try {
+                    System.out.println("[GeyserUpdater] The Server will restart in 10 Seconds!");
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (player.isOp())
+                            player.sendMessage("[GeyserUpdater] The Server will restart in 10 Seconds!");
+                    }
+                    Thread.sleep(10000);
+                    Bukkit.getServer().shutdown();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        CheckBuildFile.CheckSpigotFile();
     }
 }

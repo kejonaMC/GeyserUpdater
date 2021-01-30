@@ -1,11 +1,15 @@
 #Geyser-Updater
 #Made By Jens Aka AlysaaKobe
 
-###################################################################################################
-#  NOTICE!!! If you use the auto updating it will always download the latest build from jenkins!  #
-#  you will need to restart server before the updating takes place!                               #
-#  If anything breaks due to this plugin we are not responsible!                                  #
-#  Auto updater will update each 24H since the server has been started.                           #
-###################################################################################################
+##################################################################################################################
+#  NOTICE!!! Read before using this plugin!                                                                      #
+#  If you use the auto updating it will always download the latest build from jenkins!                           #
+#  you will need to restart server before the updating takes place!                                              #
+#  Auto updater will update each 24H since the server has been started.                                          #
+#  If you use the EnableAutoRestart you will need a working restart script! Otherwise server will just shutdown! #
+#  The server will restart everytime there is a new build downloaded with command or auto-Updating!              #
+##################################################################################################################
 
 EnableAutoUpdateGeyser: false
+
+EnableAutoRestart: false
