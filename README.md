@@ -1,4 +1,5 @@
 [![Build Status](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/badge/icon)](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/)
+[![HitCount](http://hits.dwyl.com/Konicai/GeyserUpdater.svg)](http://hits.dwyl.com/Konicai/GeyserUpdater)
 
 # GeyserUpdater
 
