@@ -16,7 +16,7 @@ public class SpigotUpdater extends JavaPlugin {
     private FileConfiguration config;
     @Override
     public void onEnable() {
-        getLogger().info("| GeyserUpdater   V 0.2.2 By Jens |");
+        getLogger().info("| GeyserUpdater   V 0.2.4 By Jens |");
         this.getCommand("geyserupdate").setExecutor(new GeyserCommand());
         createFiles();
         plugin = this;

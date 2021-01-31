@@ -9,6 +9,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import org.geysermc.connector.configuration.GeyserConfiguration;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,12 +21,10 @@ public final class BungeeUpdater extends Plugin {
 
     public static BungeeUpdater plugin;
     public static Configuration configuration;
-    public static ProxyServer getInstance() {
-        return null;
-    }
+
     @Override
     public void onEnable() {
-        getLogger().info("| GeyserUpdater   V 0.2.2 By Jens |");
+        getLogger().info("| GeyserUpdater   V 0.2.4 By Jens |");
         plugin = this;
         this.getProxy().getPluginManager().registerCommand(this, new GeyserCommand());
         this.onConfig();
@@ -46,8 +46,10 @@ public final class BungeeUpdater extends Plugin {
         }
         try {
             this.deleteBuild();
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
+
     public void onConfig() {
         try {
             configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(Config.startConfig(this, "config.yml"));
@@ -55,19 +57,22 @@ public final class BungeeUpdater extends Plugin {
             exception.printStackTrace();
         }
     }
+
     public void createUpdateFolder() {
         // Creating BuildUpdate folder
         File updateDir = new File("plugins/GeyserUpdater/BuildUpdate");
         if (!updateDir.exists()) {
             try {
                 updateDir.mkdirs();
-            } catch (Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
     }
 
     public void checkFile() {
         getProxy().getScheduler().schedule(this, CheckBuildFile::checkBungeeFile, 30, 30, TimeUnit.MINUTES);
     }
+
     public void startAutoUpdate() throws IOException {
         if (this.getConfiguration().getBoolean("EnableAutoUpdateGeyser")) {
             getProxy().getScheduler().schedule(this, () -> {
@@ -80,6 +85,7 @@ public final class BungeeUpdater extends Plugin {
             }, 0, 24, TimeUnit.HOURS);
         }
     }
+
     public void moveGeyser() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".
         File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
@@ -94,10 +100,12 @@ public final class BungeeUpdater extends Plugin {
         input.close();
         output.close();
     }
+
     private void deleteBuild() throws IOException {
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         Files.delete(file);
     }
+
     public static Configuration getConfiguration() {
         return configuration;
     }
