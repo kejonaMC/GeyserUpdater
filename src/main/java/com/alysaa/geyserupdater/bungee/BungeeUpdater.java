@@ -2,6 +2,7 @@ package com.alysaa.geyserupdater.bungee;
 
 import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
+import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -22,6 +23,7 @@ public final class BungeeUpdater extends Plugin {
 
     @Override
     public void onEnable() {
+        new Metrics(this, 10203);
         getLogger().info("| GeyserUpdater   V 0.2.4 By Jens |");
         plugin = this;
         this.getProxy().getPluginManager().registerCommand(this, new GeyserCommand());
