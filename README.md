@@ -53,6 +53,9 @@ Goto restart
 
 After you ran the command or enabled auto updating, it will check the current running Geyser version. If it's outdated it will automatic download the latest Geyser build! Changes will only take place once the server has been shutdown correctly and restarted. Do not kill "Hard shutdown" the server/proxy or the updater wont update Geyser!
 
+## bStats
+[Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
+[Bungee stats](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
 
 ## Release History
 * 0.2.4
