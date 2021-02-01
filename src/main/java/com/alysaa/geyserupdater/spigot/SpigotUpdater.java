@@ -11,11 +11,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import com.alysaa.geyserupdater.spigot.util.bstats.Metrics;
+
 public class SpigotUpdater extends JavaPlugin {
     public static SpigotUpdater plugin;
     private FileConfiguration config;
     @Override
     public void onEnable() {
+        new Metrics(this, 10202);
         getLogger().info("| GeyserUpdater   V 0.2.4 By Jens |");
         this.getCommand("geyserupdate").setExecutor(new GeyserCommand());
         createFiles();
