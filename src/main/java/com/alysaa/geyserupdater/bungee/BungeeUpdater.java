@@ -42,7 +42,7 @@ public final class BungeeUpdater extends Plugin {
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            System.out.print("[GeyserUpdater] No update have been implemented.");
+            System.out.print("[GeyserUpdater] No updates have been implemented.");
         }
         try {
             this.deleteBuild();
