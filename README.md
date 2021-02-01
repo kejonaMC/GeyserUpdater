@@ -55,6 +55,7 @@ After you ran the command or enabled auto updating, it will check the current ru
 
 ## bStats
 [Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
+
 [Bungee stats](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
 
 ## Release History
