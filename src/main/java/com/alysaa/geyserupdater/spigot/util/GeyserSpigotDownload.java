@@ -53,10 +53,10 @@ public class GeyserSpigotDownload {
             }
             if (SpigotUpdater.plugin.getConfig().getBoolean("EnableAutoRestart")) {
                 try {
-                    System.out.println("[GeyserUpdater] The Server will restart in 10 Seconds!");
+                    System.out.println("[GeyserUpdater] The Server will restart in 10 seconds!");
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (player.isOp())
-                            player.sendMessage("[GeyserUpdater] The Server will restart in 10 Seconds!");
+                            player.sendMessage("[GeyserUpdater] The Server will restart in 10 seconds!");
                     }
                     Thread.sleep(10000);
                     Bukkit.getServer().shutdown();
