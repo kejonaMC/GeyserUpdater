@@ -58,14 +58,18 @@ public class GeyserSpigotDownload {
                         if (player.isOp())
                             player.sendMessage("[GeyserUpdater] The Server will restart in 10 seconds!");
                     }
-                    Thread.sleep(10000);
-                    Bukkit.getServer().shutdown();
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Bukkit.getServer().shutdown();
     }
 }
