@@ -1,5 +1,4 @@
 [![Build Status](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/badge/icon)](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/)
-[![HitCount](http://hits.dwyl.com/YHDiamond/GeyserUpdater.svg)](http://hits.dwyl.com/YHDiamond/GeyserUpdater)
 [![License](https://img.shields.io/badge/License-GPL-orange)](https://github.com/YHDiamond/GeyserUpdater/blob/main/LICENSE)
 
 
