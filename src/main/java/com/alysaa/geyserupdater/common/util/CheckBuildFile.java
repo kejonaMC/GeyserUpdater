@@ -58,9 +58,9 @@ public class CheckBuildFile {
         } else {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (player.isOp())
-                    player.sendMessage("[GeyserUpdater] Oops?!? something went wrong in the update folder!");
+                    player.sendMessage("[GeyserUpdater] Oops?!? Something went wrong in the update folder!");
             }
-            System.out.println("[GeyserUpdater] Oops?!? something went wrong in the update folder!");
+            System.out.println("[GeyserUpdater] Oops?!? Something went wrong in the update folder!");
         }
     }
 }
