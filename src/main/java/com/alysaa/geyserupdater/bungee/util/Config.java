@@ -16,7 +16,7 @@ public class Config {
         try {
             if (!resourceFile.exists()) {
                 try (InputStream in = plugin.getResourceAsStream(file);
-                     OutputStream out = new FileOutputStream(resourceFile)) {
+                    OutputStream out = new FileOutputStream(resourceFile)) {
                     byte[] buffer = new byte[in.available()];
                     in.read(buffer);
                     out.write(buffer);
