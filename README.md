@@ -1,5 +1,7 @@
 [![Build Status](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/badge/icon)](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/)
 [![License](https://img.shields.io/badge/License-GPL-orange)](https://github.com/YHDiamond/GeyserUpdater/blob/main/LICENSE)
+[![bStats Spigot](https://img.shields.io/bstats/servers/10202?color=yellow&label=Spigot%20servers)](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
+[![bStats Bungee](https://img.shields.io/bstats/servers/10203?label=Bungee%20servers)](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
 
 
 # GeyserUpdater
