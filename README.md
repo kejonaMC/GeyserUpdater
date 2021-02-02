@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/badge/License-GPL-orange)](https://github.com/YHDiamond/GeyserUpdater/blob/main/LICENSE)
 [![bStats Spigot](https://img.shields.io/bstats/servers/10202?color=yellow&label=Spigot%20servers)](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
 [![bStats Bungee](https://img.shields.io/bstats/servers/10203?label=Bungee%20servers)](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
-
+[![Discord](https://img.shields.io/discord/806179549498966058?color=7289da&label=discord&logo=discord&logoColor=white)](https://discord.gg/xXzzdAXa2b)
 
 # GeyserUpdater
 
@@ -58,6 +58,9 @@ After you ran the command or enabled auto updating, it will check the current ru
 
 [Bungee stats](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
 
+## Discord
+[Here](https://discord.gg/xXzzdAXa2b) is our Discord link, you can come to get support, get github feeds, or just hang out. Don't pping anyone that doesn't have the pingable role!
+
 ## Release History
 * 0.2.5
     * Added bStats support
@@ -78,5 +81,5 @@ The project is owned by:
 - Jens
 - YHDiamond
 
-Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs. (To get support you can go to [Geyser discord](https://discord.geysermc.org) and ping either @Jens or @YHDiamond (but ONLY them) in #general.)
+Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs. 
 
