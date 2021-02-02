@@ -62,7 +62,7 @@ public class GeyserSpigotDownload {
                     e.printStackTrace();
                 }
                 Thread.sleep(10000);
-                Bukkit.getServer().shutdown();
+                Bukkit.spigot().restart();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
