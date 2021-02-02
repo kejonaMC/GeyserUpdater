@@ -61,15 +61,12 @@ public class GeyserSpigotDownload {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                Thread.sleep(10000);
+                Bukkit.getServer().shutdown();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Bukkit.getServer().shutdown();
     }
 }
+

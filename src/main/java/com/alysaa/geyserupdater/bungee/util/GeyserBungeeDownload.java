@@ -67,15 +67,11 @@ public class GeyserBungeeDownload {
                         all.sendMessage("[GeyserUpdater] The Server will restart in 10 Seconds!");
                     }
                 }
+                Thread.sleep(10000);
+                ProxyServer.getInstance().stop();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ProxyServer.getInstance().stop();
     }
 }
