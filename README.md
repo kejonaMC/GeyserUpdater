@@ -1,14 +1,13 @@
-[![Build Status](https://ci.alysaa.net/job/GeyserUpdater/job/main/badge/icon)](https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/)
+[![Build Status](https://ci.alysaa.net/job/GeyserUpdater/job/main/badge/icon)](https://ci.alysaa.net/job/GeyserUpdater/job/main/)
 [![License](https://img.shields.io/badge/License-GPL-orange)](https://github.com/YHDiamond/GeyserUpdater/blob/main/LICENSE)
 [![bStats Spigot](https://img.shields.io/bstats/servers/10202?color=yellow&label=Spigot%20servers)](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
 [![bStats Bungee](https://img.shields.io/bstats/servers/10203?label=Bungee%20servers)](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
 [![Discord](https://img.shields.io/discord/806179549498966058?color=7289da&label=discord&logo=discord&logoColor=white)](https://discord.gg/xXzzdAXa2b)
 [![Spigot page downloads](https://img.shields.io/spiget/downloads/88555?color=yellow&label=Spigot%20page%20downloads)](https://www.spigotmc.org/resources/geyserupdater.88555/)
-
+[![Spigot reviews](https://img.shields.io/spiget/stars/88555?color=yellow&label=Spigot%20rating)](https://www.spigotmc.org/resources/geyserupdater.88555/)
 # GeyserUpdater
 
-
-GeyserUpdater is a plugin that can update Geyser-Spigot | Geyser-BungeeCord manually or automatic. 
+GeyserUpdater is a plugin that can update Geyser-Spigot | Geyser-BungeeCord manually or automatically. 
 
 ## Downloading
 
@@ -60,7 +59,10 @@ After you ran the command or enabled auto updating, it will check the current ru
 [Bungee stats](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
 
 ## Discord
-[Here](https://discord.gg/xXzzdAXa2b) is our Discord link, you can come to get support, get github feeds, or just hang out. Don't pping anyone that doesn't have the pingable role!
+[Here](https://discord.gg/xXzzdAXa2b) is our Discord link, you can come to get support, get GitHub feeds, or just hang out. Don't ping anyone that doesn't have the pingable role!
+
+## Spigot page
+[Here](https://www.spigotmc.org/resources/geyserupdater.88555/) is our Spigot page if you want to download it there (it makes the download count go up) or post a review (they help)!
 
 ## Release History
 * 0.2.5
