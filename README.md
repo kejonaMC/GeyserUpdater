@@ -72,7 +72,7 @@ After you ran the command or enabled auto updating, it will check the current ru
     * Jenkins CI has been setup.
     * Pipeline has been added.
 * 0.1.0
-    * Merged Spigot & Bungeecord updater into 1 plugin.
+    * Merged Spigot & Bungeecord updater into one plugin.
     * Added maven
 
 ## Meta
