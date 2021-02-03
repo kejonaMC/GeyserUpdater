@@ -1,3 +1,7 @@
+To clone the repo run `git clone https://github.com/YHDiamond/GeyserUpdater.git` in your command line or terminal.
+
+You can build locally and install dependencies using maven. `mvn clean install` to install all require dependencies and `mvn clean package` to build. The built jar will be located in the target folder.
+
 Please follow the guidelines below for any code you wish to contribute, we are always open for PRs!
 
 ```java
@@ -33,5 +37,7 @@ public class LongClassName {
     }
 }
 ```
+
+
 If you are making a change to the README.md, fixing a typo, or changing code format, please append `[ci skip]` to the end of your commit message so it won't trigger a new build.
-If you need help with code for this you can go to [Geyser discord](https://discord.geysermc.org) and ping @YHDiamond or @Jens. Do NOT ping anybody else for this. 
+If you need help with code for this you can go to [our Discord](https://discord.gg/xXzzdAXa2b). Don't ping anyone that doesn't have the "Pingable" role!
