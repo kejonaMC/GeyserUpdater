@@ -12,7 +12,7 @@ GeyserUpdater is a plugin that can update Geyser-Spigot | Geyser-BungeeCord manu
 
 ## Downloading
 
-You can download the plugin here |> https://ci.alysaa.net/job/GeyserUpdaterMain/job/main/ <|
+You can download the plugin here |> https://ci.alysaa.net/job/GeyserUpdater/job/main/ <|
 or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
 
 ## Installation
