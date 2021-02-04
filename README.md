@@ -51,6 +51,11 @@ Goto restart
 
 ```
 
+# Restart-Message:
+
+Restart-Message will only work if you have enabled Auto-Restart. when the update has been downloaded it will send a text to the players
+to warn them that the server is restarting. You can change this text!
+
 ## Usage
 
 After you ran the command or enabled auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted. Do not kill (Hard shutdown) the server/proxy or the updater wont update Geyser!
