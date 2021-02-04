@@ -67,6 +67,8 @@ After you ran the command or enabled auto updating, it will check the current ru
 [Here](https://www.spigotmc.org/resources/geyserupdater.88555/) is our Spigot page if you want to download it there (it makes the download count go up) or post a review (they help)!
 
 ## Release History
+* 0.2.6
+    * Add warning for players in config option
 * 0.2.5
     * Added bStats support
 * 0.2.4
