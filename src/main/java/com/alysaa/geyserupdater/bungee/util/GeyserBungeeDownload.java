@@ -1,5 +1,6 @@
 package com.alysaa.geyserupdater.bungee.util;
 
+import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -13,7 +14,8 @@ import java.net.URLConnection;
 
 import static com.alysaa.geyserupdater.bungee.BungeeUpdater.getConfiguration;
 
-public class GeyserBungeeDownload {
+public class
+GeyserBungeeDownload {
     public static void GeyserDownload() {
         try {
             OutputStream os = null;
@@ -61,15 +63,12 @@ public class GeyserBungeeDownload {
         if (getConfiguration().getBoolean("EnableAutoRestart")) {
             try {
                 System.out.println("[GeyserUpdater] The Server will restart in 10 Seconds!");
-                for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
-                    if (all.hasPermission("gupdater.geyserupdate")) ;
-                    {
-                        all.sendMessage("[GeyserUpdater] The Server will restart in 10 Seconds!");
-                    }
+                for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                    player.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("RestartMessage")));
                 }
                 Thread.sleep(10000);
                 ProxyServer.getInstance().stop();
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
