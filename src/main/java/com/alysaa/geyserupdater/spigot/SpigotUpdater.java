@@ -6,6 +6,7 @@ import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,11 @@ import com.alysaa.geyserupdater.spigot.util.bstats.Metrics;
 public class SpigotUpdater extends JavaPlugin {
     public static SpigotUpdater plugin;
     private FileConfiguration config;
+
+    public static Plugin getPlugin() {
+        return plugin;
+    }
+
     @Override
     public void onEnable() {
         new Metrics(this, 10202);
