@@ -7,7 +7,7 @@
 [![Spigot reviews](https://img.shields.io/spiget/stars/88555?color=yellow&label=Spigot%20rating)](https://www.spigotmc.org/resources/geyserupdater.88555/)
 
 # GeyserUpdater
-
+ 
 GeyserUpdater is a plugin that can update Geyser-Spigot | Geyser-BungeeCord manually or automatically. 
 
 ## Downloading
