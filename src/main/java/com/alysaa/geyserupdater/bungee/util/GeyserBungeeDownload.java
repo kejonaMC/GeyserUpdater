@@ -14,8 +14,7 @@ import java.net.URLConnection;
 
 import static com.alysaa.geyserupdater.bungee.BungeeUpdater.getConfiguration;
 
-public class
-GeyserBungeeDownload {
+public class GeyserBungeeDownload {
     public static void GeyserDownload() {
         try {
             OutputStream os = null;
