@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class ResourceUpdaterBungee {
 
@@ -20,16 +21,13 @@ public class ResourceUpdaterBungee {
     }
 
     public void getVersion(final Consumer<String> consumer) {
-        ProxyServer.getInstance().getScheduler().schedule(this.plugin,30, 30, () -> {
-            {
-                try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=88555" + this.resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
-                    if (scanner.hasNext()) {
-                        consumer.accept(scanner.next());
-                    }
-                } catch (IOException exception) {
-                    this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
-                }
+        ProxyServer.getInstance().getScheduler().schedule(this.plugin,plugin, 30, 30, TimeUnit.MINUTES);
+        try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=88555" + this.resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
+            if (scanner.hasNext()) {
+                consumer.accept(scanner.next());
             }
-        });
+        } catch (IOException exception) {
+            this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
+        }
     }
 }

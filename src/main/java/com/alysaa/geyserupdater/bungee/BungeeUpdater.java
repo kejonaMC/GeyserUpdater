@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public final class BungeeUpdater extends Plugin {
+public final class BungeeUpdater extends Plugin implements Runnable {
 
     public static BungeeUpdater plugin;
     public static Configuration configuration;
@@ -120,5 +120,10 @@ public final class BungeeUpdater extends Plugin {
 
     public static Configuration getConfiguration() {
         return configuration;
+    }
+
+    @Override
+    public void run() {
+
     }
 }
