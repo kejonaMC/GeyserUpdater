@@ -29,7 +29,7 @@ public class ResourceUpdaterBungee {
                 } catch (IOException exception) {
                     this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
                 }
-            })
+            }
         });
     }
 }
