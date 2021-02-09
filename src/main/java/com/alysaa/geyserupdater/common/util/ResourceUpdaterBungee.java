@@ -30,6 +30,6 @@ public class ResourceUpdaterBungee {
                     this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
                 }
             })
-        }
+        });
     }
 }
