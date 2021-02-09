@@ -2,6 +2,7 @@ package com.alysaa.geyserupdater.spigot;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.ResourceUpdaterSpigot;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
+
 import com.alysaa.geyserupdater.spigot.util.bstats.Metrics;
 
 public class SpigotUpdater extends JavaPlugin {
@@ -45,6 +48,16 @@ public class SpigotUpdater extends JavaPlugin {
         StartFileCheck = new Timer();
         StartFileCheck.schedule(new StartTimer(),100*60*300,100*60*300);
         // File Checking Each 30min after server startup.
+        // Logger for check update on geyserupdater
+            Logger logger = this.getLogger();
+
+            new ResourceUpdaterSpigot(this, 88555).getVersion(version -> {
+                if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                    logger.info("There is not a new update available.");
+                } else {
+                    logger.info("There is a new update available.");
+                }
+            });
     }
     public void onDisable() {
         getLogger().info("Plugin has been disabled");
