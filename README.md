@@ -72,7 +72,7 @@ After you ran the command or enabled auto updating, it will check the current ru
 [Here](https://www.spigotmc.org/resources/geyserupdater.88555/) is our Spigot page if you want to download it there (it makes the download count go up) or post a review (they help)!
 
 ## Release History
-* 1.0.0
+* 1.1.0
     * Added message if GeyserUpdater has an available update on startup
 * 1.0.0
     * Full release! (No changes but we decided we are ready for it now, we will still update more if we need to)
