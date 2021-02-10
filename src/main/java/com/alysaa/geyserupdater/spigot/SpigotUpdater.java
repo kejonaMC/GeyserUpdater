@@ -28,7 +28,7 @@ public class SpigotUpdater extends JavaPlugin {
     @Override
     public void onEnable() {
         new Metrics(this, 10202);
-        getLogger().info("Has been Enabled");
+        getLogger().info("GeyserUpdater v1.1.0 has been enabled");
         this.getCommand("geyserupdate").setExecutor(new GeyserCommand());
         createFiles();
         plugin = this;
