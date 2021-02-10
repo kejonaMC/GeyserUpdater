@@ -41,11 +41,12 @@ public final class BungeeUpdater extends Plugin {
         ProxyServer.getInstance().getScheduler().schedule(this,this::VersionCheck, 0, 30, TimeUnit.MINUTES);
     }
     public void onDisable() {
+        Logger logger = this.getLogger();
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            System.out.print("[GeyserUpdater] No updates have been implemented.");
+            logger.info("[GeyserUpdater] No updates have been implemented.");
         }
         try {
             this.deleteBuild();
@@ -78,8 +79,7 @@ public final class BungeeUpdater extends Plugin {
         if (!updateDir.exists()) {
             try {
                 updateDir.mkdirs();
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) { }
         }
     }
 
