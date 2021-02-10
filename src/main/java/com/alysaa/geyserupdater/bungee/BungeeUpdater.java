@@ -6,6 +6,7 @@ import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.ResourceUpdaterBungee;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -37,17 +38,8 @@ public final class BungeeUpdater extends Plugin {
             e.printStackTrace();
         }
         this.checkFile();
-        Logger logger = this.getLogger();
-
-        new ResourceUpdaterBungee(this, 88555).getVersion(version -> {
-            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                logger.info("There is not a new update available.");
-            } else {
-                logger.info("There is a new update available.");
-            }
-        });
+        ProxyServer.getInstance().getScheduler().schedule(this,this::VersionCheck, 0, 30, TimeUnit.MINUTES);
     }
-
     public void onDisable() {
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         try {
@@ -59,6 +51,17 @@ public final class BungeeUpdater extends Plugin {
             this.deleteBuild();
         } catch (Exception ignored) {
         }
+    }
+    public void VersionCheck() {
+        Logger logger = this.getLogger();
+
+        new ResourceUpdaterBungee(this, 88555).getVersion(version -> {
+            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                logger.info("There is not a new update available.");
+            } else {
+                logger.info("There is a new update available.");
+            }
+        });
     }
 
     public void onConfig() {

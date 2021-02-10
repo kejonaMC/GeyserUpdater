@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public class ResourceUpdaterBungee {
 
     private BungeeUpdater plugin;
-    private int resourceId;
+    private static int resourceId;
 
     public ResourceUpdaterBungee(BungeeUpdater plugin, int resourceId) {
         this.plugin = plugin;
@@ -23,14 +23,12 @@ public class ResourceUpdaterBungee {
 
     public void getVersion(final Consumer<String> consumer) {
 
-            ProxyServer.getInstance().getScheduler().schedule(this.plugin,plugin,0,30, TimeUnit.MINUTES);{
-            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + this.resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
-                if (scanner.hasNext()) {
-                    consumer.accept(scanner.next());
-                }
-            } catch (IOException exception) {
-                this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
+        try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + ResourceUpdaterBungee.resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
+            if (scanner.hasNext()) {
+                consumer.accept(scanner.next());
             }
+        } catch (IOException exception) {
+            BungeeUpdater.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
         }
     }
 }
