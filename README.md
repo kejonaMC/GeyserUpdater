@@ -73,6 +73,8 @@ After you ran the command or enabled auto updating, it will check the current ru
 
 ## Release History
 * 1.0.0
+    * Added message if GeyserUpdater has an available update on startup
+* 1.0.0
     * Full release! (No changes but we decided we are ready for it now, we will still update more if we need to)
 * 0.2.6
     * Add warning for players in config option

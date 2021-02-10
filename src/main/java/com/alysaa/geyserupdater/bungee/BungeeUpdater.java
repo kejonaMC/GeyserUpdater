@@ -56,10 +56,10 @@ public final class BungeeUpdater extends Plugin {
         Logger logger = this.getLogger();
 
         new ResourceUpdaterBungee(this, 88555).getVersion(version -> {
-            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                logger.info("There is not a new update available.");
+            if (version.equals(this.getDescription().getVersion())) {
+                logger.info("There are no new updates for GeyserUpdater available.");
             } else {
-                logger.info("There is a new update available.");
+                logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
             }
         });
     }
