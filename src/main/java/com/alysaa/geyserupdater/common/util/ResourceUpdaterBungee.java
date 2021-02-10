@@ -2,23 +2,21 @@ package com.alysaa.geyserupdater.common.util;
 
 
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
-import net.md_5.bungee.api.ProxyServer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class ResourceUpdaterBungee {
 
-    private BungeeUpdater plugin;
+    public static BungeeUpdater plugin;
     private static int resourceId;
 
     public ResourceUpdaterBungee(BungeeUpdater plugin, int resourceId) {
-        this.plugin = plugin;
-        this.resourceId = resourceId;
+        ResourceUpdaterBungee.plugin = plugin;
+        ResourceUpdaterBungee.resourceId = resourceId;
     }
 
     public void getVersion(final Consumer<String> consumer) {
