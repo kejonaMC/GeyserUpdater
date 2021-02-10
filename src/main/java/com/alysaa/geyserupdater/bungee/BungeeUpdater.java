@@ -5,6 +5,7 @@ import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.ResourceUpdaterBungee;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -15,8 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
-public final class BungeeUpdater extends Plugin {
+public final class BungeeUpdater extends Plugin implements Runnable {
 
     public static BungeeUpdater plugin;
     public static Configuration configuration;
@@ -35,6 +37,15 @@ public final class BungeeUpdater extends Plugin {
             e.printStackTrace();
         }
         this.checkFile();
+        Logger logger = this.getLogger();
+
+        new ResourceUpdaterBungee(this, 88555).getVersion(version -> {
+            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                logger.info("There is not a new update available.");
+            } else {
+                logger.info("There is a new update available.");
+            }
+        });
     }
 
     public void onDisable() {
@@ -99,6 +110,7 @@ public final class BungeeUpdater extends Plugin {
         }
         input.close();
         output.close();
+
     }
 
     private void deleteBuild() throws IOException {
@@ -108,5 +120,10 @@ public final class BungeeUpdater extends Plugin {
 
     public static Configuration getConfiguration() {
         return configuration;
+    }
+
+    @Override
+    public void run() {
+
     }
 }
