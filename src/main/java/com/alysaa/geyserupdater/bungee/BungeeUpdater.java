@@ -27,7 +27,7 @@ public final class BungeeUpdater extends Plugin {
     @Override
     public void onEnable() {
         new Metrics(this, 10203);
-        getLogger().info("| GeyserUpdater   V 1.0.0 By Jens |");
+        getLogger().info("Has been Enabled");
         plugin = this;
         this.getProxy().getPluginManager().registerCommand(this, new GeyserCommand());
         this.onConfig();

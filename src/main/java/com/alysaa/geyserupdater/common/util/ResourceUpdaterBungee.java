@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
-public class ResourceUpdaterBungee {
+public class ResourceUpdaterBungee{
 
     public static BungeeUpdater plugin;
     private static int resourceId;
@@ -21,7 +21,7 @@ public class ResourceUpdaterBungee {
 
     public void getVersion(final Consumer<String> consumer) {
 
-        try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + ResourceUpdaterBungee.resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
+        try (InputStream inputStream = new URL("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
             if (scanner.hasNext()) {
                 consumer.accept(scanner.next());
             }
