@@ -12,8 +12,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import static com.alysaa.geyserupdater.bungee.BungeeUpdater.getConfiguration;
-
 public class GeyserBungeeDownload {
     public static void GeyserDownload() {
         try {
@@ -59,7 +57,7 @@ public class GeyserBungeeDownload {
             e.printStackTrace();
         }
         CheckBuildFile.checkBungeeFile();
-        if (getConfiguration().getBoolean("EnableAutoRestart")) {
+        if (BungeeUpdater.getConfiguration().getBoolean("EnableAutoRestart")) {
             try {
                 System.out.println("[GeyserUpdater] The Server will restart in 10 Seconds!");
                 for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {

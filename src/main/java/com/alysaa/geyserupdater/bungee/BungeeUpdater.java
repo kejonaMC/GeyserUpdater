@@ -5,7 +5,7 @@ import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.common.util.ResourceUpdaterBungee;
+import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 public final class BungeeUpdater extends Plugin {
 
-    public static BungeeUpdater plugin;
+    public BungeeUpdater plugin;
     public static Configuration configuration;
 
     @Override
@@ -50,19 +50,23 @@ public final class BungeeUpdater extends Plugin {
         }
         try {
             this.deleteBuild();
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) { }
     }
     public void VersionCheck() {
         Logger logger = this.getLogger();
-
-        new ResourceUpdaterBungee(this, 88555).getVersion(version -> {
-            if (version.equals(this.getDescription().getVersion())) {
+        String pluginVersion = this.getDescription().getVersion();
+        BungeeUpdater plugin = this;
+        Runnable runnable = () -> {
+            String version = BungeeResourceUpdateChecker.getVersion(plugin);
+            if (version.equals(pluginVersion)) {
                 logger.info("There are no new updates for GeyserUpdater available.");
             } else {
                 logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
             }
-        });
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     public void onConfig() {
