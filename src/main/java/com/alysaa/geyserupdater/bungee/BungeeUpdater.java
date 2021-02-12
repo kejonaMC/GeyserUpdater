@@ -6,6 +6,7 @@ import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
+import com.alysaa.geyserupdater.common.util.MakeBat;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -38,8 +39,18 @@ public final class BungeeUpdater extends Plugin {
             e.printStackTrace();
         }
         this.checkFile();
+        this.batFile();
         ProxyServer.getInstance().getScheduler().schedule(this,this::VersionCheck, 0, 30, TimeUnit.MINUTES);
     }
+
+    private void batFile() {
+        try {
+            MakeBat.CreateBat();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onDisable() {
         Logger logger = this.getLogger();
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
