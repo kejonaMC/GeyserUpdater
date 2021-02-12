@@ -7,7 +7,9 @@ public class MakeBat {
         File file = new File("startserver.bat");
         FileOutputStream fos = new FileOutputStream(file);
         DataOutputStream dos = new DataOutputStream(fos);
-        dos.writeBytes("testing >> testing\n");
-        dos.writeBytes("testing\n");
+        dos.writeBytes("@echo off\n");
+        dos.writeBytes(":restart\n");
+        dos.writeBytes("java -Xms512M -Xmx1G -jar BungeeCord.jar nogui\n");
+        dos.writeBytes("Goto restart\n");
     }
 }
