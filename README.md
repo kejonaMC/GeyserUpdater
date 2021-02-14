@@ -94,8 +94,8 @@ After you run the `/geyserupdate` command or enable auto updating, it will check
 
 The project is owned by:
 - Jens
-- YHDiamond <br />
+- YHDiamond  
 
-Special thanks to rtm516 who helped us with basically everything. Without him this project wouldn't even have a readme. <br />
+Special thanks to rtm516 who helped us with basically everything. Without him this project wouldn't even have a readme.  
 
 Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs, and instead, go to our Discord server linked above.
