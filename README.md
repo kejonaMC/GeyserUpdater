@@ -48,17 +48,16 @@ therefore you will need to setup a restart script that the server can use (via /
 :restart
 java -Xms-X-G -Xmx-X-G -jar ServerSoftware.jar nogui
 Goto restart
-
 ```
 
 # Restart-Message:
 
-Restart-Message will only work if you have enabled Auto-Restart. when the update has been downloaded it will send a text to the players
-to warn them that the server is restarting. You can change this text!
+Restart-Message will only work if you have enabled Auto-Restart. When the update has been downloaded it will send a message to the players
+to warn them that the server is restarting. You can change this message!
 
 ## Usage
 
-After you ran the command or enabled auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted. Do not kill (Hard shutdown) the server/proxy or the updater wont update Geyser!
+After you run the `/geyserupdate` command or enable auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted. Do not kill (Hard shutdown) the server/proxy or the updater wont update Geyser!
 
 ## bStats
 [Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
@@ -95,8 +94,8 @@ After you ran the command or enabled auto updating, it will check the current ru
 
 The project is owned by:
 - Jens
-- YHDiamond
-Special thanks to rtm516 who helped us with basically everything. Without him this project wouldn't even have a readme.
-Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs, and instead, go to our Discord server linked above.
+- YHDiamond <br />
 
- 
+Special thanks to rtm516 who helped us with basically everything. Without him this project wouldn't even have a readme. <br />
+
+Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs, and instead, go to our Discord server linked above.
