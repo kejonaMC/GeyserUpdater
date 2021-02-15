@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class MakeWinBat {
     public static void CreateBungeeWinBat() throws IOException {
-        Path p = Paths.get("startserver.bat");
+        Path p = Paths.get("plugins/GeyserUpdater/startserver.bat");
         boolean exists = Files.exists(p);
         if (exists) {
         } else {
@@ -22,7 +22,7 @@ public class MakeWinBat {
         }
     }
     public static void CreateSpigotWinBat() throws IOException {
-        Path p = Paths.get("startserver.bat");
+        Path p = Paths.get("plugins/GeyserUpdater/startserver.bat");
         boolean exists = Files.exists(p);
         if (exists) {
         } else {
