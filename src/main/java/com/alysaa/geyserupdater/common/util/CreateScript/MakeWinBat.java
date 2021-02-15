@@ -11,7 +11,8 @@ public class MakeWinBat {
         boolean exists = Files.exists(p);
         if (exists) {
         } else {
-            File file = new File("startserver.bat");
+            System.out.println("[GeyserUpdater] A custom restart script has been made for you, its located in the GeyserUpdater folder. you will need to edit this and also make sure you enable it in spigot.yml!");
+            File file = new File("plugins/GeyserUpdater/startserver.bat");
             FileOutputStream fos = new FileOutputStream(file);
             DataOutputStream dos = new DataOutputStream(fos);
             dos.writeBytes("@echo off\n");
@@ -25,7 +26,8 @@ public class MakeWinBat {
         boolean exists = Files.exists(p);
         if (exists) {
         } else {
-            File file = new File("startserver.bat");
+            System.out.println("[GeyserUpdater] A custom restart script has been made for you, its located in the GeyserUpdater folder. you will need to edit this and also make sure you enable it in spigot.yml!");
+            File file = new File("plugins/GeyserUpdater/startserver.bat");
             FileOutputStream fos = new FileOutputStream(file);
             DataOutputStream dos = new DataOutputStream(fos);
             dos.writeBytes("@echo off\n");

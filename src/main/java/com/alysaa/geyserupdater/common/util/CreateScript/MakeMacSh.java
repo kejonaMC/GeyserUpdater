@@ -10,11 +10,12 @@ import java.nio.file.Paths;
 
 public class MakeMacSh {
     public static void CreateBungeeMacSh() throws IOException {
-        Path p = Paths.get("startserver.sh");
+        Path p = Paths.get("plugins/GeyserUpdater/startserver.sh");
         boolean exists = Files.exists(p);
         if (exists) {
         } else {
-            File file = new File("startserver.sh");
+            System.out.println("[GeyserUpdater] A custom restart script has been made for you, its located in the GeyserUpdater folder. you will need to edit this and also make sure you enable it in spigot.yml!");
+            File file = new File("plugins/GeyserUpdater/startserver.sh");
             FileOutputStream fos = new FileOutputStream(file);
             DataOutputStream dos = new DataOutputStream(fos);
             dos.writeBytes("#!/bin/sh\n");
@@ -25,17 +26,18 @@ public class MakeMacSh {
     }
 
     public static void CreateSpigotMacSh() throws IOException {
-        Path p = Paths.get("startserver.sh");
+        Path p = Paths.get("plugins/GeyserUpdater/startserver.sh");
         boolean exists = Files.exists(p);
         if (exists) {
         } else {
+            System.out.println("[GeyserUpdater] A custom restart script has been made for you, its located in the GeyserUpdater folder. you will need to edit this and also make sure you enable it in spigot.yml!");
+            File file = new File("plugins/GeyserUpdater/startserver.sh");
+            FileOutputStream fos = new FileOutputStream(file);
+            DataOutputStream dos = new DataOutputStream(fos);
+            dos.writeBytes("#!/bin/sh\n");
+            dos.writeBytes(":restart\n");
+            dos.writeBytes("java -Xmx1G -jar Spigot.jar nogui\n");
+            dos.writeBytes("Goto restart\n");
         }
-        File file = new File("startserver.sh");
-        FileOutputStream fos = new FileOutputStream(file);
-        DataOutputStream dos = new DataOutputStream(fos);
-        dos.writeBytes("#!/bin/sh\n");
-        dos.writeBytes(":restart\n");
-        dos.writeBytes("java -Xmx1G -jar Spigot.jar nogui\n");
-        dos.writeBytes("Goto restart\n");
     }
 }
