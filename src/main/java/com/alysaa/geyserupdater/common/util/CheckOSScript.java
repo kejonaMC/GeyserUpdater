@@ -11,26 +11,28 @@ public class CheckOSScript {
     private static String OS = System.getProperty("os.name").toLowerCase();
 
     public static void CheckingOs() {
-
-        System.out.println("os.name: " + OS);
         if (isWindows()) {
             System.out.println("[GeyserUpdater] Windows OS detected!");
+
             try {
-                MakeWinBat.CreateWinBat();
+                MakeWinBat.CreateBungeeWinBat();
+                MakeWinBat.CreateSpigotWinBat();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (isMac()) {
             System.out.println("[GeyserUpdater] Mac OS detected!");
             try {
-                MakeMacSh.CreateMacSh();
+                MakeMacSh.CreateBungeeMacSh();
+                MakeMacSh.CreateSpigotMacSh();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (isUnix()) {
             System.out.println("[GeyserUpdater] Linux OS detected!");
             try {
-                MakeLinuxSh.CreateLinuxSh();
+                MakeLinuxSh.CreateBungeeLinuxSh();
+                MakeLinuxSh.CreateSpigotLinuxSh();
             } catch (IOException e) {
                 e.printStackTrace();
             }

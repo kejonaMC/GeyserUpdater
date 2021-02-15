@@ -2,6 +2,7 @@ package com.alysaa.geyserupdater.spigot;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.CheckOSScript;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -37,7 +38,7 @@ public class SpigotUpdater extends JavaPlugin {
             try {
                 Timer StartAutoUpdate;
                 StartAutoUpdate = new Timer();
-                StartAutoUpdate.schedule(new StartUpdate(),0,100*60*14400);
+                StartAutoUpdate.schedule(new StartUpdate(), 0, 100 * 60 * 14400);
                 // Auto Update Cycle on Startup and each 24h after startup
             } catch (Exception e) {
                 e.printStackTrace();
@@ -46,10 +47,15 @@ public class SpigotUpdater extends JavaPlugin {
         // Enable File Checking here
         Timer StartFileCheck;
         StartFileCheck = new Timer();
-        StartFileCheck.schedule(new StartTimer(),100*60*300,100*60*300);
+        StartFileCheck.schedule(new StartTimer(), 100 * 60 * 300, 100 * 60 * 300);
         // File Checking Each 30min after server startup.
         // Logger for check update on GeyserUpdater
         versionCheck();
+        CheckOs();
+    }
+
+    private void CheckOs() {
+        CheckOSScript.CheckingOs();
     }
     public void versionCheck() {
         Logger logger = this.getLogger();
