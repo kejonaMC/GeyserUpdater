@@ -1,27 +1,23 @@
 package com.alysaa.geyserupdater.bungee;
 
+import com.alysaa.geyserupdater.bungee.util.CheckOSScriptBungee;
 import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
-import com.alysaa.geyserupdater.common.util.CheckOSScript;
-import com.alysaa.geyserupdater.common.util.CreateScript.MakeWinBat;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.alysaa.geyserupdater.spigot.util.CheckOSScriptSpigot;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import org.bukkit.Bukkit;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -49,10 +45,8 @@ public final class BungeeUpdater extends Plugin {
     }
 
     private void CheckOs() {
-            CheckOSScript.CheckingOs();
+            CheckOSScriptBungee.CheckingOs();
     }
-
-
 
     public void onDisable() {
         Logger logger = this.getLogger();

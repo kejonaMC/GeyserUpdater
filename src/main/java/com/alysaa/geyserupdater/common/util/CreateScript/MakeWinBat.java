@@ -16,7 +16,7 @@ public class MakeWinBat {
             FileOutputStream fos = new FileOutputStream(file);
             DataOutputStream dos = new DataOutputStream(fos);
             dos.writeBytes("@echo off\n");
-            dos.writeBytes("java -Xmx"+Runtime.getRuntime().totalMemory() / (1024 * 1024)+"M -jar BungeeCord.jar nogui\n");
+            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax()/ (1024 * 1024) + "M -jar BungeeCord.jar nogui\n");
             dos.writeBytes("Goto restart\n");
         }
     }

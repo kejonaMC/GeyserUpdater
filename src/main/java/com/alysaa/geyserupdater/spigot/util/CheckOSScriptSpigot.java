@@ -1,4 +1,4 @@
-package com.alysaa.geyserupdater.common.util;
+package com.alysaa.geyserupdater.spigot.util;
 
 import com.alysaa.geyserupdater.common.util.CreateScript.MakeLinuxSh;
 import com.alysaa.geyserupdater.common.util.CreateScript.MakeMacSh;
@@ -6,7 +6,7 @@ import com.alysaa.geyserupdater.common.util.CreateScript.MakeWinBat;
 
 import java.io.IOException;
 
-public class CheckOSScript {
+public class CheckOSScriptSpigot {
 
     private static String OS = System.getProperty("os.name").toLowerCase();
 
@@ -15,7 +15,6 @@ public class CheckOSScript {
             System.out.println("[GeyserUpdater] Windows OS detected!");
 
             try {
-                MakeWinBat.CreateBungeeWinBat();
                 MakeWinBat.CreateSpigotWinBat();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -23,7 +22,6 @@ public class CheckOSScript {
         } else if (isMac()) {
             System.out.println("[GeyserUpdater] Mac OS detected!");
             try {
-                MakeMacSh.CreateBungeeMacSh();
                 MakeMacSh.CreateSpigotMacSh();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -31,7 +29,6 @@ public class CheckOSScript {
         } else if (isUnix()) {
             System.out.println("[GeyserUpdater] Linux OS detected!");
             try {
-                MakeLinuxSh.CreateBungeeLinuxSh();
                 MakeLinuxSh.CreateSpigotLinuxSh();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -2,7 +2,7 @@ package com.alysaa.geyserupdater.spigot;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.common.util.CheckOSScript;
+import com.alysaa.geyserupdater.spigot.util.CheckOSScriptSpigot;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -55,7 +55,7 @@ public class SpigotUpdater extends JavaPlugin {
     }
 
     private void CheckOs() {
-        CheckOSScript.CheckingOs();
+        CheckOSScriptSpigot.CheckingOs();
     }
     public void versionCheck() {
         Logger logger = this.getLogger();
