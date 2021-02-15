@@ -20,7 +20,7 @@ public class MakeMacSh {
             DataOutputStream dos = new DataOutputStream(fos);
             dos.writeBytes("#!/bin/sh\n");
             dos.writeBytes(":restart\n");
-            dos.writeBytes("java -Xmx1G -jar BungeeCord.jar nogui\n");
+            dos.writeBytes("java -Xmx"+Runtime.getRuntime().totalMemory() / (1024 * 1024)+"M -jar BungeeCord.jar nogui\n");
             dos.writeBytes("Goto restart\n");
         }
     }
@@ -36,7 +36,7 @@ public class MakeMacSh {
             DataOutputStream dos = new DataOutputStream(fos);
             dos.writeBytes("#!/bin/sh\n");
             dos.writeBytes(":restart\n");
-            dos.writeBytes("java -Xmx1G -jar Spigot.jar nogui\n");
+            dos.writeBytes("java -Xmx"+Runtime.getRuntime().totalMemory() / (1024 * 1024)+"M -jar Spigot.jar nogui\n");
             dos.writeBytes("Goto restart\n");
         }
     }
