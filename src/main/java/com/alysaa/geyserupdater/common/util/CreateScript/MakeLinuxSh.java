@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,7 +21,7 @@ public class MakeLinuxSh {
             DataOutputStream dos = new DataOutputStream(fos);
             dos.writeBytes("#!/bin/sh\n");
             dos.writeBytes(":restart\n");
-            dos.writeBytes("java -Xmx"+Runtime.getRuntime().totalMemory() / (1024 * 1024)+"M -jar BungeeCord.jar nogui\n");
+            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax()/ (1024 * 1024) + "M -jar BungeeCord.jar nogui\n");
             dos.writeBytes("Goto restart\n");
         }
     }
@@ -36,7 +37,7 @@ public class MakeLinuxSh {
             DataOutputStream dos = new DataOutputStream(fos);
             dos.writeBytes("#!/bin/sh\n");
             dos.writeBytes(":restart\n");
-            dos.writeBytes("java -Xmx"+Runtime.getRuntime().totalMemory() / (1024 * 1024)+"M -jar Spigot.jar nogui\n");
+            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax()/ (1024 * 1024) + "M -jar spigot.jar nogui\n");
             dos.writeBytes("Goto restart\n");
         }
     }
