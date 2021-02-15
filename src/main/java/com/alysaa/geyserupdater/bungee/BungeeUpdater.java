@@ -6,7 +6,8 @@ import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
-import com.alysaa.geyserupdater.common.util.MakeBat;
+import com.alysaa.geyserupdater.common.util.CheckOSScript;
+import com.alysaa.geyserupdater.common.util.CreateScript.MakeWinBat;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -44,11 +45,7 @@ public final class BungeeUpdater extends Plugin {
     }
 
     private void batFile() {
-        try {
-            MakeBat.CreateBat();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        CheckOSScript.CheckingOs();
     }
 
     public void onDisable() {
