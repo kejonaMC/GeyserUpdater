@@ -103,8 +103,7 @@ public class SpigotUpdater extends JavaPlugin {
         if (!updateDir.exists()) {
             try {
                 updateDir.mkdirs();
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
         }
     }
     private class StartTimer extends TimerTask {
