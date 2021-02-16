@@ -11,7 +11,15 @@ import java.nio.file.Paths;
 public class MakeScript {
 
     public static void createScript(String jarPath) throws IOException {
-        Path p = Paths.get("GeyserUpdaterScript.bat");
+        Path p;
+        if (OSUtils.isWindows()) {
+            p = Paths.get("GeyserUpdaterScript.bat");
+        } else if (OSUtils.isLinux() || OSUtils.isMac()){
+            p = Paths.get("GeyserUpdaterScript.sh");
+        } else {
+            System.out.println("Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+            return;
+        }
         boolean exists = Files.exists(p);
         if (!exists) {
             System.out.println("[GeyserUpdater] A custom restart script has been made for you, its located in the main server folder. you will need to edit this and also make sure you enable it in spigot.yml!");
@@ -22,9 +30,6 @@ public class MakeScript {
                 dos.writeBytes("@echo off\n");
             } else if (OSUtils.isLinux() || OSUtils.isMac()) {
                 dos.writeBytes("#!/bin/sh\n");
-            } else {
-                System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows to create scripts.");
-                return;
             }
             dos.writeBytes(":restart\n");
             dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar "+ jarPath +" nogui\n");
