@@ -59,16 +59,20 @@ public class GeyserBungeeDownload {
         }
         CheckBuildFile.checkBungeeFile();
         if (BungeeUpdater.getConfiguration().getBoolean("EnableAutoRestart")) {
-            try {
-                System.out.println("[GeyserUpdater] The Server will restart in 10 Seconds!");
-                for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("RestartMessage")));
-                }
-                Thread.sleep(10000);
-                ProxyServer.getInstance().stop();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            System.out.println("[GeyserUpdater] The Server will restart in 10 Seconds!");
+            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("RestartMessage")));
             }
+            Runnable runnable = () -> {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+            Thread thread = new Thread(runnable);
+            thread.start();
+            ProxyServer.getInstance().stop();
         }
     }
 }
