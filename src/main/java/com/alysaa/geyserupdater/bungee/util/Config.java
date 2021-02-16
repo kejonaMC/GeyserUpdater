@@ -22,8 +22,8 @@ public class Config {
                     out.write(buffer);
                 }
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return resourceFile;
     }

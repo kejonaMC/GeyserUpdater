@@ -22,8 +22,8 @@ public class BungeeResourceUpdateChecker {
             JsonObject jsonObject = new JsonParser().parse(total).getAsJsonObject();
             String version = jsonObject.get("current_version").getAsString();
             return version;
-        } catch (IOException exception) {
-            updater.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
+        } catch (IOException e) {
+            updater.plugin.getLogger().info("Cannot look for updates: " + e.getMessage());
             return null;
         }
     }

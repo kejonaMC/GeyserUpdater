@@ -1,13 +1,12 @@
 package com.alysaa.geyserupdater.bungee;
 
-import com.alysaa.geyserupdater.bungee.util.CheckOSScriptBungee;
 import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
-import com.alysaa.geyserupdater.spigot.util.CheckOSScriptSpigot;
+import com.alysaa.geyserupdater.common.util.MakeScript;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -15,6 +14,8 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,12 +41,19 @@ public final class BungeeUpdater extends Plugin {
             e.printStackTrace();
         }
         this.checkFile();
-        this.CheckOs();
-        ProxyServer.getInstance().getScheduler().schedule(this, this::VersionCheck, 0, 30, TimeUnit.MINUTES);
+        this.checkOS();
+        ProxyServer.getInstance().getScheduler().schedule(this, this::versionCheck, 0, 30, TimeUnit.MINUTES);
     }
 
-    private void CheckOs() {
-            CheckOSScriptBungee.CheckingOs();
+    private void checkOS() {
+        try {
+            URI fileURI;
+            fileURI = new URI(ProxyServer.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+            File jar = new File(fileURI.getPath());
+            MakeScript.createScript(jar.getName());
+        } catch (URISyntaxException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onDisable() {
@@ -60,7 +68,7 @@ public final class BungeeUpdater extends Plugin {
             this.deleteBuild();
         } catch (Exception ignored) { }
     }
-    public void VersionCheck() {
+    public void versionCheck() {
         Logger logger = this.getLogger();
         String pluginVersion = this.getDescription().getVersion();
         BungeeUpdater plugin = this;
@@ -104,7 +112,7 @@ public final class BungeeUpdater extends Plugin {
             getProxy().getScheduler().schedule(this, () -> {
                 try {
                     // Checking for the build numbers of current build.
-                    CheckBuildNum.CheckBuildNumberBungeeAuto();
+                    CheckBuildNum.checkBuildNumberBungeeAuto();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
