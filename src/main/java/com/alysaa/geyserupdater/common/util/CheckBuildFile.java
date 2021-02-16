@@ -22,7 +22,7 @@ public class CheckBuildFile {
             }
         }
     }
-    public static void CheckSpigotFile() {
+    public static void checkSpigotFile() {
         Path p = Paths.get("plugins/update/Geyser-Spigot.jar");
         boolean exists = Files.exists(p);
         if (exists) {

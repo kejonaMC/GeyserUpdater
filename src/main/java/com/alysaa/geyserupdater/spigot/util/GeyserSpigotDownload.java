@@ -48,7 +48,7 @@ public class GeyserSpigotDownload {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                CheckBuildFile.CheckSpigotFile();
+                CheckBuildFile.checkSpigotFile();
             }
         }
         if (SpigotUpdater.plugin.getConfig().getBoolean("EnableAutoRestart")) {

@@ -16,7 +16,7 @@ public class GeyserCommand implements CommandExecutor {
             if (command.getName().equalsIgnoreCase("geyserupdate") && player.hasPermission("gupdater.geyserupdate")) {
                 try {
                     sender.sendMessage(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version!");
-                    CheckBuildNum.CheckBuildNumberSpigot();
+                    CheckBuildNum.checkBuildNumberSpigot();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

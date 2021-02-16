@@ -2,9 +2,10 @@ package com.alysaa.geyserupdater.spigot;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.spigot.util.CheckOSScriptSpigot;
+import com.alysaa.geyserupdater.common.util.MakeScript;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,6 +13,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -51,11 +54,19 @@ public class SpigotUpdater extends JavaPlugin {
         // File Checking Each 30min after server startup.
         // Logger for check update on GeyserUpdater
         versionCheck();
-        CheckOs();
+        // Make startup script
+        makeScript();
     }
 
-    private void CheckOs() {
-        CheckOSScriptSpigot.CheckingOs();
+    private void makeScript() {
+        try {
+            URI fileURI;
+            fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+            File jar = new File(fileURI.getPath());
+            MakeScript.createScript(jar.getName());
+        } catch (URISyntaxException | IOException e) {
+            e.printStackTrace();
+        }
     }
     public void versionCheck() {
         Logger logger = this.getLogger();
@@ -99,14 +110,14 @@ public class SpigotUpdater extends JavaPlugin {
     private class StartTimer extends TimerTask {
         @Override
         public void run() {
-            CheckBuildFile.CheckSpigotFile();
+            CheckBuildFile.checkSpigotFile();
         }
     }
     private class StartUpdate extends TimerTask {
         @Override
         public void run() {
             try {
-                CheckBuildNum.CheckBuildNumberSpigotAuto();
+                CheckBuildNum.checkBuildNumberSpigotAuto();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -19,7 +19,7 @@ import java.util.Properties;
 
 public class CheckBuildNum {
 
-    public static void CheckBuildNumberSpigot() throws IOException {
+    public static void checkBuildNumberSpigot() throws IOException {
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
         String buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
@@ -44,14 +44,14 @@ public class CheckBuildNum {
                 boolean notExists = Files.notExists(p);
 
                 if (exists) {
-                    GeyserBungeeDownload.GeyserDownload();
+                    GeyserBungeeDownload.geyserDownload();
                 } else if (notExists) {
                     GeyserSpigotDownload.GeyserDownload();
                 }
             }
         }
     }
-    public static void CheckBuildNumberSpigotAuto() throws IOException {
+    public static void checkBuildNumberSpigotAuto() throws IOException {
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
         String buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
@@ -68,14 +68,14 @@ public class CheckBuildNum {
                 boolean notExists1 = Files.notExists(p);
 
                 if (exists1) {
-                    GeyserBungeeDownload.GeyserDownload();
+                    GeyserBungeeDownload.geyserDownload();
                 } else if (notExists1) {
                     GeyserSpigotDownload.GeyserDownload();
                 }
             }
         }
     }
-    public static void CheckBuildNumberBungeeAuto() throws IOException {
+    public static void checkBuildNumberBungeeAuto() throws IOException {
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
         String buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
@@ -92,7 +92,7 @@ public class CheckBuildNum {
                 boolean notExists1 = Files.notExists(p);
 
                 if (exists1) {
-                    GeyserBungeeDownload.GeyserDownload();
+                    GeyserBungeeDownload.geyserDownload();
                 } else if (notExists1) {
                     GeyserSpigotDownload.GeyserDownload();
                 }
@@ -127,7 +127,7 @@ public class CheckBuildNum {
                     boolean notExists1 = Files.notExists(p);
 
                     if (exists1) {
-                        GeyserBungeeDownload.GeyserDownload();
+                        GeyserBungeeDownload.geyserDownload();
                     } else if (notExists1) {
                         GeyserSpigotDownload.GeyserDownload();
                     }
