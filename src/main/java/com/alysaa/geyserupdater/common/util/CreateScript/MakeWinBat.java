@@ -1,6 +1,10 @@
 package com.alysaa.geyserupdater.common.util.CreateScript;
 
+import net.md_5.bungee.api.ProxyServer;
+import org.bukkit.Bukkit;
+
 import java.io.*;
+import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
