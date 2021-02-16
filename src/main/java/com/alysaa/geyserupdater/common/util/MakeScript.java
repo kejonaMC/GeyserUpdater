@@ -11,19 +11,19 @@ import java.nio.file.Paths;
 public class MakeScript {
 
     public static void createScript(String jarPath) throws IOException {
-        Path p;
+        File file;
+        String extension;
         if (OSUtils.isWindows()) {
-            p = Paths.get("GeyserUpdaterScript.bat");
-        } else if (OSUtils.isLinux() || OSUtils.isMac()){
-            p = Paths.get("GeyserUpdaterScript.sh");
+            extension = "bat";
+        } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+            extension = "sh";
         } else {
             System.out.println("Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
             return;
         }
-        boolean exists = Files.exists(p);
-        if (!exists) {
+        file = new File("ServerRestartScript." + extension);
+        if (!file.exists()) {
             System.out.println("[GeyserUpdater] A custom restart script has been made for you, its located in the main server folder. you will need to edit this and also make sure you enable it in spigot.yml!");
-            File file = new File("GeyserUpdaterScript.bat");
             FileOutputStream fos = new FileOutputStream(file);
             DataOutputStream dos = new DataOutputStream(fos);
             if (OSUtils.isWindows()) {
