@@ -1,16 +1,18 @@
 package com.alysaa.geyserupdater.spigot;
 
+import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
+import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.common.util.MakeScript;
-import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
-import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
+import com.alysaa.geyserupdater.common.util.RestartScriptFactory;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -55,19 +57,21 @@ public class SpigotUpdater extends JavaPlugin {
         // Logger for check update on GeyserUpdater
         versionCheck();
         // Make startup script
-        makeScript();
+        makeScriptFile();
     }
 
-    private void makeScript() {
+    private void makeScriptFile() {
         try {
             URI fileURI;
             fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             File jar = new File(fileURI.getPath());
-            MakeScript.createScript(jar.getName());
+            // Tell the createScript method what the filename of the server jar is, and that bungee is not being used.
+            RestartScriptFactory.createScript(jar.getName(), false);
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
     }
+
     public void versionCheck() {
         Logger logger = this.getLogger();
         String pluginVersion = this.getDescription().getVersion();
