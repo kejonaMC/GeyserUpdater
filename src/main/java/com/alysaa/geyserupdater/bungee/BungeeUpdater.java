@@ -6,7 +6,7 @@ import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.common.util.RestartScriptFactory;
+import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -56,8 +56,9 @@ public final class BungeeUpdater extends Plugin {
             URI fileURI;
             fileURI = new URI(ProxyServer.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             File jar = new File(fileURI.getPath());
-            // Tell the createScript method what the filename of the server jar is, and that bungee is being used.
-            RestartScriptFactory.createScript(jar.getName(), true);
+            // Tell the createScript method the name of the server jar
+            // and that a loop is necessary because bungee has no restart system.
+            ScriptCreator.createScript(jar.getName(), true);
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }

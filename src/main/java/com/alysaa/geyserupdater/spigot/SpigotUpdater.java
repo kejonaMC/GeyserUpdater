@@ -4,7 +4,7 @@ import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.common.util.RestartScriptFactory;
+import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -65,8 +65,9 @@ public class SpigotUpdater extends JavaPlugin {
             URI fileURI;
             fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             File jar = new File(fileURI.getPath());
-            // Tell the createScript method what the filename of the server jar is, and that bungee is not being used.
-            RestartScriptFactory.createScript(jar.getName(), false);
+            // Tell the createScript method the name of the server jar
+            // and that a loop is not necessary because spigot has a restart system.
+            ScriptCreator.createScript(jar.getName(), false);
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }

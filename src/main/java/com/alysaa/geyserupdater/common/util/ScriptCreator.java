@@ -6,9 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 
-public class RestartScriptFactory {
+public class ScriptCreator {
 
-    public static void createScript(String jarPath, boolean isBungee) throws IOException {
+    public static void createScript(String jarPath, boolean runLoop) throws IOException {
         File file;
         String extension;
         if (OSUtils.isWindows()) {
@@ -32,11 +32,11 @@ public class RestartScriptFactory {
             }
             // The restart signal from Spigot is being used in the GeyserSpigotDownload class, which means that a loop in this script is not necessary for spigot.
             // GeyserBungeeDownload can only use the stop signal, so a loop must be used to keep the script alive. This only supports Windows currently.
-            if (isBungee) {
+            if (runLoop) {
                 dos.writeBytes(":restart\n");
             }
             dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar "+ jarPath +" nogui\n");
-            if (isBungee) {
+            if (runLoop) {
                 dos.writeBytes("Goto restart\n");
             }
         }
