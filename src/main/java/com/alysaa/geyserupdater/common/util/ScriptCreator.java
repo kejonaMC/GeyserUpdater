@@ -31,13 +31,21 @@ public class ScriptCreator {
                 dos.writeBytes("#!/bin/sh\n");
             }
             // The restart signal from Spigot is being used in the GeyserSpigotDownload class, which means that a loop in this script is not necessary for spigot.
-            // GeyserBungeeDownload can only use the stop signal, so a loop must be used to keep the script alive. This only supports Windows currently.
+            // GeyserBungeeDownload can only use the stop signal, so a loop must be used to keep the script alive.
             if (runLoop) {
-                dos.writeBytes(":restart\n");
+                if (OSUtils.isWindows()) {
+                    dos.writeBytes(":restart\n");
+                } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+                    dos.writeBytes("while true; do\n");
+                }
             }
             dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar "+ jarPath +" nogui\n");
             if (runLoop) {
-                dos.writeBytes("Goto restart\n");
+                if (OSUtils.isWindows()) {
+                    dos.writeBytes("timeout 10 && Goto restart\n");
+                } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+                    dos.writeBytes("echo \"Server stopped, restarting in 10 seconds!\"; sleep 10; done\n");
+                }
             }
         }
     }
