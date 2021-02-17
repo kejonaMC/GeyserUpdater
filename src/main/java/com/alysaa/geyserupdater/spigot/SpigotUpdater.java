@@ -57,7 +57,13 @@ public class SpigotUpdater extends JavaPlugin {
         // Logger for check update on GeyserUpdater
         versionCheck();
         // Make startup script
-        makeScriptFile();
+        if (getConfig().getBoolean("EnableAutoScript")) {
+            try {
+                makeScriptFile();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void makeScriptFile() {
@@ -68,6 +74,11 @@ public class SpigotUpdater extends JavaPlugin {
             System.out.println("[GeyserUpdater] Has detected a restart script.");
         } else {
             try {
+                //need to add os check on string
+                String scriptName = ("./ServerRestartScript.bat");
+                spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
+                spigot.set("settings.restart-script",scriptName);
+                spigot.save("spigot.yml");
                 URI fileURI;
                 fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
                 File jar = new File(fileURI.getPath());
