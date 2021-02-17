@@ -10,38 +10,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class MakeScript {
-
-    public static void checkSpigotRestart() {
-        FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
-        String scriptPath = spigot.getString("settings.restart-script");
-        File script = new File(scriptPath);
-        //need to add os check on string
-        String scriptName;
-        if (OSUtils.isWindows()) scriptName = "ServerRestartScript.bat";
-        else if (OSUtils.isLinux() || OSUtils.isMac()) scriptName = "./ServerRestartScript.sh";
-        else {
-            System.out.println("Your OS is not supported for script checking!");
-            return;
-        }
-        spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
-        spigot.set("settings.restart-script", scriptName);
-        try {
-            spigot.save("spigot.yml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (script.exists())
-            System.out.println("[GeyserUpdater] Has detected a restart script.");
-        else
-            try {
-                URI fileURI;
-                fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-                File jar = new File(fileURI.getPath());
-                MakeScript.createScript(jar.getName());
-            } catch (URISyntaxException | IOException e) {
-                e.printStackTrace();
-            }
-    }
     public static void createScript(String jarPath) throws IOException {
 
         File file;
@@ -56,7 +24,7 @@ public class MakeScript {
         }
         file = new File("ServerRestartScript." + extension);
         if (!file.exists()) {
-            System.out.println("[GeyserUpdater] A custom restart script has been made for you." );
+            System.out.println("[GeyserUpdater] A custom restart script has been made for you.");
             System.out.println("[GeyserUpdater] You will need to shutdown the server and use our provided restart script.");
             FileOutputStream fos = new FileOutputStream(file);
             DataOutputStream dos = new DataOutputStream(fos);
@@ -66,7 +34,7 @@ public class MakeScript {
                 dos.writeBytes("#!/bin/sh\n");
             }
             dos.writeBytes(":restart\n");
-            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar "+ jarPath +" nogui\n");
+            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar " + jarPath + " nogui\n");
             dos.writeBytes("Goto restart\n");
         }
     }

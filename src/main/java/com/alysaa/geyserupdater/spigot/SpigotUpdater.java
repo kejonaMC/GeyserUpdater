@@ -3,6 +3,7 @@ package com.alysaa.geyserupdater.spigot;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.MakeScript;
+import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -55,7 +56,7 @@ public class SpigotUpdater extends JavaPlugin {
         // Make startup script
         if (getConfig().getBoolean("EnableAutoScript")) {
             try {
-                MakeScript.checkSpigotRestart();
+                CheckSpigotRestart.checkYml();
             } catch (Exception e) {
                 e.printStackTrace();
             }
