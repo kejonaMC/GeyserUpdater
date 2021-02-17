@@ -41,6 +41,8 @@ public class ScriptCreator {
                 URI fileURI;
                 fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
                 File jar = new File(fileURI.getPath());
+                // Tell the createScript method the name of the server jar
+                // and that a loop is necessary because bungee has no restart system.
                 ScriptCreator.createScript(jar.getName(), false);
             } catch (URISyntaxException | IOException e) {
                 e.printStackTrace();
@@ -48,7 +50,6 @@ public class ScriptCreator {
         }
     }
     public static void createScript(String jarPath, boolean runLoop) throws IOException {
-
         File file;
         String extension;
         if (OSUtils.isWindows()) {
