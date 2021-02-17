@@ -1,14 +1,46 @@
 package com.alysaa.geyserupdater.common.util;
 
 import com.alysaa.geyserupdater.common.util.OSUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MakeScript {
+
+    public static void checkSpigotRestart() {
+
+        FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
+        String scriptPath = spigot.getString("settings.restart-script");
+        File script = new File(scriptPath);
+        //need to add os check on string
+        String scriptName = ("./ServerRestartScript.bat");
+        spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
+        spigot.set("settings.restart-script",scriptName);
+        try {
+            spigot.save("spigot.yml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (script.exists())
+            System.out.println("[GeyserUpdater] Has detected a restart script.");
+        else
+            try {
+                URI fileURI;
+                fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+                File jar = new File(fileURI.getPath());
+                MakeScript.createScript(jar.getName());
+            } catch (URISyntaxException | IOException e) {
+                e.printStackTrace();
+            }
+    }
 
     public static void createScript(String jarPath) throws IOException {
         File file;
