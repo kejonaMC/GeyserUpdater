@@ -61,7 +61,9 @@ public class SpigotUpdater extends JavaPlugin {
     }
 
     private void makeScriptFile() {
-        try {
+        FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
+        if (spigot.getString("restart-script")) {
+            try {
             URI fileURI;
             fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             File jar = new File(fileURI.getPath());
@@ -69,7 +71,8 @@ public class SpigotUpdater extends JavaPlugin {
             // and that a loop is not necessary because spigot has a restart system.
             ScriptCreator.createScript(jar.getName(), false);
         } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
+                e.printStackTrace();
+            }
         }
     }
 
