@@ -53,7 +53,8 @@ public class SpigotUpdater extends JavaPlugin {
         // File Checking Each 30min after server startup.
         // Logger for check update on GeyserUpdater
         versionCheck();
-        // Make startup script
+        // Check if a restart script already exists
+        // We create one if it doesn't
         if (getConfig().getBoolean("EnableAutoScript")) {
             try {
                 CheckSpigotRestart.checkYml();

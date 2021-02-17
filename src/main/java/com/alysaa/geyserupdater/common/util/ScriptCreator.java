@@ -8,7 +8,7 @@ import java.lang.management.ManagementFactory;
 
 public class ScriptCreator {
 
-    public static void createScript(String jarPath, boolean runLoop) throws IOException {
+    public static void createScript(String jarName, boolean runLoop) throws IOException {
         File file;
         String extension;
         if (OSUtils.isWindows()) {
@@ -40,7 +40,7 @@ public class ScriptCreator {
                     dos.writeBytes("while true; do\n");
                 }
             }
-            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar " + jarPath + " nogui\n");
+            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar " + jarName + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes("timeout 10 && Goto restart\n");
