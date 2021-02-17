@@ -6,7 +6,6 @@ import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,8 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -37,6 +34,7 @@ public class SpigotUpdater extends JavaPlugin {
         getLogger().info("GeyserUpdater v1.1.0 has been enabled");
         this.getCommand("geyserupdate").setExecutor(new GeyserCommand());
         createFiles();
+        checkConfigVer();
         plugin = this;
         // If true start auto updating
         if (getConfig().getBoolean("EnableAutoUpdateGeyser")) {
@@ -59,37 +57,20 @@ public class SpigotUpdater extends JavaPlugin {
         // Make startup script
         if (getConfig().getBoolean("EnableAutoScript")) {
             try {
-                makeScriptFile();
+                ScriptCreator.checkSpigotRestart();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void makeScriptFile() {
-        FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
-        String scriptPath = spigot.getString("settings.restart-script");
-        File script = new File(scriptPath);
-        if (script.exists()) {
-            System.out.println("[GeyserUpdater] Has detected a restart script.");
-        } else {
-            try {
-                //need to add os check on string
-                String scriptName = ("./ServerRestartScript.bat");
-                spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
-                spigot.set("settings.restart-script",scriptName);
-                spigot.save("spigot.yml");
-                URI fileURI;
-                fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-                File jar = new File(fileURI.getPath());
-                // Tell the createScript method the name of the server jar
-                // and that a loop is not necessary because spigot has a restart system.
-                ScriptCreator.createScript(jar.getName(), false);
-            } catch (URISyntaxException | IOException e) {
-                e.printStackTrace();
+    public void checkConfigVer(){
+        Logger logger = this.getLogger();
+        //Change version number only when editing config.yml!
+        if (!getConfig().getString("Version").equalsIgnoreCase("1.0")) {
+                logger.info("Config.yml is outdated. please regenerate a new config.yml!");
             }
         }
-    }
 
     public void versionCheck() {
         Logger logger = this.getLogger();

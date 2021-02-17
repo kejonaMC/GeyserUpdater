@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 public final class BungeeUpdater extends Plugin {
 
-    public BungeeUpdater plugin;
+    public static BungeeUpdater plugin;
     public static Configuration configuration;
 
     @Override
@@ -70,7 +70,7 @@ public final class BungeeUpdater extends Plugin {
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            logger.info("[GeyserUpdater] No updates have been implemented.");
+            logger.info("No updates have been implemented.");
         }
         try {
             this.deleteBuild();
