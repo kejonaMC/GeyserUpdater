@@ -12,7 +12,6 @@ import java.lang.management.ManagementFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-
 public class ScriptCreator {
 
     public static void checkSpigotRestart() {
