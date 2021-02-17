@@ -1,17 +1,10 @@
 package com.alysaa.geyserupdater.common.util;
-
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.*;
 import java.lang.management.ManagementFactory;
-import java.net.URI;
-import java.net.URISyntaxException;
+
 
 public class MakeScript {
     public static void createScript(String jarPath) throws IOException {
-
         File file;
         String extension;
         if (OSUtils.isWindows()) {
@@ -38,6 +31,4 @@ public class MakeScript {
             dos.writeBytes("Goto restart\n");
         }
     }
-
-
 }

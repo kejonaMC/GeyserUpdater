@@ -66,8 +66,6 @@ public class GeyserSpigotDownload {
             };
             Thread thread = new Thread(runnable);
             thread.start();
-
-
             Bukkit.spigot().restart();
         }
     }

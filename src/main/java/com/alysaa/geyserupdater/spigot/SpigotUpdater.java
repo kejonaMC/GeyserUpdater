@@ -2,7 +2,6 @@ package com.alysaa.geyserupdater.spigot;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.common.util.MakeScript;
 import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
@@ -65,7 +64,7 @@ public class SpigotUpdater extends JavaPlugin {
     public void checkConfigVer(){
         Logger logger = this.getLogger();
         //Change version number only when editing config.yml!
-        if (!getConfig().getString("Version").equalsIgnoreCase("1.0")) {
+        if (!getConfig().getString("version").equalsIgnoreCase("one")) {
                 logger.info("Config.yml is outdated. please regenerate a new config.yml!");
             }
         }
@@ -81,7 +80,6 @@ public class SpigotUpdater extends JavaPlugin {
                 logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
             }
         };
-
         Thread thread = new Thread(runnable);
         thread.start();
     }
