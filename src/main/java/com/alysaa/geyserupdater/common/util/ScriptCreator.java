@@ -21,7 +21,8 @@ public class ScriptCreator {
         }
         file = new File("ServerRestartScript." + extension);
         if (!file.exists()) {
-            System.out.println("[GeyserUpdater] A custom restart script has been made for you, its located in the main server folder. you will need to edit this and also make sure you enable it in spigot.yml!");
+            System.out.println("[GeyserUpdater] A custom restart script has been made for you.");
+            System.out.println("[GeyserUpdater] You will need to shutdown the server and use our provided restart script.");
             FileOutputStream fos = new FileOutputStream(file);
             DataOutputStream dos = new DataOutputStream(fos);
 
@@ -39,7 +40,7 @@ public class ScriptCreator {
                     dos.writeBytes("while true; do\n");
                 }
             }
-            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar "+ jarPath +" nogui\n");
+            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar " + jarPath + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes("timeout 10 && Goto restart\n");

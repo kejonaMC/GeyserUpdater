@@ -52,7 +52,8 @@ public class GeyserSpigotDownload {
             }
         }
         if (SpigotUpdater.plugin.getConfig().getBoolean("EnableAutoRestart")) {
-            System.out.println("[GeyserUpdater] The Server will restart in 10 seconds!");
+
+            SpigotUpdater.plugin.getLogger().info("[GeyserUpdater] The Server will restart in 10 seconds!");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',SpigotUpdater.getPlugin().getConfig().getString("RestartMessage")));
             }
@@ -65,8 +66,6 @@ public class GeyserSpigotDownload {
             };
             Thread thread = new Thread(runnable);
             thread.start();
-
-
             Bukkit.spigot().restart();
         }
     }
