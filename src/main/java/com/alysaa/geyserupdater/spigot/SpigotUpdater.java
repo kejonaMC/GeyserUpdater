@@ -64,9 +64,9 @@ public class SpigotUpdater extends JavaPlugin {
         FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
         String scriptPath = spigot.getString("settings.restart-script");
         File script = new File(scriptPath);
-        if (script.exists())
+        if (script.exists()) {
             System.out.println("[GeyserUpdater] Has detected a restart script.");
-        else
+        } else {
             try {
                 URI fileURI;
                 fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
@@ -77,6 +77,7 @@ public class SpigotUpdater extends JavaPlugin {
             } catch (URISyntaxException | IOException e) {
                 e.printStackTrace();
             }
+        }
     }
 
     public void versionCheck() {
