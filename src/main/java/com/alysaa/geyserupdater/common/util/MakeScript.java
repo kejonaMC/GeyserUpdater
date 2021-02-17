@@ -57,7 +57,7 @@ public class MakeScript {
         file = new File("ServerRestartScript." + extension);
         if (!file.exists()) {
             System.out.println("[GeyserUpdater] A custom restart script has been made for you." );
-            System.out.println(" You will need to shutdown the server and use our provided restart script.");
+            System.out.println("[GeyserUpdater] You will need to shutdown the server and use our provided restart script.");
             FileOutputStream fos = new FileOutputStream(file);
             DataOutputStream dos = new DataOutputStream(fos);
             if (OSUtils.isWindows()) {
