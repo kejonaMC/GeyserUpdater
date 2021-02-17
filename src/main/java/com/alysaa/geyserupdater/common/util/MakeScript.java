@@ -21,9 +21,15 @@ public class MakeScript {
         String scriptPath = spigot.getString("settings.restart-script");
         File script = new File(scriptPath);
         //need to add os check on string
-        String scriptName = ("./ServerRestartScript.bat");
+        String scriptName;
+        if (OSUtils.isWindows()) scriptName = "./ServerRestartScript.bat";
+        else if (OSUtils.isLinux() || OSUtils.isMac()) scriptName = "./ServerRestartScript.sh";
+        else {
+            System.out.println("Your OS is not supported for script checking!");
+            return;
+        }
         spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
-        spigot.set("settings.restart-script",scriptName);
+        spigot.set("settings.restart-script", scriptName);
         try {
             spigot.save("spigot.yml");
         } catch (IOException e) {
