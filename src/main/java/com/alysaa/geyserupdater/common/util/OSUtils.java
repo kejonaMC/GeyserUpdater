@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.common.util;
 
 public class OSUtils {
+
     private static String OS = System.getProperty("os.name").toLowerCase();
 
     public static boolean isWindows() {
@@ -16,4 +17,21 @@ public class OSUtils {
                 || OS.indexOf("nux") >= 0
                 || OS.indexOf("aix") > 0);
     }
+
+    public static OSType getOS() {
+        if (isLinux()) return OSType.LINUX;
+        else if (isMac()) return OSType.MACOS;
+        else if (isWindows()) return OSType.WINDOWS;
+        else return null;
+    }
 }
+
+enum OSType {
+    WINDOWS("windows"),
+    MACOS("macos"),
+    LINUX("linux");
+
+    OSType(String windows) {}
+}
+
+
