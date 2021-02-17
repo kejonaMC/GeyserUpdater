@@ -12,9 +12,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Logger;
 
 public class GeyserBungeeDownload {
     public static void geyserDownload() {
+        Logger logger = BungeeUpdater.plugin.getLogger();
         try {
             OutputStream os = null;
             InputStream is = null;
@@ -59,7 +61,7 @@ public class GeyserBungeeDownload {
         }
         CheckBuildFile.checkBungeeFile();
         if (BungeeUpdater.getConfiguration().getBoolean("EnableAutoRestart")) {
-            System.out.println("[GeyserUpdater] The Server will restart in 10 Seconds!");
+            logger.info("[GeyserUpdater] The Server will restart in 10 Seconds!");
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("RestartMessage")));
             }

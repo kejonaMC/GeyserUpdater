@@ -5,7 +5,6 @@ import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.MakeScript;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,8 +12,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -35,6 +32,7 @@ public class SpigotUpdater extends JavaPlugin {
         getLogger().info("GeyserUpdater v1.1.0 has been enabled");
         this.getCommand("geyserupdate").setExecutor(new GeyserCommand());
         createFiles();
+        checkConfigVer();
         plugin = this;
         // If true start auto updating
         if (getConfig().getBoolean("EnableAutoUpdateGeyser")) {
@@ -63,6 +61,13 @@ public class SpigotUpdater extends JavaPlugin {
             }
         }
     }
+    public void checkConfigVer(){
+        Logger logger = this.getLogger();
+        //Change version number only when editing config.yml!
+        if (!getConfig().getString("Version").equalsIgnoreCase("1.0")) {
+                logger.info("Config.yml is outdated. please regenerate a new config.yml!");
+            }
+        }
     public void versionCheck() {
         Logger logger = this.getLogger();
         String pluginVersion = this.getDescription().getVersion();
