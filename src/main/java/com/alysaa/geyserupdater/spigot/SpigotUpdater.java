@@ -59,13 +59,16 @@ public class SpigotUpdater extends JavaPlugin {
     }
 
     private void makeScript() {
-        try {
+        FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
+        if (spigot.getString("restart-script")) {
+            try {
             URI fileURI;
             fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             File jar = new File(fileURI.getPath());
             MakeScript.createScript(jar.getName());
         } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
+                e.printStackTrace();
+            }
         }
     }
     public void versionCheck() {
