@@ -10,3 +10,5 @@ EnableAutoUpdateGeyser: false
 EnableAutoRestart: false
 
 RestartMessage: '&2The server will restart in 10 Seconds!'
+
+EnableAutoScript: false
