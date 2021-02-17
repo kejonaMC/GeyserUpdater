@@ -4,7 +4,7 @@ import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.common.util.ScriptCreator;
+import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -54,10 +54,11 @@ public class SpigotUpdater extends JavaPlugin {
         // File Checking Each 30min after server startup.
         // Logger for check update on GeyserUpdater
         versionCheck();
-        // Make startup script
+        // Check if a restart script already exists
+        // We produce one if it does not
         if (getConfig().getBoolean("EnableAutoScript")) {
             try {
-                ScriptCreator.checkSpigotRestart();
+                CheckSpigotRestart.checkYml();
             } catch (Exception e) {
                 e.printStackTrace();
             }
