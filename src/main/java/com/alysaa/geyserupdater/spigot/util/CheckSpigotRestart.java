@@ -1,7 +1,7 @@
 package com.alysaa.geyserupdater.spigot.util;
 
-import com.alysaa.geyserupdater.common.util.MakeScript;
 import com.alysaa.geyserupdater.common.util.OSUtils;
+import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,7 +16,6 @@ public class CheckSpigotRestart {
         FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
         String scriptPath = spigot.getString("settings.restart-script");
         File script = new File(scriptPath);
-        //need to add os check on string
         String scriptName;
         if (OSUtils.isWindows()) scriptName = "./ServerRestartScript.bat";
         else if (OSUtils.isLinux() || OSUtils.isMac()) scriptName = "./ServerRestartScript.sh";
@@ -33,14 +32,17 @@ public class CheckSpigotRestart {
         }
         if (script.exists())
             System.out.println("[GeyserUpdater] Has detected a restart script.");
-        else
+        else {
             try {
                 URI fileURI;
                 fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
                 File jar = new File(fileURI.getPath());
-                MakeScript.createScript(jar.getName());
+                // Tell the createScript method the name of the server jar
+                // and that a loop is not necessary because spigot has a restart system.
+                ScriptCreator.createScript(jar.getName(), false);
             } catch (URISyntaxException | IOException e) {
                 e.printStackTrace();
             }
+        }
     }
 }

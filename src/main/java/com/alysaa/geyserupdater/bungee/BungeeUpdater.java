@@ -1,19 +1,23 @@
 package com.alysaa.geyserupdater.bungee;
 
-import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
+import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
+import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
-import com.alysaa.geyserupdater.common.util.MakeScript;
+import com.alysaa.geyserupdater.common.util.ScriptCreator;
+
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -41,17 +45,22 @@ public final class BungeeUpdater extends Plugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // Enable File Checking here
         this.checkFile();
-        this.checkOS();
         this.checkConfigVer();
         ProxyServer.getInstance().getScheduler().schedule(this, this::versionCheck, 0, 30, TimeUnit.MINUTES);
+        // Make startup script
+        makeScriptFile();
     }
-    private void checkOS() {
+
+    private void makeScriptFile() {
         try {
             URI fileURI;
             fileURI = new URI(ProxyServer.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             File jar = new File(fileURI.getPath());
-            MakeScript.createScript(jar.getName());
+            // Tell the createScript method the name of the server jar
+            // and that a loop is necessary because bungee has no restart system.
+            ScriptCreator.createScript(jar.getName(), true);
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
