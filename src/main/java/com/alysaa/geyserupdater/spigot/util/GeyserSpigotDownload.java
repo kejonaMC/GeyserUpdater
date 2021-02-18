@@ -14,7 +14,7 @@ public class GeyserSpigotDownload {
     public static void GeyserDownload() {
         OutputStream os = null;
         InputStream is = null;
-        String fileUrl = "https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar";
+        String fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/server-inventory/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar";
         String outputPath = ("plugins/update/Geyser-Spigot.jar");
         try {
             // create a url object

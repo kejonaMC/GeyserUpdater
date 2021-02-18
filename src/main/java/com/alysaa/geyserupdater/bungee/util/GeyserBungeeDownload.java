@@ -17,7 +17,7 @@ public class GeyserBungeeDownload {
         try {
             OutputStream os = null;
             InputStream is = null;
-            String fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar";
+            String fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/server-inventory/lastSuccessfulBuild/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar";
             String outputPath = ("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
             try {
                 // create a url object
