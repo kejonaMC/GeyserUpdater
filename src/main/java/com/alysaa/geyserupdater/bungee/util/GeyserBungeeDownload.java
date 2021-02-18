@@ -60,10 +60,10 @@ public class GeyserBungeeDownload {
             e.printStackTrace();
         }
         CheckBuildFile.checkBungeeFile();
-        if (BungeeUpdater.getConfiguration().getBoolean("EnableAutoRestart")) {
+        if (BungeeUpdater.getConfiguration().getBoolean("Auto-Restart-Server")) {
             logger.info("[GeyserUpdater] The Server will restart in 10 Seconds!");
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("RestartMessage")));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("Restart-Message-Players")));
             }
             Runnable runnable = () -> {
                 try {
