@@ -54,7 +54,8 @@ public final class BungeeUpdater extends Plugin {
     }
 
     private void makeScriptFile() {
-        try {
+        if (this.getConfiguration().getBoolean("Auto-Script-Generating")) {
+            try {
             URI fileURI;
             fileURI = new URI(ProxyServer.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             File jar = new File(fileURI.getPath());
@@ -62,7 +63,8 @@ public final class BungeeUpdater extends Plugin {
             // and that a loop is necessary because bungee has no restart system.
             ScriptCreator.createScript(jar.getName(), true);
         } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
+                e.printStackTrace();
+            }
         }
     }
     public void onDisable() {
@@ -80,7 +82,7 @@ public final class BungeeUpdater extends Plugin {
         //Change version number only when editing config.yml!
          if (!getConfiguration().getString("version").equals("one")){
             logger.info("Config.yml is outdated. please regenerate a new config.yml!");
-        }
+         }
     }
     public void versionCheck() {
         String pluginVersion = this.getDescription().getVersion();
@@ -118,7 +120,7 @@ public final class BungeeUpdater extends Plugin {
         getProxy().getScheduler().schedule(this, CheckBuildFile::checkBungeeFile, 30, 30, TimeUnit.MINUTES);
     }
     public void startAutoUpdate() throws IOException {
-        if (this.getConfiguration().getBoolean("EnableAutoUpdateGeyser")) {
+        if (this.getConfiguration().getBoolean("Auto-Update-Geyser")) {
             getProxy().getScheduler().schedule(this, () -> {
                 try {
                     // Checking for the build numbers of current build.

@@ -36,7 +36,7 @@ public class SpigotUpdater extends JavaPlugin {
         checkConfigVer();
         plugin = this;
         // If true start auto updating
-        if (getConfig().getBoolean("EnableAutoUpdateGeyser")) {
+        if (getConfig().getBoolean("Auto-Update-Geyser")) {
             try {
                 Timer StartAutoUpdate;
                 StartAutoUpdate = new Timer();
@@ -55,7 +55,7 @@ public class SpigotUpdater extends JavaPlugin {
         versionCheck();
         // Check if a restart script already exists
         // We create one if it doesn't
-        if (getConfig().getBoolean("EnableAutoScript")) {
+        if (getConfig().getBoolean("Auto-Script-Generating")) {
             try {
                 CheckSpigotRestart.checkYml();
             } catch (Exception e) {

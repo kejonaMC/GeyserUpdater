@@ -17,7 +17,7 @@ public class CheckSpigotRestart {
         String scriptPath = spigot.getString("settings.restart-script");
         File script = new File(scriptPath);
         String scriptName;
-        if (OSUtils.isWindows()) scriptName = "./ServerRestartScript.bat";
+        if (OSUtils.isWindows()) scriptName = "ServerRestartScript.bat";
         else if (OSUtils.isLinux() || OSUtils.isMac()) scriptName = "./ServerRestartScript.sh";
         else {
             System.out.println("Your OS is not supported for script checking!");
