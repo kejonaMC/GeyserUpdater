@@ -47,7 +47,6 @@ public final class BungeeUpdater extends Plugin {
         }
         // Enable File Checking here
         this.checkFile();
-        this.makeScriptFile();
         this.checkConfigVer();
         ProxyServer.getInstance().getScheduler().schedule(this, this::versionCheck, 0, 30, TimeUnit.MINUTES);
         // Make startup script
