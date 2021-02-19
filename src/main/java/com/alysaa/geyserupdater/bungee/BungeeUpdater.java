@@ -18,8 +18,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -56,13 +54,9 @@ public final class BungeeUpdater extends Plugin {
     private void makeScriptFile() {
         if (this.getConfiguration().getBoolean("Auto-Script-Generating")) {
             try {
-            URI fileURI;
-            fileURI = new URI(ProxyServer.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-            File jar = new File(fileURI.getPath());
-            // Tell the createScript method the name of the server jar
-            // and that a loop is necessary because bungee has no restart system.
-            ScriptCreator.createScript(jar.getName(), true);
-        } catch (URISyntaxException | IOException e) {
+            // Tell the createScript method that a loop is necessary because bungee has no restart system.
+            ScriptCreator.createScript(true);
+        } catch (IOException e) {
                 e.printStackTrace();
             }
         }

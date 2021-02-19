@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ScriptCreator {
 
-    public static void createScript(String jarName, boolean runLoop) throws IOException {
+    public static void createScript(boolean runLoop) throws IOException {
         File file;
         String extension;
         if (OSUtils.isWindows()) {
