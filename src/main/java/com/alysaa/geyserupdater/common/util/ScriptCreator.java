@@ -43,8 +43,9 @@ public class ScriptCreator {
                 }
             }
             // Fetch JVM flags
-            String inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments().toString().replaceAll("[,\\[\\]]", "");
-            dos.writeBytes("java " + inputArguments + " -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
+            List<String> inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
+            String runtimeFlags = String.join(" ", inputArguments);
+            dos.writeBytes("java " + runtimeFlags + " -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes("timeout 10 && Goto restart\n");
