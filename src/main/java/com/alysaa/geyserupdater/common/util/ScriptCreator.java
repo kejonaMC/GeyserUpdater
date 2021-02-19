@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScriptCreator {
 
@@ -40,7 +42,9 @@ public class ScriptCreator {
                     dos.writeBytes("while true; do\n");
                 }
             }
-            dos.writeBytes("java -Xmx" + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "M -jar " + jarName + " nogui\n");
+            List<String> memory = ManagementFactory.getRuntimeMXBean().getInputArguments();
+
+            dos.writeBytes("java -Xmx" + ManagementFactory.getRuntimeMXBean().getInputArguments().replaceAll("[<>\\[\\],-]", "") + "M -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes("timeout 10 && Goto restart\n");
