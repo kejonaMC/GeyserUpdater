@@ -43,10 +43,10 @@ public class ScriptCreator {
                     dos.writeBytes("while true; do\n");
                 }
             }
-            List<String> memory = ManagementFactory.getRuntimeMXBean().getInputArguments();
-            Collections.replaceAll(memory, "[<>\\[\\],-]", "");
-
-            dos.writeBytes("java -Xmx" + memory + "M -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
+            // Fetch JVM flags
+            String inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments().toString().replaceAll("[,\\[\\]]", "");
+            // Write command to start server
+            dos.writeBytes("java " + inputArguments + " -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes("timeout 10 && Goto restart\n");
