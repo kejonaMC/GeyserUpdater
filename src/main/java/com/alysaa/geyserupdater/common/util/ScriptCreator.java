@@ -5,13 +5,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ScriptCreator {
 
-    public static void createScript(String jarName, boolean runLoop) throws IOException {
+    public static void createScript(boolean runLoop) throws IOException {
         File file;
         String extension;
         if (OSUtils.isWindows()) {
@@ -44,9 +42,10 @@ public class ScriptCreator {
                 }
             }
             // Fetch JVM flags
-            String inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments().toString().replaceAll("[,\\[\\]]", "");
+            List<String> inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
+            String runtimeFlags = String.join(" ", inputArguments);
             // Write command to start server
-            dos.writeBytes("java " + inputArguments + " -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
+            dos.writeBytes("java " + runtimeFlags + " -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes("timeout 10 && Goto restart\n");
