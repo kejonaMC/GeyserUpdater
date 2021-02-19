@@ -45,6 +45,7 @@ public class ScriptCreator {
             // Fetch JVM flags
             List<String> inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
             String runtimeFlags = String.join(" ", inputArguments);
+            // Write command to start server
             dos.writeBytes("java " + runtimeFlags + " -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
