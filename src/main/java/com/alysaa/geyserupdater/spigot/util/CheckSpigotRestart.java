@@ -8,8 +8,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class CheckSpigotRestart {
     public static void checkYml() {
@@ -34,13 +32,9 @@ public class CheckSpigotRestart {
             System.out.println("[GeyserUpdater] Has detected a restart script.");
         else {
             try {
-                URI fileURI;
-                fileURI = new URI(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-                File jar = new File(fileURI.getPath());
-                // Tell the createScript method the name of the server jar
-                // and that a loop is not necessary because spigot has a restart system.
-                ScriptCreator.createScript(jar.getName(), false);
-            } catch (URISyntaxException | IOException e) {
+                // Tell the createScript method that a loop is not necessary because spigot has a restart system.
+                ScriptCreator.createScript(false);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
