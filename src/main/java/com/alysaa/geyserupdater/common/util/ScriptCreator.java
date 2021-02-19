@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ScriptCreator {
@@ -43,8 +44,9 @@ public class ScriptCreator {
                 }
             }
             List<String> memory = ManagementFactory.getRuntimeMXBean().getInputArguments();
+            Collections.replaceAll(memory, "[<>\\[\\],-]", "");
 
-            dos.writeBytes("java -Xmx" + ManagementFactory.getRuntimeMXBean().getInputArguments().replaceAll("[<>\\[\\],-]", "") + "M -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
+            dos.writeBytes("java -Xmx" + memory + "M -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes("timeout 10 && Goto restart\n");
