@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ScriptCreator {
@@ -44,6 +45,7 @@ public class ScriptCreator {
             }
             // Fetch JVM flags
             String inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments().toString().replaceAll("[,\\[\\]]", "");
+            // Write command to start server
             dos.writeBytes("java " + inputArguments + " -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
