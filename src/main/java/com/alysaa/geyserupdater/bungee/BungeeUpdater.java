@@ -74,7 +74,7 @@ public final class BungeeUpdater extends Plugin {
     }
     public void checkConfigVer(){
         //Change version number only when editing config.yml!
-         if (!getConfiguration().getString("version").equals("one")){
+         if (getConfiguration().getInt("version") <= 1){
             logger.info("Config.yml is outdated. please regenerate a new config.yml!");
          }
     }
