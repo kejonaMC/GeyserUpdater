@@ -22,6 +22,7 @@ public class CheckSpigotRestart {
                 ScriptCreator.createScript(false);
             } catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
             // Set the restart-script entry in spigot.yml to the one we just created
             String scriptName;
@@ -40,6 +41,7 @@ public class CheckSpigotRestart {
                 spigot.save("spigot.yml");
             } catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
             System.out.println("[GeyserUpdater] Has set restart-script in spigot.yml to " + scriptName);
         }
