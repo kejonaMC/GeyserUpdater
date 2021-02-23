@@ -32,7 +32,7 @@ public class CheckSpigotRestart {
                 scriptName = "./ServerRestartScript.sh";
             }
             else {
-                System.out.println("Your OS is not supported for script checking!");
+                System.out.println("[GeyserUpdater] Your OS is not supported for script checking!");
                 return;
             }
             spigot.set("settings.restart-script", scriptName);
@@ -41,6 +41,7 @@ public class CheckSpigotRestart {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            System.out.println("[GeyserUpdater] Has set restart-script in spigot.yml to " + scriptName);
         }
     }
 }

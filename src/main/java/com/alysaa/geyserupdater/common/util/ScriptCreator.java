@@ -17,7 +17,7 @@ public class ScriptCreator {
         } else if (OSUtils.isLinux() || OSUtils.isMac()) {
             extension = "sh";
         } else {
-            System.out.println("Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+            System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
             return;
         }
         file = new File("ServerRestartScript." + extension);
