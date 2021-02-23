@@ -14,29 +14,34 @@ public class CheckSpigotRestart {
         FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
         String scriptPath = spigot.getString("settings.restart-script");
         File script = new File(scriptPath);
-        String scriptName;
-        if (OSUtils.isWindows()) scriptName = "ServerRestartScript.bat";
-        else if (OSUtils.isLinux() || OSUtils.isMac()) scriptName = "./ServerRestartScript.sh";
-        else {
-            System.out.println("Your OS is not supported for script checking!");
-            return;
-        }
-        spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
-        spigot.set("settings.restart-script", scriptName);
-        try {
-            spigot.save("spigot.yml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (script.exists())
+        if (script.exists()) {
             System.out.println("[GeyserUpdater] Has detected a restart script.");
-        else {
+        } else {
             try {
                 // Tell the createScript method that a loop is not necessary because spigot has a restart system.
                 ScriptCreator.createScript(false);
             } catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
+            // Set the restart-script entry in spigot.yml to the one we just created
+            String scriptName;
+            if (OSUtils.isWindows()) {
+                scriptName = "ServerRestartScript.bat";
+            } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+                scriptName = "./ServerRestartScript.sh";
+            } else {
+                System.out.println("[GeyserUpdater] Your OS is not supported for script checking!");
+                return;
+            }
+            spigot.set("settings.restart-script", scriptName);
+            try {
+                spigot.save("spigot.yml");
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            System.out.println("[GeyserUpdater] Has set restart-script in spigot.yml to " + scriptName);
         }
     }
 }

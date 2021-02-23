@@ -6,6 +6,7 @@ import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -53,11 +54,15 @@ public final class BungeeUpdater extends Plugin {
 
     private void makeScriptFile() {
         if (this.getConfiguration().getBoolean("Auto-Script-Generating")) {
-            try {
-            // Tell the createScript method that a loop is necessary because bungee has no restart system.
-            ScriptCreator.createScript(true);
-        } catch (IOException e) {
-                e.printStackTrace();
+            if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
+                try {
+                // Tell the createScript method that a loop is necessary because bungee has no restart system.
+                ScriptCreator.createScript(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
             }
         }
     }
