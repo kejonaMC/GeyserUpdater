@@ -48,20 +48,25 @@ public class GeyserSpigotDownload {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                CheckBuildFile.CheckSpigotFile();
+                CheckBuildFile.checkSpigotFile();
             }
         }
-        if (SpigotUpdater.plugin.getConfig().getBoolean("EnableAutoRestart")) {
-            try {
-                System.out.println("[GeyserUpdater] The Server will restart in 10 seconds!");
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',SpigotUpdater.getPlugin().getConfig().getString("RestartMessage")));
-                }
-                Thread.sleep(10000);
-                Bukkit.spigot().restart();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if (SpigotUpdater.plugin.getConfig().getBoolean("Auto-Restart-Server")) {
+
+            SpigotUpdater.plugin.getLogger().info("[GeyserUpdater] The Server will restart in 10 seconds!");
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',SpigotUpdater.getPlugin().getConfig().getString("Restart-Message-Players")));
             }
+            Runnable runnable = () -> {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+            Thread thread = new Thread(runnable);
+            thread.start();
+            Bukkit.spigot().restart();
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.alysaa.geyserupdater.common.util;
 
+import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
+import com.alysaa.geyserupdater.spigot.SpigotUpdater;
 import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -16,10 +18,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class CheckBuildNum {
 
-    public static void CheckBuildNumberSpigot() throws IOException {
+    public static void checkBuildNumberSpigot() throws IOException {
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
         String buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
@@ -28,13 +31,13 @@ public class CheckBuildNum {
             int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
             // Compare build numbers.
             if (latestBuildNum == buildNum) {
-                System.out.println("[GeyserUpdater] Geyser is on the latest build!");
+                SpigotUpdater.plugin.getLogger().info("Geyser is on the latest build!");
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.isOp())
-                        player.sendMessage("[GeyserUpdater] Geyser is on the latest build!");
+                        player.sendMessage("Geyser is on the latest build!");
                 }
             } else {
-                System.out.println("[GeyserUpdater] Current running Geyser build is outdated!");
+                SpigotUpdater.plugin.getLogger().info("Current running Geyser build is outdated!");
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.isOp())
                         player.sendMessage("[GeyserUpdater] Current running Geyser build is outdated");
@@ -44,14 +47,14 @@ public class CheckBuildNum {
                 boolean notExists = Files.notExists(p);
 
                 if (exists) {
-                    GeyserBungeeDownload.GeyserDownload();
+                    GeyserBungeeDownload.geyserDownload();
                 } else if (notExists) {
                     GeyserSpigotDownload.GeyserDownload();
                 }
             }
         }
     }
-    public static void CheckBuildNumberSpigotAuto() throws IOException {
+    public static void checkBuildNumberSpigotAuto() throws IOException {
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
         String buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
@@ -60,22 +63,22 @@ public class CheckBuildNum {
             int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
             // Compare build numbers.
             if (latestBuildNum == buildNum) {
-                System.out.println("[GeyserUpdater] Geyser is on the latest build!");
+                SpigotUpdater.plugin.getLogger().info("Geyser is on the latest build!");
             } else {
-                System.out.println("[GeyserUpdater] Current running Geyser build is outdated!");
+                SpigotUpdater.plugin.getLogger().info("[Current running Geyser build is outdated!");
                 Path p = Paths.get("plugins/Geyser-BungeeCord.jar");
                 boolean exists1 = Files.exists(p);
                 boolean notExists1 = Files.notExists(p);
 
                 if (exists1) {
-                    GeyserBungeeDownload.GeyserDownload();
+                    GeyserBungeeDownload.geyserDownload();
                 } else if (notExists1) {
                     GeyserSpigotDownload.GeyserDownload();
                 }
             }
         }
     }
-    public static void CheckBuildNumberBungeeAuto() throws IOException {
+    public static void checkBuildNumberBungeeAuto() throws IOException {
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
         String buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
@@ -92,7 +95,7 @@ public class CheckBuildNum {
                 boolean notExists1 = Files.notExists(p);
 
                 if (exists1) {
-                    GeyserBungeeDownload.GeyserDownload();
+                    GeyserBungeeDownload.geyserDownload();
                 } else if (notExists1) {
                     GeyserSpigotDownload.GeyserDownload();
                 }
@@ -100,6 +103,7 @@ public class CheckBuildNum {
         }
     }
     public static void CheckBuildNumberBungee() throws IOException {
+        Logger logger = BungeeUpdater.plugin.getLogger();
         Properties gitProp = new Properties();
         gitProp.load(FileUtils.getResource("git.properties"));
         String buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
@@ -108,7 +112,7 @@ public class CheckBuildNum {
             int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
             // Compare build numbers.
             if (latestBuildNum == buildNum) {
-                System.out.println("[GeyserUpdater] Geyser is on the latest build!");
+                logger.info("[GeyserUpdater] Geyser is on the latest build!");
                 for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
                     if (all.hasPermission("gupdater.geyserupdate")) ;
                     {
@@ -116,7 +120,7 @@ public class CheckBuildNum {
                     }
                 }
             } else {
-                System.out.println("[GeyserUpdater] Current running Geyser build is outdated!");
+                logger.info("[GeyserUpdater] Current running Geyser build is outdated!");
                 for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
                     if (all.hasPermission("gupdater.geyserupdate")) ;
                     {
@@ -127,7 +131,7 @@ public class CheckBuildNum {
                     boolean notExists1 = Files.notExists(p);
 
                     if (exists1) {
-                        GeyserBungeeDownload.GeyserDownload();
+                        GeyserBungeeDownload.geyserDownload();
                     } else if (notExists1) {
                         GeyserSpigotDownload.GeyserDownload();
                     }

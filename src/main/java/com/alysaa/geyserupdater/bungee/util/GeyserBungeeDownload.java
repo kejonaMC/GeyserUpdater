@@ -2,6 +2,7 @@ package com.alysaa.geyserupdater.bungee.util;
 
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -11,9 +12,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Logger;
 
 public class GeyserBungeeDownload {
-    public static void GeyserDownload() {
+    public static void geyserDownload() {
+        Logger logger = BungeeUpdater.plugin.getLogger();
         try {
             OutputStream os = null;
             InputStream is = null;
@@ -57,17 +60,21 @@ public class GeyserBungeeDownload {
             e.printStackTrace();
         }
         CheckBuildFile.checkBungeeFile();
-        if (BungeeUpdater.getConfiguration().getBoolean("EnableAutoRestart")) {
-            try {
-                System.out.println("[GeyserUpdater] The Server will restart in 10 Seconds!");
-                for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                    player.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("RestartMessage")));
-                }
-                Thread.sleep(10000);
-                ProxyServer.getInstance().stop();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if (BungeeUpdater.getConfiguration().getBoolean("Auto-Restart-Server")) {
+            logger.info("[GeyserUpdater] The Server will restart in 10 Seconds!");
+            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("Restart-Message-Players")));
             }
+            Runnable runnable = () -> {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+            Thread thread = new Thread(runnable);
+            thread.start();
+            ProxyServer.getInstance().stop();
         }
     }
 }

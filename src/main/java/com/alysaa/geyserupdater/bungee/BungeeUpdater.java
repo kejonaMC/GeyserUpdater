@@ -1,18 +1,24 @@
 package com.alysaa.geyserupdater.bungee;
 
-import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
+import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
+import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
-import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
+import com.alysaa.geyserupdater.common.util.OSUtils;
+import com.alysaa.geyserupdater.common.util.ScriptCreator;
+
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,13 +27,14 @@ import java.util.logging.Logger;
 
 public final class BungeeUpdater extends Plugin {
 
-    public BungeeUpdater plugin;
+    public static BungeeUpdater plugin;
     public static Configuration configuration;
+    Logger logger = this.getLogger();
 
     @Override
     public void onEnable() {
         new Metrics(this, 10203);
-        getLogger().info("GeyserUpdater v1.1.0 has been enabled");
+        getLogger().info("GeyserUpdater v1.2.0 has been enabled");
         plugin = this;
         this.getProxy().getPluginManager().registerCommand(this, new GeyserCommand());
         this.onConfig();
@@ -37,23 +44,46 @@ public final class BungeeUpdater extends Plugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // Enable File Checking here
         this.checkFile();
-        ProxyServer.getInstance().getScheduler().schedule(this,this::VersionCheck, 0, 30, TimeUnit.MINUTES);
+        this.checkConfigVer();
+        ProxyServer.getInstance().getScheduler().schedule(this, this::versionCheck, 0, 30, TimeUnit.MINUTES);
+        // Make startup script
+        makeScriptFile();
+    }
+
+    private void makeScriptFile() {
+        if (this.getConfiguration().getBoolean("Auto-Script-Generating")) {
+            if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
+                try {
+                // Tell the createScript method that a loop is necessary because bungee has no restart system.
+                ScriptCreator.createScript(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+            }
+        }
     }
     public void onDisable() {
-        Logger logger = this.getLogger();
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            logger.info("[GeyserUpdater] No updates have been implemented.");
+            logger.info("No updates have been implemented.");
         }
         try {
             this.deleteBuild();
         } catch (Exception ignored) { }
     }
-    public void VersionCheck() {
-        Logger logger = this.getLogger();
+    public void checkConfigVer(){
+        //Change version number only when editing config.yml!
+         if (!(getConfiguration().getInt("version") == 1)){
+            logger.info("Config.yml is outdated. please regenerate a new config.yml!");
+         }
+    }
+    public void versionCheck() {
         String pluginVersion = this.getDescription().getVersion();
         BungeeUpdater plugin = this;
         Runnable runnable = () -> {
@@ -76,7 +106,6 @@ public final class BungeeUpdater extends Plugin {
             exception.printStackTrace();
         }
     }
-
     public void createUpdateFolder() {
         // Creating BuildUpdate folder
         File updateDir = new File("plugins/GeyserUpdater/BuildUpdate");
@@ -86,24 +115,21 @@ public final class BungeeUpdater extends Plugin {
             } catch (Exception ignored) { }
         }
     }
-
     public void checkFile() {
         getProxy().getScheduler().schedule(this, CheckBuildFile::checkBungeeFile, 30, 30, TimeUnit.MINUTES);
     }
-
     public void startAutoUpdate() throws IOException {
-        if (this.getConfiguration().getBoolean("EnableAutoUpdateGeyser")) {
+        if (this.getConfiguration().getBoolean("Auto-Update-Geyser")) {
             getProxy().getScheduler().schedule(this, () -> {
                 try {
                     // Checking for the build numbers of current build.
-                    CheckBuildNum.CheckBuildNumberBungeeAuto();
+                    CheckBuildNum.checkBuildNumberBungeeAuto();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }, 0, 24, TimeUnit.HOURS);
         }
     }
-
     public void moveGeyser() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".
         File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
@@ -117,14 +143,11 @@ public final class BungeeUpdater extends Plugin {
         }
         input.close();
         output.close();
-
     }
-
     private void deleteBuild() throws IOException {
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         Files.delete(file);
     }
-
     public static Configuration getConfiguration() {
         return configuration;
     }

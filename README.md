@@ -10,11 +10,13 @@
  
 GeyserUpdater is a plugin that can update Geyser-Spigot | Geyser-BungeeCord manually or automatically. 
 
+
 ## Downloading
 
 Please download the plugin from [our Spigot page](https://www.spigotmc.org/resources/geyserupdater.88555/) so we can get an idea of how many people are downloading the plugin.
 
 If you don't want to use the Spigot website you can download the plugin [on our CI](https://ci.alysaa.net/job/GeyserUpdater/job/main) or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
+
 
 ## Installation
 
@@ -26,52 +28,60 @@ GeyserUpdater can be installed on Spigot & Bungeecord. Place the GeyserUpdater p
 gupdater.geyserupdate
 ```
 
+
 # Commands:
 ```
 /geyserupdate 
 ```
 
-# Auto-Updating:
+
+# Auto-Update-Geyser:
 
 You can set Auto-Updating to true in the config.yml.
 
 
-# Auto-Restart:
+# Auto-Restart-Server:
 
 Once you enable auto-restart it will restart the server automatically after each new build that has being downloaded,
 therefore you will need to setup a restart script that the server can use (via /restart)!
 
-*Example*
 
-```
-@echo off
-:restart
-java -Xms-X-G -Xmx-X-G -jar ServerSoftware.jar nogui
-Goto restart
+# Auto-Script-Generating:
 
-```
+When enabled it will generate a restart script (ServerRestartScript.bat/sh) and set it up in the spigot.yml for you.
+you will need to use our script to start server! Do not touch this setting when you are using a host provider.
+Most providers already have a working restart option set for you.
 
-# Restart-Message:
 
-Restart-Message will only work if you have enabled Auto-Restart. when the update has been downloaded it will send a text to the players
-to warn them that the server is restarting. You can change this text!
+# Restart-Message-Players:
+
+Restart-Message will only work if you have enabled Auto-Restart. When the update has been downloaded it will send a message to the players
+to warn them that the server is restarting. You can change this message!
+
 
 ## Usage
 
-After you ran the command or enabled auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted. Do not kill (Hard shutdown) the server/proxy or the updater wont update Geyser!
+After you run the `/geyserupdate` command or enable auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted. Do not kill (Hard shutdown) the server/proxy or the updater wont update Geyser!
+
 
 ## bStats
 [Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
 
 [Bungee stats](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
 
+
 ## Discord
 [Here](https://discord.gg/xXzzdAXa2b) is our Discord link, you can come to get support, get GitHub feeds, or just hang out. Don't ping anyone that doesn't have the pingable role!
+
 
 ## Spigot page
 [Here](https://www.spigotmc.org/resources/geyserupdater.88555/) is our Spigot page if you want to download it there (it makes the download count go up) or post a review (they help)!
 
+
 ## Release History
+* 1.2.0
+    * Added Restart script generating depended on OS, and setting it up on spigot.yml.
+    * Added config version check.
 * 1.1.0
     * Added message if GeyserUpdater has an available update on startup
 * 1.0.0
@@ -91,12 +101,13 @@ After you ran the command or enabled auto updating, it will check the current ru
     * Merged Spigot & Bungeecord updater into 1 plugin.
     * Added maven
 
+
 ## Meta
 
 The project is owned by:
 - Jens
-- YHDiamond
-Special thanks to rtm516 who helped us with basically everything. Without him this project wouldn't even have a readme.
-Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs, and instead, go to our Discord server linked above.
+- YHDiamond  
 
- 
+Special thanks to rtm516 who helped us with basically everything. Without him this project wouldn't even have a readme.  
+
+Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs, and instead, go to our Discord server linked above.
