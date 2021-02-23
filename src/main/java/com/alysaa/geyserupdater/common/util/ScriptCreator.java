@@ -22,8 +22,6 @@ public class ScriptCreator {
         }
         file = new File("ServerRestartScript." + extension);
         if (!file.exists()) {
-            System.out.println("[GeyserUpdater] A custom restart script has been made for you.");
-            System.out.println("[GeyserUpdater] You will need to shutdown the server and use our provided restart script.");
             FileOutputStream fos = new FileOutputStream(file);
             DataOutputStream dos = new DataOutputStream(fos);
 
@@ -53,6 +51,10 @@ public class ScriptCreator {
                 } else if (OSUtils.isLinux() || OSUtils.isMac()) {
                     dos.writeBytes("echo \"Server stopped, restarting in 10 seconds!\"; sleep 10; done\n");
                 }
+            }
+            System.out.println("[GeyserUpdater] A custom restart script has been made for you.");
+            if (runLoop) {
+                System.out.println("[GeyserUpdater] You will need to shutdown the server and use our provided restart script.");
             }
         }
     }
