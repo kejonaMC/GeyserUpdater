@@ -1,5 +1,7 @@
 package com.alysaa.geyserupdater.common.util;
 
+import com.alysaa.geyserupdater.spigot.SpigotUpdater;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -52,9 +54,9 @@ public class ScriptCreator {
                     dos.writeBytes("echo \"Server stopped, restarting in 10 seconds!\"; sleep 10; done\n");
                 }
             }
-            System.out.println("[GeyserUpdater] A custom restart script has been made for you.");
+            SpigotUpdater.plugin.getLogger().info("A custom restart script has been made for you.");
             if (runLoop) {
-                System.out.println("[GeyserUpdater] You will need to shutdown the server and use our provided restart script.");
+                SpigotUpdater.plugin.getLogger().info("You will need to shutdown and start the server with our provided restart script.");
             }
         }
     }

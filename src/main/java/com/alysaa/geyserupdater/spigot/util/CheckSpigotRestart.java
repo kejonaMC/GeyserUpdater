@@ -39,10 +39,12 @@ public class CheckSpigotRestart {
             try {
                 spigot.save("spigot.yml");
             } catch (IOException e) {
+                SpigotUpdater.plugin.getLogger().info("Failed to set restart-script in spigot.yml to " + scriptName);
                 e.printStackTrace();
                 return;
             }
             SpigotUpdater.plugin.getLogger().info("Has set restart-script in spigot.yml to " + scriptName);
+            SpigotUpdater.plugin.getLogger().info("Use /restart to restart the server.");
         }
     }
 }
