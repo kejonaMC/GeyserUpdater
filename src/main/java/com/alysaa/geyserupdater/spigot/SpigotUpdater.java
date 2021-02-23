@@ -1,5 +1,6 @@
 package com.alysaa.geyserupdater.spigot;
 
+import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
@@ -56,10 +57,14 @@ public class SpigotUpdater extends JavaPlugin {
         // Check if a restart script already exists
         // We create one if it doesn't
         if (getConfig().getBoolean("Auto-Script-Generating")) {
-            try {
-                CheckSpigotRestart.checkYml();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
+                try {
+                    CheckSpigotRestart.checkYml();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
             }
         }
     }

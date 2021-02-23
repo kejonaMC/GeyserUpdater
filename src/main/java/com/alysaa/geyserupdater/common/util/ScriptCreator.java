@@ -12,6 +12,7 @@ public class ScriptCreator {
     public static void createScript(boolean runLoop) throws IOException {
         File file;
         String extension;
+        // This method is only called
         if (OSUtils.isWindows()) {
             extension = "bat";
         } else if (OSUtils.isLinux() || OSUtils.isMac()) {
