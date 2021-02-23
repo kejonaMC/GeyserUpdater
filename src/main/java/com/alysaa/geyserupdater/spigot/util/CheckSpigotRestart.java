@@ -28,11 +28,9 @@ public class CheckSpigotRestart {
             String scriptName;
             if (OSUtils.isWindows()) {
                 scriptName = "ServerRestartScript.bat";
-            }
-            else if (OSUtils.isLinux() || OSUtils.isMac()) {
+            } else if (OSUtils.isLinux() || OSUtils.isMac()) {
                 scriptName = "./ServerRestartScript.sh";
-            }
-            else {
+            } else {
                 System.out.println("[GeyserUpdater] Your OS is not supported for script checking!");
                 return;
             }
