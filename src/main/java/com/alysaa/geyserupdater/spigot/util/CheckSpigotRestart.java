@@ -16,7 +16,7 @@ public class CheckSpigotRestart {
         String scriptPath = spigot.getString("settings.restart-script");
         File script = new File(scriptPath);
         if (script.exists()) {
-            SpigotUpdater.plugin.getLogger().info(" Has detected a restart script.");
+            SpigotUpdater.plugin.getLogger().info("Has detected a restart script.");
         } else {
             try {
                 // Tell the createScript method that a loop is not necessary because spigot has a restart system.
@@ -32,7 +32,7 @@ public class CheckSpigotRestart {
             } else if (OSUtils.isLinux() || OSUtils.isMac()) {
                 scriptName = "./ServerRestartScript.sh";
             } else {
-                SpigotUpdater.plugin.getLogger().info("[ Your OS is not supported for script checking!");
+                SpigotUpdater.plugin.getLogger().info("Your OS is not supported for script checking!");
                 return;
             }
             spigot.set("settings.restart-script", scriptName);
@@ -42,7 +42,7 @@ public class CheckSpigotRestart {
                 e.printStackTrace();
                 return;
             }
-            SpigotUpdater.plugin.getLogger().info(" Has set restart-script in spigot.yml to " + scriptName);
+            SpigotUpdater.plugin.getLogger().info("Has set restart-script in spigot.yml to " + scriptName);
         }
     }
 }
