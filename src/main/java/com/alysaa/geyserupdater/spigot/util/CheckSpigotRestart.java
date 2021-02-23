@@ -2,6 +2,7 @@ package com.alysaa.geyserupdater.spigot.util;
 
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
+import com.alysaa.geyserupdater.spigot.SpigotUpdater;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,7 +16,7 @@ public class CheckSpigotRestart {
         String scriptPath = spigot.getString("settings.restart-script");
         File script = new File(scriptPath);
         if (script.exists()) {
-            System.out.println("[GeyserUpdater] Has detected a restart script.");
+            SpigotUpdater.plugin.getLogger().info(" Has detected a restart script.");
         } else {
             try {
                 // Tell the createScript method that a loop is not necessary because spigot has a restart system.
@@ -31,7 +32,7 @@ public class CheckSpigotRestart {
             } else if (OSUtils.isLinux() || OSUtils.isMac()) {
                 scriptName = "./ServerRestartScript.sh";
             } else {
-                System.out.println("[GeyserUpdater] Your OS is not supported for script checking!");
+                SpigotUpdater.plugin.getLogger().info("[ Your OS is not supported for script checking!");
                 return;
             }
             spigot.set("settings.restart-script", scriptName);
@@ -41,7 +42,7 @@ public class CheckSpigotRestart {
                 e.printStackTrace();
                 return;
             }
-            System.out.println("[GeyserUpdater] Has set restart-script in spigot.yml to " + scriptName);
+            SpigotUpdater.plugin.getLogger().info(" Has set restart-script in spigot.yml to " + scriptName);
         }
     }
 }
