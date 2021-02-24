@@ -11,7 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class GeyserSpigotDownload {
-    public static void GeyserDownload() {
+    public static void downloadGeyser() {
         OutputStream os = null;
         InputStream is = null;
         String fileUrl = "https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar";

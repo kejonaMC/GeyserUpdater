@@ -19,8 +19,8 @@ public class GeyserCommand extends Command {
         if (commandSender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) commandSender;
             try {
-                player.sendMessage(new TextComponent(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version"));
-                CheckBuildNum.CheckBuildNumberBungee();
+                player.sendMessage(new TextComponent(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version!"));
+                CheckBuildNum.checkBuildNumberBungee();
             } catch (IOException e) {
                 e.printStackTrace();
             }
