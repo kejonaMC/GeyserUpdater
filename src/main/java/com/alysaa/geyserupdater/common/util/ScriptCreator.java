@@ -54,7 +54,7 @@ public class ScriptCreator {
             }
             System.out.println("[GeyserUpdater] A custom restart script has been made for you.");
             if (runLoop) {
-                System.out.println("[GeyserUpdater] You will need to shutdown the server and use our provided restart script.");
+                System.out.println("[GeyserUpdater] You will need to shutdown and start the server with our provided restart script.");
             }
         }
     }
