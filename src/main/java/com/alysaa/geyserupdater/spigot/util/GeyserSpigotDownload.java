@@ -60,8 +60,8 @@ public class GeyserSpigotDownload {
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', SpigotUpdater.getPlugin().getConfig().getString("Restart-Message-Players")));
                     }
                     Thread.sleep(10000);
+                    Bukkit.spigot().restart();
                 }
-                Bukkit.spigot().restart();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
