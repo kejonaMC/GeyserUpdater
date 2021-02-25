@@ -65,7 +65,7 @@ public class CheckBuildNum {
             if (latestBuildNum == buildNum) {
                 SpigotUpdater.plugin.getLogger().info("Geyser is on the latest build!");
             } else {
-                SpigotUpdater.plugin.getLogger().info("[Current running Geyser build is outdated!");
+                SpigotUpdater.plugin.getLogger().info("Current running Geyser build is outdated!");
                 Path p = Paths.get("plugins/Geyser-BungeeCord.jar");
                 boolean exists1 = Files.exists(p);
                 boolean notExists1 = Files.notExists(p);
