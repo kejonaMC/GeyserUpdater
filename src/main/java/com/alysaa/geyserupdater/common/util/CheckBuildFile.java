@@ -3,6 +3,7 @@ package com.alysaa.geyserupdater.common.util;
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,9 +20,8 @@ public class CheckBuildFile {
         if (exists) {
             logger.info("[GeyserUpdater] New Geyser build has been downloaded! BungeeCord restart is required!");
             for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
-                if (all.hasPermission("gupdater.geyserupdate")) ;
-                {
-                    all.sendMessage("[GeyserUpdater] New Geyser build has been downloaded! BungeeCord restart is required!");
+                if (all.hasPermission("gupdater.geyserupdate")) {
+                    all.sendMessage(new TextComponent("[GeyserUpdater] New Geyser build has been downloaded! BungeeCord restart is required!"));
                 }
             }
         }
@@ -31,7 +31,7 @@ public class CheckBuildFile {
         boolean exists = Files.exists(p);
         if (exists) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.isOp())
+                if (player.hasPermission("gupdater.geyserupdate"))
                     player.sendMessage("[GeyserUpdater] New Geyser build has been downloaded! Server restart is required!");
             }
             SpigotUpdater.plugin.getLogger().info("New Geyser build has been downloaded! Server restart is required!");

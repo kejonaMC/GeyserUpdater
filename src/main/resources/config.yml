@@ -7,15 +7,22 @@ version: 1
 # NOTICE! Read the information on our GitHub before using this plugin!
 # https://github.com/YHDiamond/GeyserUpdater
 
+
+# This dictates which Geyser branch will be downloaded and updated.
+# Only master and server-inventory are supported
+# master is the main release. Information on server-inventory can be found on the Geyser discord.
+
+Geyser-branch: master
+
 # When enabled it will check for geyser updates on server restart and each 24h after server start.
 Auto-Update-Geyser: false
 
-# When enabled it will restart the server automatic after Geyser build has been downloaded.
+# When enabled it will restart the server automatically after the latest Geyser build has been downloaded.
 Auto-Restart-Server: false
 
-# Send a text to your online players to warn them that the server is restarting.
+# Send a message to your online players to warn them that the server is restarting.
 Restart-Message-Players: '&2The server will restart in 10 Seconds!'
 
 # When enabled it will generate a restart script and set it up in the spigot.yml for you.
-# you will need to use our script to start server! More info about this on Github.
+# You will need to use our script to start server! More info about this on Github.
 Auto-Script-Generating: false
