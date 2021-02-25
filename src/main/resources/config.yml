@@ -7,13 +7,6 @@ version: 1
 # NOTICE! Read the information on our GitHub before using this plugin!
 # https://github.com/YHDiamond/GeyserUpdater
 
-
-# This dictates which Geyser branch will be downloaded and updated.
-# Only master and server-inventory are supported
-# master is the main release. Information on server-inventory can be found on the Geyser discord.
-
-Geyser-branch: master
-
 # When enabled it will check for geyser updates on server restart and each 24h after server start.
 Auto-Update-Geyser: false
 
