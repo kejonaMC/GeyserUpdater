@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 
 public class GeyserBungeeDownload {
     public static void downloadGeyser() {
-        Logger logger = BungeeUpdater.plugin.getLogger();
         OutputStream os = null;
         InputStream is = null;
         String fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar";
@@ -56,22 +55,24 @@ public class GeyserBungeeDownload {
                 }
             }
         }
-        CheckBuildFile.checkBungeeFile();
-        if (BungeeUpdater.getConfiguration().getBoolean("Auto-Restart-Server")) {
-            logger.info("The Server will restart in 10 Seconds!");
+        // Check if the file was downloaded successfully
+        boolean downloadSuccess = CheckBuildFile.checkBungeeFile();
+        // Restart the server if the option is enabled
+        if (BungeeUpdater.getConfiguration().getBoolean("Auto-Restart-Server") && downloadSuccess) {
+            BungeeUpdater.plugin.getLogger().info("The Server will restart in 10 Seconds!");
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("Restart-Message-Players"))));
             }
             Runnable runnable = () -> {
                 try {
                     Thread.sleep(10000);
+                    ProxyServer.getInstance().stop();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             };
             Thread thread = new Thread(runnable);
             thread.start();
-            ProxyServer.getInstance().stop();
         }
     }
 }

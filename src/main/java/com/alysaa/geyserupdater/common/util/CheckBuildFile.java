@@ -12,7 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CheckBuildFile {
-    public static void checkBungeeFile() {
+
+    public static boolean checkBungeeFile() {
         Path p = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         boolean exists = Files.exists(p);
         if (exists) {
@@ -22,9 +23,12 @@ public class CheckBuildFile {
                     all.sendMessage(new TextComponent("[GeyserUpdater] New Geyser build has been downloaded! BungeeCord restart is required!"));
                 }
             }
+            return true;
+        } else {
+            return false;
         }
     }
-    public static void checkSpigotFile() {
+    public static boolean checkSpigotFile() {
         Path p = Paths.get("plugins/update/Geyser-Spigot.jar");
         boolean exists = Files.exists(p);
         if (exists) {
@@ -34,6 +38,9 @@ public class CheckBuildFile {
                     player.sendMessage("[GeyserUpdater] New Geyser build has been downloaded! Server restart is required!");
                 }
             }
+            return true;
+        } else {
+            return false;
         }
     }
 }
