@@ -122,7 +122,7 @@ public class SpigotUpdater extends JavaPlugin {
         @Override
         public void run() {
             try {
-                CheckBuildNum.checkBuildNumberSpigotAuto();
+                CheckBuildNum.checkBuildNumberSpigot();
             } catch (IOException e) {
                 e.printStackTrace();
             }

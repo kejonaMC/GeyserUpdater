@@ -11,7 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class GeyserSpigotDownload {
-    public static void GeyserDownload() {
+    public static void downloadGeyser() {
         OutputStream os = null;
         InputStream is = null;
         String fileUrl = "https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar";
@@ -48,25 +48,26 @@ public class GeyserSpigotDownload {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                CheckBuildFile.checkSpigotFile();
             }
         }
-        if (SpigotUpdater.plugin.getConfig().getBoolean("Auto-Restart-Server")) {
-
-            SpigotUpdater.plugin.getLogger().info("[GeyserUpdater] The Server will restart in 10 seconds!");
+        // Check if the file was downloaded successfully
+        boolean downloadSuccess = CheckBuildFile.checkSpigotFile();
+        // Restart the server if the option is enabled
+        if (SpigotUpdater.plugin.getConfig().getBoolean("Auto-Restart-Server") && downloadSuccess) {
+            SpigotUpdater.plugin.getLogger().info("The Server will restart in 10 seconds!");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',SpigotUpdater.getPlugin().getConfig().getString("Restart-Message-Players")));
             }
             Runnable runnable = () -> {
                 try {
                     Thread.sleep(10000);
+                    Bukkit.spigot().restart();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             };
             Thread thread = new Thread(runnable);
             thread.start();
-            Bukkit.spigot().restart();
         }
     }
 }
