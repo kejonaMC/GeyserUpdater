@@ -58,7 +58,7 @@ public class GeyserBungeeDownload {
         }
         CheckBuildFile.checkBungeeFile();
         if (BungeeUpdater.getConfiguration().getBoolean("Auto-Restart-Server")) {
-            logger.info("[GeyserUpdater] The Server will restart in 10 Seconds!");
+            logger.info("The Server will restart in 10 Seconds!");
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("Restart-Message-Players"))));
             }

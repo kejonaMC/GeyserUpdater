@@ -48,12 +48,12 @@ public class GeyserSpigotDownload {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                CheckBuildFile.checkSpigotFile();
             }
         }
+        CheckBuildFile.checkSpigotFile();
         if (SpigotUpdater.plugin.getConfig().getBoolean("Auto-Restart-Server")) {
 
-            SpigotUpdater.plugin.getLogger().info("[GeyserUpdater] The Server will restart in 10 seconds!");
+            SpigotUpdater.plugin.getLogger().info("The Server will restart in 10 seconds!");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',SpigotUpdater.getPlugin().getConfig().getString("Restart-Message-Players")));
             }

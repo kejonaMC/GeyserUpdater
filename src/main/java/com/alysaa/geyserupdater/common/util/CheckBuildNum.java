@@ -66,8 +66,8 @@ public class CheckBuildNum {
                     if (all.hasPermission("gupdater.geyserupdate")) {
                         all.sendMessage(new TextComponent("[GeyserUpdater] Current running Geyser build is outdated, attempting to download latest!"));
                     }
-                    GeyserBungeeDownload.downloadGeyser();
                 }
+                GeyserBungeeDownload.downloadGeyser();
             }
         }
     }

@@ -29,7 +29,7 @@ public class GeyserCommand extends Command {
         } else {
             BungeeUpdater.plugin.getLogger().info("Checking current Geyser version!");
             try {
-                CheckBuildNum.CheckBuildNumberBungee();
+                CheckBuildNum.checkBuildNumberBungee();
             } catch (IOException e) {
                 e.printStackTrace();
             }
