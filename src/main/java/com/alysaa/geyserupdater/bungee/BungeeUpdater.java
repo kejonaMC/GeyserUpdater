@@ -123,7 +123,7 @@ public final class BungeeUpdater extends Plugin {
             getProxy().getScheduler().schedule(this, () -> {
                 try {
                     // Checking for the build numbers of current build.
-                    CheckBuildNum.checkBuildNumberBungeeAuto();
+                    CheckBuildNum.checkBuildNumberBungee();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
