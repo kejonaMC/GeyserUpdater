@@ -1,5 +1,6 @@
 package com.alysaa.geyserupdater.bungee.command;
 
+import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 
 public class GeyserCommand extends Command {
+
     public GeyserCommand() {
         super("geyserupdate", "gupdater.geyserupdate");
     }
@@ -21,6 +23,13 @@ public class GeyserCommand extends Command {
             try {
                 player.sendMessage(new TextComponent(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version!"));
                 CheckBuildNum.checkBuildNumberBungee();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            BungeeUpdater.plugin.getLogger().info("Checking current Geyser version!");
+            try {
+                CheckBuildNum.CheckBuildNumberBungee();
             } catch (IOException e) {
                 e.printStackTrace();
             }
