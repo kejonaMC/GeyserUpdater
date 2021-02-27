@@ -9,7 +9,6 @@ import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -44,10 +43,11 @@ public final class BungeeUpdater extends Plugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // Enable File Checking here
-        this.checkFile();
         this.checkConfigVer();
-        ProxyServer.getInstance().getScheduler().schedule(this, this::versionCheck, 0, 30, TimeUnit.MINUTES);
+        // Check if downloaded Geyser file exists periodically
+        getProxy().getScheduler().schedule(this, CheckBuildFile::checkBungeeFile, 30, 720, TimeUnit.MINUTES);
+        // Check GeyserUpdater version periodically
+        getProxy().getScheduler().schedule(this, this::versionCheck, 0, 24, TimeUnit.HOURS);
         // Make startup script
         makeScriptFile();
     }
@@ -114,9 +114,6 @@ public final class BungeeUpdater extends Plugin {
                 updateDir.mkdirs();
             } catch (Exception ignored) { }
         }
-    }
-    public void checkFile() {
-        getProxy().getScheduler().schedule(this, CheckBuildFile::checkBungeeFile, 30, 30, TimeUnit.MINUTES);
     }
     public void startAutoUpdate() throws IOException {
         if (this.getConfiguration().getBoolean("Auto-Update-Geyser")) {
