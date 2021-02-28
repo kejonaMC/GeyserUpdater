@@ -41,7 +41,7 @@ public class SpigotUpdater extends JavaPlugin {
             try {
                 Timer StartAutoUpdate;
                 StartAutoUpdate = new Timer();
-                StartAutoUpdate.schedule(new StartUpdate(), 0, 100 * 60 * 14400);
+                StartAutoUpdate.schedule(new StartUpdate(), 0, 1000 * 60 * 1440);
                 // Auto Update Cycle on Startup and each 24h after startup
             } catch (Exception e) {
                 e.printStackTrace();
@@ -50,8 +50,8 @@ public class SpigotUpdater extends JavaPlugin {
         // Enable File Checking here
         Timer StartFileCheck;
         StartFileCheck = new Timer();
-        StartFileCheck.schedule(new StartTimer(), 100 * 60 * 300, 100 * 60 * 300);
-        // File Checking Each 30min after server startup.
+        // File Checking every 12h after 30min after server start
+        StartFileCheck.schedule(new StartTimer(), 1000 * 60 * 30, 1000 * 60 * 720);
         // Logger for check update on GeyserUpdater
         versionCheck();
         // Check if a restart script already exists
@@ -76,19 +76,15 @@ public class SpigotUpdater extends JavaPlugin {
             }
         }
     public void versionCheck() {
+        SpigotUpdater plugin = this;
         Logger logger = this.getLogger();
         String pluginVersion = this.getDescription().getVersion();
-        SpigotUpdater plugin = this;
-        Runnable runnable = () -> {
-            String version = SpigotResourceUpdateChecker.getVersion(plugin);
-            if (version.equals(pluginVersion)) {
-                logger.info("There are no new updates for GeyserUpdater available.");
-            } else {
-                logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
+        String version = SpigotResourceUpdateChecker.getVersion(plugin);
+        if (version.equals(pluginVersion)) {
+            logger.info("There are no new updates for GeyserUpdater available.");
+        } else {
+            logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+        }
     }
     public void onDisable() {
         getLogger().info("Plugin has been disabled");
