@@ -18,30 +18,16 @@ public class CheckBuildFile {
         boolean exists = Files.exists(p);
         if (exists) {
             BungeeUpdater.plugin.getLogger().info("New Geyser build has been downloaded! BungeeCord restart is required!");
-            for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
-                if (all.hasPermission("gupdater.geyserupdate")) {
-                    all.sendMessage(new TextComponent("[GeyserUpdater] New Geyser build has been downloaded! BungeeCord restart is required!"));
-                }
-            }
-            return true;
-        } else {
-            return false;
         }
+        return false;
     }
     public static boolean checkSpigotFile() {
         Path p = Paths.get("plugins/update/Geyser-Spigot.jar");
         boolean exists = Files.exists(p);
         if (exists) {
             SpigotUpdater.plugin.getLogger().info("New Geyser build has been downloaded! Server restart is required!");
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.hasPermission("gupdater.geyserupdate")) {
-                    player.sendMessage("[GeyserUpdater] New Geyser build has been downloaded! Server restart is required!");
-                }
-            }
-            return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }
 
