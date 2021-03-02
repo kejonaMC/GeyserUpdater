@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Post') {
             steps {
-                archiveArtifacts 'target/GeyserUpdater-1.0-SNAPSHOT.jar'
+                archiveArtifacts 'target/GeyserUpdater-1.2.0-SNAPSHOT.jar'
                   }
 
                 }
