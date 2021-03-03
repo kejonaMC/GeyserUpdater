@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.bungee;
 
 import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
+import com.alysaa.geyserupdater.bungee.util.BungeeJoinListener;
 import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
@@ -9,6 +10,8 @@ import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
+import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
+import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -24,7 +27,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public final class BungeeUpdater extends Plugin {
+public final class BungeeUpdater extends Plugin implements Listener {
 
     public static BungeeUpdater plugin;
     public static Configuration configuration;
@@ -44,6 +47,7 @@ public final class BungeeUpdater extends Plugin {
             e.printStackTrace();
         }
         this.checkConfigVer();
+        getProxy().getPluginManager().registerListener(new BungeeJoinListener(), this);
         // Check if downloaded Geyser file exists periodically
         getProxy().getScheduler().schedule(this, CheckBuildFile::checkBungeeFile, 30, 720, TimeUnit.MINUTES);
         // Check GeyserUpdater version periodically

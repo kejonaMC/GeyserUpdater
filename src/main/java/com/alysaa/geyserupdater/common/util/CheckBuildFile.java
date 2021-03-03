@@ -2,11 +2,14 @@ package com.alysaa.geyserupdater.common.util;
 
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
+import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

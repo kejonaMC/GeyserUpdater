@@ -2,10 +2,12 @@ package com.alysaa.geyserupdater.spigot;
 
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
+import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -54,6 +56,8 @@ public class SpigotUpdater extends JavaPlugin {
         StartFileCheck.schedule(new StartTimer(), 1000 * 60 * 30, 1000 * 60 * 720);
         // Logger for check update on GeyserUpdater
         versionCheck();
+        // Player alert if a restart is required when they join
+        Bukkit.getServer().getPluginManager().registerEvents(new SpigotJoinListener(), this);
         // Check if a restart script already exists
         // We create one if it doesn't
         if (getConfig().getBoolean("Auto-Script-Generating")) {
