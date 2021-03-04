@@ -18,6 +18,7 @@ public class CheckBuildFile {
         boolean exists = Files.exists(p);
         if (exists) {
             BungeeUpdater.plugin.getLogger().info("New Geyser build has been downloaded! BungeeCord restart is required!");
+            return true;
         }
         return false;
     }
@@ -26,6 +27,7 @@ public class CheckBuildFile {
         boolean exists = Files.exists(p);
         if (exists) {
             SpigotUpdater.plugin.getLogger().info("New Geyser build has been downloaded! Server restart is required!");
+            return true;
         }
         return false;
     }
