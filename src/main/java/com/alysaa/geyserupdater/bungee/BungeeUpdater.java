@@ -48,7 +48,7 @@ public final class BungeeUpdater extends Plugin {
         // Player alert if a restart is required when they join
         getProxy().getPluginManager().registerListener(this, new BungeeJoinListener());
         // Check if downloaded Geyser file exists periodically
-        getProxy().getScheduler().schedule(this, () -> CheckBuildFile.checkSpigotFile(true), 30, 720, TimeUnit.MINUTES);
+        getProxy().getScheduler().schedule(this, () -> CheckBuildFile.checkBungeeFile(true), 30, 720, TimeUnit.MINUTES);
         // Check GeyserUpdater version periodically
         getProxy().getScheduler().schedule(this, this::versionCheck, 0, 24, TimeUnit.HOURS);
         // Make startup script
