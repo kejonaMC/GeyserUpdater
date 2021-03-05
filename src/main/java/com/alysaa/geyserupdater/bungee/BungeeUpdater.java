@@ -10,8 +10,6 @@ import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
-import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
-import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -27,7 +25,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public final class BungeeUpdater extends Plugin implements Listener {
+public final class BungeeUpdater extends Plugin {
 
     public static BungeeUpdater plugin;
     public static Configuration configuration;
@@ -47,7 +45,8 @@ public final class BungeeUpdater extends Plugin implements Listener {
             e.printStackTrace();
         }
         this.checkConfigVer();
-        getProxy().getPluginManager().registerListener(new BungeeJoinListener(), this);
+        // Player alert if a restart is required when they join
+        getProxy().getPluginManager().registerListener(this, new BungeeJoinListener());
         // Check if downloaded Geyser file exists periodically
         getProxy().getScheduler().schedule(this, CheckBuildFile::checkBungeeFile, 30, 720, TimeUnit.MINUTES);
         // Check GeyserUpdater version periodically
