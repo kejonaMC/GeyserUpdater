@@ -8,22 +8,35 @@ import java.nio.file.Paths;
 
 public class CheckBuildFile {
 
+
+    // Epoch time at which either methods have been called last.
+    // Set to 0 first so the player join listener calls one of these classes if they haven't been called once before
+    public static long callTime = 0;
+
+    public static boolean cachedResult;
+
     public static boolean checkBungeeFile() {
+        callTime = System.currentTimeMillis();
         Path p = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         boolean exists = Files.exists(p);
         if (exists) {
             BungeeUpdater.plugin.getLogger().info("New Geyser build has been downloaded! BungeeCord restart is required!");
+            cachedResult = true;
             return true;
         }
+        cachedResult = false;
         return false;
     }
     public static boolean checkSpigotFile() {
+        callTime = System.currentTimeMillis();
         Path p = Paths.get("plugins/update/Geyser-Spigot.jar");
         boolean exists = Files.exists(p);
         if (exists) {
             SpigotUpdater.plugin.getLogger().info("New Geyser build has been downloaded! Server restart is required!");
+            cachedResult = true;
             return true;
         }
+        cachedResult = false;
         return false;
     }
 }
