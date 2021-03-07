@@ -53,7 +53,7 @@ public class GeyserSpigotDownload {
                     }
                 }
                 // Check if the file was downloaded successfully
-                boolean downloadSuccess = CheckBuildFile.checkSpigotFile();
+                boolean downloadSuccess = CheckBuildFile.checkSpigotFile(false);
                 // Restart the server if the option is enabled
                 if (SpigotUpdater.plugin.getConfig().getBoolean("Auto-Restart-Server") && downloadSuccess) {
                     SpigotUpdater.plugin.getLogger().info("The Server will restart in 10 seconds!");

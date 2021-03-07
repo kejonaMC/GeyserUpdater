@@ -56,7 +56,7 @@ public class GeyserBungeeDownload {
             }
         }
         // Check if the file was downloaded successfully
-        boolean downloadSuccess = CheckBuildFile.checkBungeeFile();
+        boolean downloadSuccess = CheckBuildFile.checkBungeeFile(false);
         // Restart the server if the option is enabled
         if (BungeeUpdater.getConfiguration().getBoolean("Auto-Restart-Server") && downloadSuccess) {
             BungeeUpdater.plugin.getLogger().info("The Server will restart in 10 Seconds!");

@@ -115,7 +115,7 @@ public class SpigotUpdater extends JavaPlugin {
     private class StartTimer extends TimerTask {
         @Override
         public void run() {
-            CheckBuildFile.checkSpigotFile();
+            CheckBuildFile.checkSpigotFile(false);
         }
     }
     private class StartUpdate extends TimerTask {
