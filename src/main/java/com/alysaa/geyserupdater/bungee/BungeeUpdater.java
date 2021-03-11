@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.bungee;
 
 import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
+import com.alysaa.geyserupdater.bungee.util.BungeeJoinListener;
 import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
@@ -44,8 +45,10 @@ public final class BungeeUpdater extends Plugin {
             e.printStackTrace();
         }
         this.checkConfigVer();
+        // Player alert if a restart is required when they join
+        getProxy().getPluginManager().registerListener(this, new BungeeJoinListener());
         // Check if downloaded Geyser file exists periodically
-        getProxy().getScheduler().schedule(this, CheckBuildFile::checkBungeeFile, 30, 720, TimeUnit.MINUTES);
+        getProxy().getScheduler().schedule(this, () -> CheckBuildFile.checkBungeeFile(true), 30, 720, TimeUnit.MINUTES);
         // Check GeyserUpdater version periodically
         getProxy().getScheduler().schedule(this, this::versionCheck, 0, 24, TimeUnit.HOURS);
         // Make startup script
