@@ -6,6 +6,7 @@ import com.alysaa.geyserupdater.velocity.util.BuildNumChecker;
 import com.alysaa.geyserupdater.velocity.util.OSUtils;
 import com.alysaa.geyserupdater.velocity.util.ScriptCreator;
 import com.alysaa.geyserupdater.velocity.util.VelocityJoinListener;
+import com.alysaa.geyserupdater.velocity.util.bstats.Metrics;
 import com.google.inject.Inject;
 
 import com.moandjiezana.toml.Toml;
@@ -33,11 +34,13 @@ public class VelocityUpdater {
     public static Logger logger;
     public Path dataDirectory;
     public static Toml configf;
+    private final Metrics.Factory metricsFactory;
     @Inject
-    public VelocityUpdater(ProxyServer server, Logger logger, @DataDirectory final Path folder) {
+    public VelocityUpdater(ProxyServer server, Logger logger, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
         this.server = server;
         com.alysaa.geyserupdater.velocity.VelocityUpdater.logger = logger;
         configf = loadConfig(folder);
+        this.metricsFactory = metricsFactory;
     }
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
@@ -60,6 +63,7 @@ public class VelocityUpdater {
         };
         Timer timer = new Timer("Timer");
         timer.schedule(task, 60*30*1000,60*60*121000);
+        Metrics metrics = metricsFactory.make(this, 10673);
     }
     public void onDisable() {
         try {
