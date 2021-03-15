@@ -1,5 +1,6 @@
 package com.alysaa.geyserupdater.velocity.util;
 
+import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.velocity.VelocityUpdater;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
@@ -12,7 +13,6 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class GeyserVeloDownload {
-
     public static void downloadGeyser() {
         OutputStream os = null;
         InputStream is = null;
@@ -53,7 +53,7 @@ public class GeyserVeloDownload {
             }
         }
         // Check if the file was downloaded successfully
-        boolean downloadSuccess = BuildFileChecker.checkVelocityFile(false);
+        boolean downloadSuccess = CheckBuildFile.checkVelocityFile(false);
         // Restart the server if the option is enabled
         if (VelocityUpdater.configf.getBoolean("Auto-Restart-Server") && downloadSuccess) {
             VelocityUpdater.logger.warn("The Server will restart in 10 Seconds!");

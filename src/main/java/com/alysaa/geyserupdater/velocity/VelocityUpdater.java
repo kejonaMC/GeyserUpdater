@@ -1,10 +1,10 @@
 package com.alysaa.geyserupdater.velocity;
 
+import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import com.alysaa.geyserupdater.velocity.command.GeyserUpdaterCommand;
-import com.alysaa.geyserupdater.velocity.util.BuildFileChecker;
-import com.alysaa.geyserupdater.velocity.util.BuildNumChecker;
-import com.alysaa.geyserupdater.velocity.util.OSUtils;
-import com.alysaa.geyserupdater.velocity.util.ScriptCreator;
+import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.velocity.util.VelocityJoinListener;
 import com.alysaa.geyserupdater.velocity.util.bstats.Metrics;
 import com.google.inject.Inject;
@@ -58,7 +58,7 @@ public class VelocityUpdater {
         // Check if downloaded Geyser file exists periodically
         TimerTask task = new TimerTask() {
             public void run() {
-                BuildFileChecker.checkVelocityFile(true);
+                CheckBuildFile.checkVelocityFile(true);
             }
         };
         Timer timer = new Timer("Timer");
@@ -89,7 +89,7 @@ public class VelocityUpdater {
         if (configf.getBoolean("Auto-Script-Generating")) {
             if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
                 try {
-                    ScriptCreator.createScript();
+                    ScriptCreator.createScript(true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -103,7 +103,7 @@ public class VelocityUpdater {
             // Checking for the build numbers of current build.
             TimerTask task = new TimerTask() {
                 public void run() {
-                    BuildNumChecker.checkBuildNumberVelocity();
+                    CheckBuildNum.checkBuildNumberVelocity();
                 }
             };
             Timer timer = new Timer("Timer");
