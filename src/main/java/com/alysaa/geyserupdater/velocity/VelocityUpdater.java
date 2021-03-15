@@ -27,7 +27,7 @@ import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.2.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.3.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
     public static ProxyServer server;
