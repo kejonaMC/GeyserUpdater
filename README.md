@@ -9,7 +9,7 @@
 
 # GeyserUpdater
  
-GeyserUpdater is a plugin that can update Geyser-Spigot | Geyser-BungeeCord manually or automatically. 
+GeyserUpdater is a plugin that can update Geyser on Spigot, Bungeecord and Velocity manually or automatically. 
 
 
 ## Downloading
@@ -80,6 +80,8 @@ After you run the `/geyserupdate` command or enable auto updating, it will check
 
 
 ## Release History
+* 1.3.0
+    * Added Velocity support.
 * 1.2.0
     * Added Restart script generating depended on OS, and setting it up on spigot.yml.
     * Added config version check.
@@ -109,6 +111,10 @@ The project is owned by:
 - Jens
 - YHDiamond  
 
-Special thanks to rtm516 who helped us with basically everything. Without him this project wouldn't even have a readme.  
+
+
+Special thanks to:
+- rtm516; who helped us with basically everything. Without him this project wouldn't even have a readme.  
+- Konica; who did alot of work on the updater code.
 
 Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs, and instead, go to our Discord server linked above.
