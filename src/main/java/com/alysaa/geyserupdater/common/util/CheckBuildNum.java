@@ -4,6 +4,9 @@ import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
 import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
+import com.alysaa.geyserupdater.velocity.VelocityUpdater;
+import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownload;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -13,6 +16,7 @@ import org.geysermc.connector.utils.FileUtils;
 import org.geysermc.connector.utils.WebUtils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
@@ -68,6 +72,41 @@ public class CheckBuildNum {
                     }
                 }
                 GeyserBungeeDownload.downloadGeyser();
+            }
+        }
+    }
+    public static void checkBuildNumberVelocity() {
+        Properties gitProp = new Properties();
+        try {
+            gitProp.load(FileUtils.getResource("git.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String buildXML = null;
+        try {
+            buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        if (buildXML.startsWith("<buildNumber>")) {
+            int latestBuildNum = Integer.parseInt(buildXML.replaceAll("<(\\\\)?(/)?buildNumber>", "").trim());
+            int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
+            // Compare build numbers.
+            if (latestBuildNum == buildNum) {
+                VelocityUpdater.logger.warn("Geyser is on the latest build!");
+                for (com.velocitypowered.api.proxy.Player all : VelocityUpdater.server.getAllPlayers()) {
+                    if (all.hasPermission("gupdater.geyserupdate")) {
+                        all.sendMessage(Component.text("[GeyserUpdater] Geyser is on the latest build!"));
+                    }
+                }
+            } else {
+                VelocityUpdater.logger.warn("Current running Geyser build is outdated, attempting to download latest!");
+                for (com.velocitypowered.api.proxy.Player all : VelocityUpdater.server.getAllPlayers()) {
+                    if (all.hasPermission("gupdater.geyserupdate")) {
+                        all.sendMessage(Component.text("[GeyserUpdater] Current running Geyser build is outdated, attempting to download latest!"));
+                    }
+                }
+                GeyserVeloDownload.downloadGeyser();
             }
         }
     }
