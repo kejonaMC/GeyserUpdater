@@ -36,12 +36,12 @@ Note that for Bungeecord and Velocity, if the server is not shutdown cleanly, th
 
 ## Config
 
-### Auto-Update-Geyser:
+### `Auto-Update-Geyser`:
 *Default:* `false`  
 
 If enabled, the plugin will check for a newer version of Geyser on startup and every 24 hours thereafter. If a newer version exists it will be downloaded. 
 
-### Auto-Restart-Server:
+### `Auto-Restart-Server`:
 
 *Default:* `false`  
 
@@ -51,7 +51,7 @@ If enabled, attempts to restart the server 10 seconds after a new version of Gey
 
 - **Bungeecord/Velocity:** The server will simply stop. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server, your proxy should automatically restart. If not, you can use a script to *start* the proxy that will make it start again once it has ended. 
 
-### Auto-Script-Generating:
+### `Auto-Script-Generating`:
 
 *Default:* `false`  
 
@@ -63,7 +63,7 @@ When enabled, a restart script named ServerRestartScript.bat or ServerRestartScr
 
 - **Bungeecord/Velocity:** You must use the generated script to start the proxy. This will make the server restart after it has stopped. 
 
-### Restart-Message-Players:
+### `Restart-Message-Players`:
 
 *Default:* `'&2The server will restart in 10 Seconds!'`  
 
