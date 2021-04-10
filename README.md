@@ -39,7 +39,7 @@ Note that for Bungeecord and Velocity, if the server is not shutdown cleanly, th
 ### Auto-Update-Geyser:
 *Default:* `false`  
 
-If enabled, the plugin will check for a newer version of Geyser on startup and every 24 hours thereafter. 
+If enabled, the plugin will check for a newer version of Geyser on startup and every 24 hours thereafter. If a newer version exists it will be downloaded. 
 
 ### Auto-Restart-Server:
 
@@ -47,7 +47,7 @@ If enabled, the plugin will check for a newer version of Geyser on startup and e
 
 If enabled, attempts to restart the server 10 seconds after a new version of Geyser has been successfully downloaded. 
 
-- **Spigot:** Attempts with the restart feature of Spigot. A restart script must be defined in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/) in order for spigot to succesfully restart the server. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server, leave the `restart-script` value in spigot.yml blank. Your server should automatically restart without the script.
+- **Spigot:** Attempts with the restart feature of Spigot. A restart script must be defined in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/) in order for spigot's restart feature to work. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server, leave the `restart-script` value in spigot.yml blank. Your server should automatically restart without the script.
 
 - **Bungeecord/Velocity:** The server will simply stop. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server, your proxy should automatically restart. If not, you can use a script to *start* the proxy that will make it start again once it has ended. 
 
