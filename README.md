@@ -30,7 +30,7 @@ GeyserUpdater can be installed on Spigot, Bungeecord, and Velocity. Place the Ge
 | --- | --- |
 | `/geyserupdate` | `gupdater.geyserupdate` |
 
-After you run the `/geyserupdate` command or enable auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted.
+After you run the `/geyserupdate` command or enable auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown and restarted.
 
 Note that for Bungeecord and Velocity, if the server is not shutdown cleanly, the new version of Geyser will not be applied. 
 
@@ -38,27 +38,33 @@ Note that for Bungeecord and Velocity, if the server is not shutdown cleanly, th
 
 ### Auto-Update-Geyser:
 *Default:* `false`  
+
 If enabled, the plugin will check for a newer version of Geyser on startup and every 24 hours thereafter. 
 
 ### Auto-Restart-Server:
+
 *Default:* `false`  
 
 If enabled, attempts to restart the server 10 seconds after a new version of Geyser has been successfully downloaded. 
 
-- **Spigot:** Attempts with the restart feature of Spigot. A restart script must be defined in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/) in order for spigot to succesfully restart the server. If you are using a hosting provider, a [server wrapper], or a systemd unit (or similar) to run the server, leave the `restart-script` value in spigot.yml blank. Your server should automatically restart.
+- **Spigot:** Attempts with the restart feature of Spigot. A restart script must be defined in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/) in order for spigot to succesfully restart the server. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server, leave the `restart-script` value in spigot.yml blank. Your server should automatically restart without the script.
 
-- **Bungeecord/Velocity:** If enabled, the server will simply stop. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server, your proxy should automatically restart. If not, you can use a script to *start* the proxy that will make it start again once it has ended. 
+- **Bungeecord/Velocity:** The server will simply stop. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server, your proxy should automatically restart. If not, you can use a script to *start* the proxy that will make it start again once it has ended. 
 
 ### Auto-Script-Generating:
+
 *Default:* `false`  
 
 Do not use this if you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server.
 
-When enabled it will generate a restart script (ServerRestartScript.bat/sh) for you. 
+When enabled, a restart script named ServerRestartScript.bat or ServerRestartScript.bat will be generated for you. It will attempt to use the same JVM flags that your server started with. Although it should typically work without issue, it is recommended to verify and modify it to your liking. 
 
-- If you are running spigot, it will configure the `restart-script` value in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/). Running `./restart` will restart the server. This will allow the server to successfully restart if you have `Auto-Restart-Server` enabled. 
+- **Spigot:** The `restart-script` value in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/) will be automatically set to use the generated restart script. This will allow the spigot restart feature to work if you have `Auto-Restart-Server` enabled, and if you run `/restart`. If you run linux it is recommended to modify the script so that your server runs in a [screen](https://www.gnu.org/software/screen/) or [tmux](https://github.com/tmux/tmux/wiki) session, so that you can attach to the terminal of the restarted server. 
+
+- **Bungeecord/Velocity:** You must use the generated script to start the proxy. This will make the server restart after it has stopped. 
 
 ### Restart-Message-Players:
+
 *Default:* `'&2The server will restart in 10 Seconds!'`  
 
 This is the message that is sent to all players when the latest version of Geyser has been downloaded and `Auto-Restart-Server` is enabled. 
