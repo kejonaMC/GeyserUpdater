@@ -8,9 +8,7 @@
 [![Spigot reviews](https://img.shields.io/spiget/stars/88555?color=yellow&label=Spigot%20rating)](https://www.spigotmc.org/resources/geyserupdater.88555/)
 
 # GeyserUpdater
- 
-GeyserUpdater is a plugin that can update Geyser on Spigot, Bungeecord and Velocity manually or automatically. 
-
+### GeyserUpdater is a plugin that can update Geyser on Spigot, Bungeecord and Velocity manually or automatically. 
 
 ## Downloading
 
@@ -18,58 +16,42 @@ Please download the plugin from [our Spigot page](https://www.spigotmc.org/resou
 
 If you don't want to use the Spigot website you can download the plugin [on our CI](https://ci.alysaa.net/job/GeyserUpdater/job/main) or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
 
-
 ## Installation
 
 GeyserUpdater can be installed on Spigot, Bungeecord, and Velocity. Place the GeyserUpdater plugin file in the plugins folder and restart the server.
 
+## Usage
 
-# Permissions:
-```
-gupdater.geyserupdate
-```
+| Commands | Permissions | Description |
+| --- | --- | --- |
+| `/geyserupdate` | `gupdater.geyserupdate` | Download the latest version of Geyser if you don't have it |
 
+After you run the `/geyserupdate` command or enable auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted. Do not kill (Hard shutdown) the server/proxy or the updater wont update Geyser!
 
-# Commands:
-```
-/geyserupdate 
-```
+## Config
 
-
-# Auto-Update-Geyser:
-
+### Auto-Update-Geyser:
+Default: `false`  
 You can set Auto-Updating to true in the config.yml.
 
 
-# Auto-Restart-Server:
-
+### Auto-Restart-Server:
+Default:`false`  
 Once you enable auto-restart it will restart the server automatically after each new build that has being downloaded,
 therefore you will need to setup a restart script that the server can use (via /restart)!
 
 
-# Auto-Script-Generating:
-
+### Auto-Script-Generating:
+Default: `false`  
 When enabled it will generate a restart script (ServerRestartScript.bat/sh) and set it up in the spigot.yml for you.
 you will need to use our script to start server! Do not touch this setting when you are using a host provider.
 Most providers already have a working restart option set for you.
 
 
-# Restart-Message-Players:
-
+### Restart-Message-Players:
+Default: `'&2The server will restart in 10 Seconds!'`  
 Restart-Message will only work if you have enabled Auto-Restart. When the update has been downloaded it will send a message to the players
 to warn them that the server is restarting. You can change this message!
-
-
-## Usage
-
-After you run the `/geyserupdate` command or enable auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted. Do not kill (Hard shutdown) the server/proxy or the updater wont update Geyser!
-
-
-## bStats
-[Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
-
-[Bungee stats](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
-
 
 ## Discord
 [Here](https://discord.gg/xXzzdAXa2b) is our Discord link, you can come to get support, get GitHub feeds, or just hang out. Don't ping anyone that doesn't have the pingable role!
@@ -78,6 +60,12 @@ After you run the `/geyserupdate` command or enable auto updating, it will check
 ## Spigot page
 [Here](https://www.spigotmc.org/resources/geyserupdater.88555/) is our Spigot page if you want to download it there (it makes the download count go up) or post a review (they help)!
 
+## bStats
+[Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
+
+[Bungee stats](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
+
+[Velocity stats](https://bstats.org/plugin/velocity/GeyserUpdater/10673)
 
 ## Release History
 * 1.3.0
