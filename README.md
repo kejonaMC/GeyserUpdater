@@ -18,7 +18,7 @@ Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC 
 
 Please download the plugin from [our Spigot page](https://www.spigotmc.org/resources/geyserupdater.88555/) so we can get an idea of how many people are downloading the plugin.
 
-If you don't want to use the Spigot website you can download the plugin [on our CI](https://ci.alysaa.net/job/GeyserUpdater/job/main) or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
+If you don't want to use the Spigot website you can download the plugin [our CI](https://ci.alysaa.net/job/GeyserUpdater/job/main) or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
 
 ## Installation
 
@@ -26,33 +26,42 @@ GeyserUpdater can be installed on Spigot, Bungeecord, and Velocity. Place the Ge
 
 ## Usage
 
-| Commands | Permissions | Description |
-| --- | --- | --- |
-| `/geyserupdate` | `gupdater.geyserupdate` | Download the latest version of Geyser if you don't have it |
+| Commands | Permission |
+| --- | --- |
+| `/geyserupdate` | `gupdater.geyserupdate` |
 
-After you run the `/geyserupdate` command or enable auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted. Do not kill (Hard shutdown) the server/proxy or the updater wont update Geyser!
+After you run the `/geyserupdate` command or enable auto updating, it will check the current running Geyser version. If it's outdated, it will automatically download the latest Geyser build. Changes will only take place once the server has been shutdown correctly and restarted.
+
+Note that for Bungeecord and Velocity, if the server is not shutdown cleanly, the new version of Geyser will not be applied. 
 
 ## Config
 
 ### Auto-Update-Geyser:
 *Default:* `false`  
-You can set Auto-Updating to true in the config.yml.
+If enabled, the plugin will check for a newer version of Geyser on startup and every 24 hours thereafter. 
 
 ### Auto-Restart-Server:
 *Default:* `false`  
-Once you enable auto-restart it will restart the server automatically after each new build that has being downloaded,
-therefore you will need to setup a restart script that the server can use (via /restart)!
+
+If enabled, attempts to restart the server 10 seconds after a new version of Geyser has been successfully downloaded. 
+
+- **Spigot:** Attempts with the restart feature of Spigot. A restart script must be defined in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/) in order for spigot to succesfully restart the server. If you are using a hosting provider, a [server wrapper], or a systemd unit (or similar) to run the server, leave the `restart-script` value in spigot.yml blank. Your server should automatically restart.
+
+- **Bungeecord/Velocity:** If enabled, the server will simply stop. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server, your proxy should automatically restart. If not, you can use a script to *start* the proxy that will make it start again once it has ended. 
 
 ### Auto-Script-Generating:
 *Default:* `false`  
-When enabled it will generate a restart script (ServerRestartScript.bat/sh) and set it up in the spigot.yml for you.
-you will need to use our script to start server! Do not touch this setting when you are using a host provider.
-Most providers already have a working restart option set for you.
+
+Do not use this if you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a systemd unit (or similar) to run the server.
+
+When enabled it will generate a restart script (ServerRestartScript.bat/sh) for you. 
+
+- If you are running spigot, it will configure the `restart-script` value in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/). Running `./restart` will restart the server. This will allow the server to successfully restart if you have `Auto-Restart-Server` enabled. 
 
 ### Restart-Message-Players:
 *Default:* `'&2The server will restart in 10 Seconds!'`  
-Restart-Message will only work if you have enabled Auto-Restart. When the update has been downloaded it will send a message to the players
-to warn them that the server is restarting. You can change this message!
+
+This is the message that is sent to all players when the latest version of Geyser has been downloaded and `Auto-Restart-Server` is enabled. 
 
 ## bStats
 [Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
