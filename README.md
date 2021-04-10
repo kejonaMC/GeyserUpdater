@@ -67,7 +67,7 @@ When enabled, a restart script named ServerRestartScript.bat or ServerRestartScr
 
 *Default:* `'&2The server will restart in 10 Seconds!'`  
 
-This is the message that is sent to all players when the latest version of Geyser has been downloaded and `Auto-Restart-Server` is enabled. 
+This is the message that is sent to all players when `Auto-Restart-Server` is going to restart the server in 10 seconds. 
 
 ## bStats
 [Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
