@@ -8,7 +8,11 @@
 [![Spigot reviews](https://img.shields.io/spiget/stars/88555?color=yellow&label=Spigot%20rating)](https://www.spigotmc.org/resources/geyserupdater.88555/)
 
 # GeyserUpdater
-### GeyserUpdater is a plugin that can update Geyser on Spigot, Bungeecord and Velocity manually or automatically. 
+### GeyserUpdater is a plugin that can update Geyser on Spigot, Bungeecord and Velocity manually or automatically.
+
+[Here](https://discord.gg/xXzzdAXa2b) is our Discord link, you can come to get support, get GitHub feeds, or just hang out. Don't ping anyone that doesn't have the pingable role!
+
+Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs, and instead, go to our Discord server linked above.
 
 ## Downloading
 
@@ -31,34 +35,24 @@ After you run the `/geyserupdate` command or enable auto updating, it will check
 ## Config
 
 ### Auto-Update-Geyser:
-Default: `false`  
+*Default:* `false`  
 You can set Auto-Updating to true in the config.yml.
 
-
 ### Auto-Restart-Server:
-Default:`false`  
+*Default:* `false`  
 Once you enable auto-restart it will restart the server automatically after each new build that has being downloaded,
 therefore you will need to setup a restart script that the server can use (via /restart)!
 
-
 ### Auto-Script-Generating:
-Default: `false`  
+*Default:* `false`  
 When enabled it will generate a restart script (ServerRestartScript.bat/sh) and set it up in the spigot.yml for you.
 you will need to use our script to start server! Do not touch this setting when you are using a host provider.
 Most providers already have a working restart option set for you.
 
-
 ### Restart-Message-Players:
-Default: `'&2The server will restart in 10 Seconds!'`  
+*Default:* `'&2The server will restart in 10 Seconds!'`  
 Restart-Message will only work if you have enabled Auto-Restart. When the update has been downloaded it will send a message to the players
 to warn them that the server is restarting. You can change this message!
-
-## Discord
-[Here](https://discord.gg/xXzzdAXa2b) is our Discord link, you can come to get support, get GitHub feeds, or just hang out. Don't ping anyone that doesn't have the pingable role!
-
-
-## Spigot page
-[Here](https://www.spigotmc.org/resources/geyserupdater.88555/) is our Spigot page if you want to download it there (it makes the download count go up) or post a review (they help)!
 
 ## bStats
 [Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
@@ -96,13 +90,10 @@ to warn them that the server is restarting. You can change this message!
 ## Meta
 
 The project is owned by:
-- Jens
-- YHDiamond  
-
-
+- [Jens](https://github.com/Jens-Co)
+- [YHDiamond](https://github.com/YHDiamond)
+</br>
 
 Special thanks to:
-- rtm516; who helped us with basically everything. Without him this project wouldn't even have a readme.  
-- Konica; who did alot of work on the updater code.
-
-Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs, and instead, go to our Discord server linked above.
+- [rtm516](https://github.com/rtm516), who helped us with basically everything. Without him this project wouldn't even have a readme.  
+- [Konica](https://github.com/Konicai), who did alot of work on the updater code.
