@@ -1,7 +1,7 @@
 package com.alysaa.geyserupdater.velocity;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import com.alysaa.geyserupdater.velocity.command.GeyserUpdaterCommand;
 import com.alysaa.geyserupdater.common.util.OSUtils;
@@ -44,7 +44,7 @@ public class VelocityUpdater {
     }
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        logger.info("Plugin has enabled!");
+        logger.info("GeyserUpdater v1.4.0 has been enabled");
         // Create folder for storing new Geyser jar
         createUpdateFolder();
         // Make startup script
@@ -103,7 +103,15 @@ public class VelocityUpdater {
             // Checking for the build numbers of current build.
             TimerTask task = new TimerTask() {
                 public void run() {
-                    CheckBuildNum.checkBuildNumberVelocity();
+                    try {
+                        boolean isLatest = GeyserProperties.isLatestBuild();
+                        if (!isLatest) {
+                            logger.info("A newer version of Geyser is available. Downloading now...");
+                        }
+                    } catch (IOException e) {
+                        logger.error("Failed to check if Geyser is outdated!");
+                        e.printStackTrace();
+                    }
                 }
             };
             Timer timer = new Timer("Timer");

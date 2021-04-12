@@ -3,10 +3,11 @@ package com.alysaa.geyserupdater.bungee;
 import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
 import com.alysaa.geyserupdater.bungee.util.BungeeJoinListener;
 import com.alysaa.geyserupdater.bungee.util.Config;
+import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
@@ -34,7 +35,7 @@ public final class BungeeUpdater extends Plugin {
     @Override
     public void onEnable() {
         new Metrics(this, 10203);
-        getLogger().info("GeyserUpdater v1.3.0 has been enabled");
+        getLogger().info("GeyserUpdater v1.4.0 has been enabled");
         plugin = this;
         this.getProxy().getPluginManager().registerCommand(this, new GeyserCommand());
         this.onConfig();
@@ -123,8 +124,13 @@ public final class BungeeUpdater extends Plugin {
             getProxy().getScheduler().schedule(this, () -> {
                 try {
                     // Checking for the build numbers of current build.
-                    CheckBuildNum.checkBuildNumberBungee();
+                    boolean isLatest = GeyserProperties.isLatestBuild();
+                    if (!isLatest) {
+                        logger.info("A newer version of Geyser is available. Downloading now...");
+                        GeyserBungeeDownload.downloadGeyser();
+                    }
                 } catch (IOException e) {
+                    logger.severe("Failed to check if Geyser is outdated!");
                     e.printStackTrace();
                 }
             }, 0, 24, TimeUnit.HOURS);

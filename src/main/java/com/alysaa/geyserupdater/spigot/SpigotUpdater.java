@@ -1,11 +1,12 @@
 package com.alysaa.geyserupdater.spigot;
 
 import com.alysaa.geyserupdater.common.util.OSUtils;
-import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
+import com.alysaa.geyserupdater.spigot.command.GeyserUpdateCommand;
+import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
 import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -33,8 +34,8 @@ public class SpigotUpdater extends JavaPlugin {
     @Override
     public void onEnable() {
         new Metrics(this, 10202);
-        getLogger().info("GeyserUpdater v1.3.0 has been enabled");
-        this.getCommand("geyserupdate").setExecutor(new GeyserCommand());
+        getLogger().info("GeyserUpdater v1.4.0 has been enabled");
+        this.getCommand("geyserupdate").setExecutor(new GeyserUpdateCommand());
         createFiles();
         checkConfigVer();
         plugin = this;
@@ -75,7 +76,7 @@ public class SpigotUpdater extends JavaPlugin {
     public void checkConfigVer(){
         Logger logger = this.getLogger();
         //Change version number only when editing config.yml!
-        if (!(getConfig().getInt("version") ==1)){
+        if (!(getConfig().getInt("version") == 1)){
                 logger.info("Config.yml is outdated. please regenerate a new config.yml!");
             }
         }
@@ -84,10 +85,14 @@ public class SpigotUpdater extends JavaPlugin {
         Logger logger = this.getLogger();
         String pluginVersion = this.getDescription().getVersion();
         String version = SpigotResourceUpdateChecker.getVersion(plugin);
-        if (version.equals(pluginVersion)) {
-            logger.info("There are no new updates for GeyserUpdater available.");
+        if (version != null && version.length() != 0) {
+            if (version.equals(pluginVersion)) {
+                logger.info("There are no new updates for GeyserUpdater available.");
+            } else {
+                logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+            }
         } else {
-            logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+            logger.severe("Failed to check version of GeyserUpdater!");
         }
     }
     public void onDisable() {
@@ -112,6 +117,9 @@ public class SpigotUpdater extends JavaPlugin {
             } catch (Exception ignored) {}
         }
     }
+
+    // TODO Spigot probably has a better way of doing timers.
+
     private class StartTimer extends TimerTask {
         @Override
         public void run() {
@@ -122,8 +130,13 @@ public class SpigotUpdater extends JavaPlugin {
         @Override
         public void run() {
             try {
-                CheckBuildNum.checkBuildNumberSpigot();
+                boolean isLatest = GeyserProperties.isLatestBuild();
+                if (!isLatest) {
+                    plugin.getLogger().info("A newer version of Geyser is available. Downloading now...");
+                    GeyserSpigotDownload.downloadGeyser();
+                }
             } catch (IOException e) {
+                plugin.getLogger().severe("Failed to check if Geyser is outdated!");
                 e.printStackTrace();
             }
         }
