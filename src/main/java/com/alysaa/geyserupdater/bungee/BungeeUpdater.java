@@ -1,6 +1,6 @@
 package com.alysaa.geyserupdater.bungee;
 
-import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
+import com.alysaa.geyserupdater.bungee.command.GeyserUpdateCommand;
 import com.alysaa.geyserupdater.bungee.util.BungeeJoinListener;
 import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
@@ -37,7 +37,7 @@ public final class BungeeUpdater extends Plugin {
         new Metrics(this, 10203);
         getLogger().info("GeyserUpdater v1.4.0 has been enabled");
         plugin = this;
-        this.getProxy().getPluginManager().registerCommand(this, new GeyserCommand());
+        this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         this.onConfig();
         this.createUpdateFolder();
         try {

@@ -1,0 +1,674 @@
+Index: src/main/java/com/alysaa/geyserupdater/bungee/BungeeUpdater.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/alysaa/geyserupdater/bungee/BungeeUpdater.java b/src/main/java/com/alysaa/geyserupdater/bungee/BungeeUpdater.java
+--- a/src/main/java/com/alysaa/geyserupdater/bungee/BungeeUpdater.java	(revision 67cac15fc4d81d89adb1bb8f448b44f65dabf809)
++++ b/src/main/java/com/alysaa/geyserupdater/bungee/BungeeUpdater.java	(revision 1739867d18625c1cb430a9b4f0eada735a4915f6)
+@@ -3,10 +3,11 @@
+ import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
+ import com.alysaa.geyserupdater.bungee.util.BungeeJoinListener;
+ import com.alysaa.geyserupdater.bungee.util.Config;
++import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
+ import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
+ import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
+ import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
++import com.alysaa.geyserupdater.common.util.GeyserProperties;
+ import com.alysaa.geyserupdater.common.util.OSUtils;
+ import com.alysaa.geyserupdater.common.util.ScriptCreator;
+ 
+@@ -34,7 +35,7 @@
+     @Override
+     public void onEnable() {
+         new Metrics(this, 10203);
+-        getLogger().info("GeyserUpdater v1.3.0 has been enabled");
++        getLogger().info("GeyserUpdater v1.4.0 has been enabled");
+         plugin = this;
+         this.getProxy().getPluginManager().registerCommand(this, new GeyserCommand());
+         this.onConfig();
+@@ -123,8 +124,13 @@
+             getProxy().getScheduler().schedule(this, () -> {
+                 try {
+                     // Checking for the build numbers of current build.
+-                    CheckBuildNum.checkBuildNumberBungee();
++                    boolean isLatest = GeyserProperties.isLatestBuild();
++                    if (!isLatest) {
++                        logger.info("A newer version of Geyser is available. Downloading now...");
++                        GeyserBungeeDownload.downloadGeyser();
++                    }
+                 } catch (IOException e) {
++                    logger.severe("Failed to check if Geyser is outdated!");
+                     e.printStackTrace();
+                 }
+             }, 0, 24, TimeUnit.HOURS);
+Index: src/main/java/com/alysaa/geyserupdater/bungee/command/GeyserCommand.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/alysaa/geyserupdater/bungee/command/GeyserCommand.java b/src/main/java/com/alysaa/geyserupdater/bungee/command/GeyserCommand.java
+--- a/src/main/java/com/alysaa/geyserupdater/bungee/command/GeyserCommand.java	(revision 67cac15fc4d81d89adb1bb8f448b44f65dabf809)
++++ b/src/main/java/com/alysaa/geyserupdater/bungee/command/GeyserCommand.java	(revision 1739867d18625c1cb430a9b4f0eada735a4915f6)
+@@ -1,7 +1,8 @@
+ package com.alysaa.geyserupdater.bungee.command;
+ 
+ import com.alysaa.geyserupdater.bungee.BungeeUpdater;
+-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
++import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
++import com.alysaa.geyserupdater.common.util.GeyserProperties;
+ import net.md_5.bungee.api.ChatColor;
+ import net.md_5.bungee.api.CommandSender;
+ import net.md_5.bungee.api.chat.TextComponent;
+@@ -9,6 +10,7 @@
+ import net.md_5.bungee.api.plugin.Command;
+ 
+ import java.io.IOException;
++import java.util.logging.Logger;
+ 
+ 
+ public class GeyserCommand extends Command {
+@@ -18,19 +20,44 @@
+     }
+ 
+     public void execute(CommandSender commandSender, String[] args) {
++
++        String checkMsg = "Checking current Geyser version!";
++        String latestMsg = "Geyser is on the latest build!";
++        String outdatedMsg = "A newer version of Geyser is available. Downloading now...";
++        String failMsg = "Failed to check if Geyser is outdated!";
++
++        Logger logger = BungeeUpdater.plugin.getLogger();
++
++        // TODO compress this. near duplication seems unnecessary just to send to different commandSenders.
++
+         if (commandSender instanceof ProxiedPlayer) {
+             ProxiedPlayer player = (ProxiedPlayer) commandSender;
+             try {
+-                player.sendMessage(new TextComponent(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version!"));
+-                CheckBuildNum.checkBuildNumberBungee();
++                player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + checkMsg));
++                boolean isLatest = GeyserProperties.isLatestBuild();
++                if (isLatest) {
++                    player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + latestMsg));
++                } else {
++                    player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + outdatedMsg));
++                    GeyserBungeeDownload.downloadGeyser();
++                }
+             } catch (IOException e) {
++                player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + failMsg));
+                 e.printStackTrace();
+             }
+         } else {
+-            BungeeUpdater.plugin.getLogger().info("Checking current Geyser version!");
++            // TODO filter this against command blocks
+             try {
+-                CheckBuildNum.checkBuildNumberBungee();
++                logger.info(checkMsg);
++                boolean isLatest = GeyserProperties.isLatestBuild();
++                if (isLatest) {
++                    logger.info(latestMsg);
++                } else {
++                    logger.info(outdatedMsg);
++                    GeyserBungeeDownload.downloadGeyser();
++                }
+             } catch (IOException e) {
++                logger.severe(failMsg);
+                 e.printStackTrace();
+             }
+         }
+Index: src/main/java/com/alysaa/geyserupdater/spigot/SpigotUpdater.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/alysaa/geyserupdater/spigot/SpigotUpdater.java b/src/main/java/com/alysaa/geyserupdater/spigot/SpigotUpdater.java
+--- a/src/main/java/com/alysaa/geyserupdater/spigot/SpigotUpdater.java	(revision 67cac15fc4d81d89adb1bb8f448b44f65dabf809)
++++ b/src/main/java/com/alysaa/geyserupdater/spigot/SpigotUpdater.java	(revision 1739867d18625c1cb430a9b4f0eada735a4915f6)
+@@ -1,11 +1,12 @@
+ package com.alysaa.geyserupdater.spigot;
+ 
+ import com.alysaa.geyserupdater.common.util.OSUtils;
+-import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
++import com.alysaa.geyserupdater.spigot.command.GeyserUpdateCommand;
++import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
+ import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
+ import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
+ import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
++import com.alysaa.geyserupdater.common.util.GeyserProperties;
+ import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
+ import org.bukkit.Bukkit;
+ import org.bukkit.configuration.InvalidConfigurationException;
+@@ -33,8 +34,8 @@
+     @Override
+     public void onEnable() {
+         new Metrics(this, 10202);
+-        getLogger().info("GeyserUpdater v1.3.0 has been enabled");
+-        this.getCommand("geyserupdate").setExecutor(new GeyserCommand());
++        getLogger().info("GeyserUpdater v1.4.0 has been enabled");
++        this.getCommand("geyserupdate").setExecutor(new GeyserUpdateCommand());
+         createFiles();
+         checkConfigVer();
+         plugin = this;
+@@ -75,7 +76,7 @@
+     public void checkConfigVer(){
+         Logger logger = this.getLogger();
+         //Change version number only when editing config.yml!
+-        if (!(getConfig().getInt("version") ==1)){
++        if (!(getConfig().getInt("version") == 1)){
+                 logger.info("Config.yml is outdated. please regenerate a new config.yml!");
+             }
+         }
+@@ -84,10 +85,14 @@
+         Logger logger = this.getLogger();
+         String pluginVersion = this.getDescription().getVersion();
+         String version = SpigotResourceUpdateChecker.getVersion(plugin);
+-        if (version.equals(pluginVersion)) {
+-            logger.info("There are no new updates for GeyserUpdater available.");
+-        } else {
+-            logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
++        if (version != null && version.length() != 0) {
++            if (version.equals(pluginVersion)) {
++                logger.info("There are no new updates for GeyserUpdater available.");
++            } else {
++                logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
++            }
++        } else {
++            logger.severe("Failed to check version of GeyserUpdater!");
+         }
+     }
+     public void onDisable() {
+@@ -112,6 +117,9 @@
+             } catch (Exception ignored) {}
+         }
+     }
++
++    // TODO Spigot probably has a better way of doing timers.
++
+     private class StartTimer extends TimerTask {
+         @Override
+         public void run() {
+@@ -122,8 +130,13 @@
+         @Override
+         public void run() {
+             try {
+-                CheckBuildNum.checkBuildNumberSpigot();
++                boolean isLatest = GeyserProperties.isLatestBuild();
++                if (!isLatest) {
++                    plugin.getLogger().info("A newer version of Geyser is available. Downloading now...");
++                    GeyserSpigotDownload.downloadGeyser();
++                }
+             } catch (IOException e) {
++                plugin.getLogger().severe("Failed to check if Geyser is outdated!");
+                 e.printStackTrace();
+             }
+         }
+Index: src/main/java/com/alysaa/geyserupdater/spigot/command/GeyserCommand.java
+===================================================================
+diff --git a/src/main/java/com/alysaa/geyserupdater/spigot/command/GeyserCommand.java b/src/main/java/com/alysaa/geyserupdater/spigot/command/GeyserCommand.java
+deleted file mode 100644
+--- a/src/main/java/com/alysaa/geyserupdater/spigot/command/GeyserCommand.java	(revision 67cac15fc4d81d89adb1bb8f448b44f65dabf809)
++++ /dev/null	(revision 67cac15fc4d81d89adb1bb8f448b44f65dabf809)
+@@ -1,36 +0,0 @@
+-package com.alysaa.geyserupdater.spigot.command;
+-
+-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+-import com.alysaa.geyserupdater.spigot.SpigotUpdater;
+-import org.bukkit.ChatColor;
+-import org.bukkit.command.Command;
+-import org.bukkit.command.CommandExecutor;
+-import org.bukkit.command.CommandSender;
+-import org.bukkit.command.ConsoleCommandSender;
+-import org.bukkit.entity.Player;
+-
+-import java.io.IOException;
+-
+-public class GeyserCommand implements CommandExecutor {
+-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+-        if (sender instanceof Player) {
+-            Player player = (Player) sender;
+-            if (command.getName().equalsIgnoreCase("geyserupdate") && player.hasPermission("gupdater.geyserupdate")) {
+-                try {
+-                    sender.sendMessage(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version!");
+-                    CheckBuildNum.checkBuildNumberSpigot();
+-                } catch (IOException e) {
+-                    e.printStackTrace();
+-                }
+-            }
+-        } else if (sender instanceof ConsoleCommandSender) {
+-            SpigotUpdater.plugin.getLogger().info("Checking current Geyser version!");
+-            try {
+-                CheckBuildNum.checkBuildNumberSpigot();
+-            } catch (IOException e) {
+-                e.printStackTrace();
+-            }
+-        }
+-        return false;
+-    }
+-}
+\ No newline at end of file
+Index: src/main/java/com/alysaa/geyserupdater/velocity/VelocityUpdater.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/alysaa/geyserupdater/velocity/VelocityUpdater.java b/src/main/java/com/alysaa/geyserupdater/velocity/VelocityUpdater.java
+--- a/src/main/java/com/alysaa/geyserupdater/velocity/VelocityUpdater.java	(revision 67cac15fc4d81d89adb1bb8f448b44f65dabf809)
++++ b/src/main/java/com/alysaa/geyserupdater/velocity/VelocityUpdater.java	(revision 1739867d18625c1cb430a9b4f0eada735a4915f6)
+@@ -1,7 +1,7 @@
+ package com.alysaa.geyserupdater.velocity;
+ 
+ import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
++import com.alysaa.geyserupdater.common.util.GeyserProperties;
+ import com.alysaa.geyserupdater.common.util.ScriptCreator;
+ import com.alysaa.geyserupdater.velocity.command.GeyserUpdaterCommand;
+ import com.alysaa.geyserupdater.common.util.OSUtils;
+@@ -44,7 +44,7 @@
+     }
+     @Subscribe
+     public void onProxyInitialization(ProxyInitializeEvent event) {
+-        logger.info("Plugin has enabled!");
++        logger.info("GeyserUpdater v1.4.0 has been enabled");
+         // Create folder for storing new Geyser jar
+         createUpdateFolder();
+         // Make startup script
+@@ -103,7 +103,15 @@
+             // Checking for the build numbers of current build.
+             TimerTask task = new TimerTask() {
+                 public void run() {
+-                    CheckBuildNum.checkBuildNumberVelocity();
++                    try {
++                        boolean isLatest = GeyserProperties.isLatestBuild();
++                        if (!isLatest) {
++                            logger.info("A newer version of Geyser is available. Downloading now...");
++                        }
++                    } catch (IOException e) {
++                        logger.error("Failed to check if Geyser is outdated!");
++                        e.printStackTrace();
++                    }
+                 }
+             };
+             Timer timer = new Timer("Timer");
+Index: src/main/java/com/alysaa/geyserupdater/velocity/command/GeyserUpdaterCommand.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/alysaa/geyserupdater/velocity/command/GeyserUpdaterCommand.java b/src/main/java/com/alysaa/geyserupdater/velocity/command/GeyserUpdaterCommand.java
+--- a/src/main/java/com/alysaa/geyserupdater/velocity/command/GeyserUpdaterCommand.java	(revision 67cac15fc4d81d89adb1bb8f448b44f65dabf809)
++++ b/src/main/java/com/alysaa/geyserupdater/velocity/command/GeyserUpdaterCommand.java	(revision 1739867d18625c1cb430a9b4f0eada735a4915f6)
+@@ -1,16 +1,40 @@
+ package com.alysaa.geyserupdater.velocity.command;
+ 
+-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+-import com.velocitypowered.api.command.SimpleCommand;
++import com.alysaa.geyserupdater.common.util.GeyserProperties;
++import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
++import com.alysaa.geyserupdater.velocity.VelocityUpdater;
++import com.velocitypowered.api.command.CommandSource;
++import com.velocitypowered.api.command.RawCommand;
+ import net.kyori.adventure.text.Component;
++import org.slf4j.Logger;
+ 
+-public class GeyserUpdaterCommand implements SimpleCommand {
++import java.io.IOException;
++
++public class GeyserUpdaterCommand implements RawCommand {
++    // TODO make sure command blocks can't run this command
+     @Override
+     public void execute(final Invocation invocation) {
+-        invocation.source().sendMessage(Component.text("[GeyserUpdater] Checking current Geyser version!"));
++
++        String checkMsg = "Checking current Geyser version!";
++        String latestMsg = "Geyser is on the latest build!";
++        String outdatedMsg = "A newer version of Geyser is available. Downloading now...";
++        String failMsg = "Failed to check if Geyser is outdated!";
++
++        CommandSource source = invocation.source();
++        Logger logger = VelocityUpdater.logger;
++
+         try {
+-            CheckBuildNum.checkBuildNumberVelocity();
+-        } catch (Exception e) {
++            source.sendMessage(Component.text(checkMsg));
++            boolean isLatest = GeyserProperties.isLatestBuild();
++            if (isLatest) {
++                source.sendMessage(Component.text(latestMsg));
++            } else {
++                source.sendMessage(Component.text(outdatedMsg));
++                GeyserSpigotDownload.downloadGeyser();
++            }
++        } catch (IOException e) {
++            source.sendMessage(Component.text(failMsg));
++            logger.error(failMsg);
+             e.printStackTrace();
+         }
+     }
+Index: src/main/java/com/alysaa/geyserupdater/spigot/command/GeyserUpdateCommand.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/alysaa/geyserupdater/spigot/command/GeyserUpdateCommand.java b/src/main/java/com/alysaa/geyserupdater/spigot/command/GeyserUpdateCommand.java
+new file mode 100644
+--- /dev/null	(revision 1739867d18625c1cb430a9b4f0eada735a4915f6)
++++ b/src/main/java/com/alysaa/geyserupdater/spigot/command/GeyserUpdateCommand.java	(revision 1739867d18625c1cb430a9b4f0eada735a4915f6)
+@@ -0,0 +1,67 @@
++package com.alysaa.geyserupdater.spigot.command;
++
++import com.alysaa.geyserupdater.common.util.GeyserProperties;
++import com.alysaa.geyserupdater.spigot.SpigotUpdater;
++import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
++import org.bukkit.ChatColor;
++import org.bukkit.command.Command;
++import org.bukkit.command.CommandExecutor;
++import org.bukkit.command.CommandSender;
++import org.bukkit.command.ConsoleCommandSender;
++import org.bukkit.entity.Player;
++
++import java.io.IOException;
++import java.util.logging.Logger;
++
++public class GeyserUpdateCommand implements CommandExecutor {
++    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
++
++        String checkMsg = "Checking current Geyser version!";
++        String latestMsg = "Geyser is on the latest build!";
++        String outdatedMsg = "A newer version of Geyser is available. Downloading now...";
++        String failMsg = "Failed to check if Geyser is outdated!";
++
++        Logger logger = SpigotUpdater.plugin.getLogger();
++
++        // I guess this could be thrown into a different method
++        // But we wouldn't have as much control over the messages
++
++
++        if (sender instanceof Player) {
++            Player player = (Player) sender;
++            if (command.getName().equalsIgnoreCase("geyserupdate") && player.hasPermission("gupdater.geyserupdate")) {
++                try {
++                    sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + checkMsg);
++                    boolean isLatest = GeyserProperties.isLatestBuild();
++                    if (isLatest) {
++                        sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + latestMsg);
++                    } else {
++                        sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + outdatedMsg);
++                        GeyserSpigotDownload.downloadGeyser();
++                    }
++                } catch (IOException e) {
++                    sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + failMsg);
++                    logger.severe(failMsg);
++                    e.printStackTrace();
++                }
++            }
++        } else if (sender instanceof ConsoleCommandSender) {
++            try {
++                logger.info(checkMsg);
++                boolean isLatest = GeyserProperties.isLatestBuild();
++                if (isLatest) {
++                    logger.info(latestMsg);
++                } else {
++                    logger.info(outdatedMsg);
++                    GeyserSpigotDownload.downloadGeyser();
++                }
++            } catch (IOException e) {
++                logger.severe(failMsg);
++                e.printStackTrace();
++            }
++        } else {
++            return false;
++        }
++        return true;
++    }
++}
+\ No newline at end of file
+Index: Jenkinsfile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Jenkinsfile b/Jenkinsfile
+--- a/Jenkinsfile	(revision 90823cd31e17459f4c4fee88d1be02308e0e2fd5)
++++ b/Jenkinsfile	(revision b45c71225cf78555ec0ecd5d749a80aab86cbaa7)
+@@ -10,7 +10,7 @@
+         }
+         stage('Post') {
+             steps {
+-                archiveArtifacts 'target/GeyserUpdater-1.3.0-SNAPSHOT.jar'
++                archiveArtifacts 'target/GeyserUpdater-1.4.0-SNAPSHOT.jar'
+                 discordSend description: "**Build:** [${currentBuild.id}](${env.BUILD_URL})\n**Status:** [${currentBuild.currentResult}]" , footer: 'ProjectG', link: env.BUILD_URL, result: currentBuild.currentResult, title: "ProjectG/GeyserUpdater", webhookURL: "https://discord.com/api/webhooks/829602972098887720/kscr0LGNfA6cyYEtg0Gkfzu0gD4jmun6x-p3xPW2_xhH3BmOQD6ytc7jFx1j6cuTqlRq"
+                   }
+ 
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	(revision 90823cd31e17459f4c4fee88d1be02308e0e2fd5)
++++ b/pom.xml	(revision b45c71225cf78555ec0ecd5d749a80aab86cbaa7)
+@@ -6,7 +6,7 @@
+ 
+     <groupId>com.alysaa</groupId>
+     <artifactId>GeyserUpdater</artifactId>
+-    <version>1.3.0-SNAPSHOT</version>
++    <version>1.4.0-SNAPSHOT</version>
+ 
+     <properties>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+Index: src/main/resources/bungee.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/bungee.yml b/src/main/resources/bungee.yml
+--- a/src/main/resources/bungee.yml	(revision 90823cd31e17459f4c4fee88d1be02308e0e2fd5)
++++ b/src/main/resources/bungee.yml	(revision b45c71225cf78555ec0ecd5d749a80aab86cbaa7)
+@@ -1,6 +1,6 @@
+ name: GeyserUpdater
+ main: com.alysaa.geyserupdater.bungee.BungeeUpdater
+-version: 1.3.0
++version: 1.4.0
+ description: Geyser Auto Updating Plugin Addon.
+ author: Jens
+ depends: ["Geyser-BungeeCord"]
+Index: src/main/resources/plugin.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/plugin.yml b/src/main/resources/plugin.yml
+--- a/src/main/resources/plugin.yml	(revision 90823cd31e17459f4c4fee88d1be02308e0e2fd5)
++++ b/src/main/resources/plugin.yml	(revision b45c71225cf78555ec0ecd5d749a80aab86cbaa7)
+@@ -1,6 +1,6 @@
+ name: GeyserUpdater
+ main: com.alysaa.geyserupdater.spigot.SpigotUpdater
+-version: 1.3.0
++version: 1.4.0
+ api-version: 1.15
+ depend: [Geyser-Spigot]
+ description: Geyser Auto Updating Plugin Addon.
+Index: src/main/java/com/alysaa/geyserupdater/common/util/GeyserProperties.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/alysaa/geyserupdater/common/util/GeyserProperties.java b/src/main/java/com/alysaa/geyserupdater/common/util/GeyserProperties.java
+new file mode 100644
+--- /dev/null	(revision 1739867d18625c1cb430a9b4f0eada735a4915f6)
++++ b/src/main/java/com/alysaa/geyserupdater/common/util/GeyserProperties.java	(revision 1739867d18625c1cb430a9b4f0eada735a4915f6)
+@@ -0,0 +1,49 @@
++package com.alysaa.geyserupdater.common.util;
++
++import org.geysermc.connector.utils.FileUtils;
++import org.geysermc.connector.utils.WebUtils;
++
++import java.io.IOException;
++import java.io.UnsupportedEncodingException;
++import java.net.URLEncoder;
++import java.nio.charset.StandardCharsets;
++import java.util.Properties;
++
++public class GeyserProperties {
++
++    /**
++     * Compare the local build number to the latest build number on Geyser CI
++     *
++     * @return true if local build number equals latest build number on Geyser CI
++     * @throws IOException if it fails to fetch either build number
++     */
++    public static boolean isLatestBuild() throws IOException {
++        int jenkinsBuildNumber = jenkinsLatestBuildNumber(queryGitProperties("git.branch"));
++        int localBuildNumber = Integer.parseInt(queryGitProperties("git.build.number"));
++        // Compare build numbers.
++        return jenkinsBuildNumber == localBuildNumber;
++    }
++
++    /** Query the git properties of Geyser
++     *
++     * @param propertyKey the key of property to query
++     * @return the value of the property
++     * @throws IOException if failed to load the Geyser git properties
++     */
++    public static String queryGitProperties(String propertyKey) throws IOException {
++        Properties gitProp = new Properties();
++        gitProp.load(FileUtils.getResource("git.properties"));
++        return gitProp.getProperty(propertyKey);
++    }
++
++    /** Get the latest build number of a given branch of Geyser from jenkins CI
++     *
++     * @param gitBranch the branch to query
++     * @return the latest build number
++     * @throws UnsupportedEncodingException if failed to encode the given gitBranch
++     */
++    public static int jenkinsLatestBuildNumber(String gitBranch) throws UnsupportedEncodingException {
++        String XML = WebUtils.getBody("https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitBranch, StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
++        return Integer.parseInt(XML.replaceAll("<(\\\\)?(/)?buildNumber>", "").trim());
++    }
++}
+\ No newline at end of file
+Index: src/main/java/com/alysaa/geyserupdater/common/util/CheckBuildNum.java
+===================================================================
+diff --git a/src/main/java/com/alysaa/geyserupdater/common/util/CheckBuildNum.java b/src/main/java/com/alysaa/geyserupdater/common/util/CheckBuildNum.java
+deleted file mode 100644
+--- a/src/main/java/com/alysaa/geyserupdater/common/util/CheckBuildNum.java	(revision 67cac15fc4d81d89adb1bb8f448b44f65dabf809)
++++ /dev/null	(revision 67cac15fc4d81d89adb1bb8f448b44f65dabf809)
+@@ -1,113 +0,0 @@
+-package com.alysaa.geyserupdater.common.util;
+-
+-import com.alysaa.geyserupdater.bungee.BungeeUpdater;
+-import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
+-import com.alysaa.geyserupdater.spigot.SpigotUpdater;
+-import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
+-import com.alysaa.geyserupdater.velocity.VelocityUpdater;
+-import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownload;
+-import net.kyori.adventure.text.Component;
+-import net.md_5.bungee.api.ProxyServer;
+-import net.md_5.bungee.api.chat.TextComponent;
+-import net.md_5.bungee.api.connection.ProxiedPlayer;
+-import org.bukkit.Bukkit;
+-import org.bukkit.entity.Player;
+-import org.geysermc.connector.utils.FileUtils;
+-import org.geysermc.connector.utils.WebUtils;
+-
+-import java.io.IOException;
+-import java.io.UnsupportedEncodingException;
+-import java.net.URLEncoder;
+-import java.nio.charset.StandardCharsets;
+-import java.util.Properties;
+-import java.util.logging.Logger;
+-
+-public class CheckBuildNum {
+-
+-    public static void checkBuildNumberSpigot() throws IOException {
+-        Properties gitProp = new Properties();
+-        gitProp.load(FileUtils.getResource("git.properties"));
+-        String buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
+-        if (buildXML.startsWith("<buildNumber>")) {
+-            int latestBuildNum = Integer.parseInt(buildXML.replaceAll("<(\\\\)?(/)?buildNumber>", "").trim());
+-            int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
+-            // Compare build numbers.
+-            if (latestBuildNum == buildNum) {
+-                SpigotUpdater.plugin.getLogger().info("Geyser is on the latest build!");
+-                for (Player player : Bukkit.getOnlinePlayers()) {
+-                    if (player.hasPermission("gupdater.geyserupdate"))
+-                        player.sendMessage("[GeyserUpdater] Geyser is on the latest build!");
+-                }
+-            } else {
+-                SpigotUpdater.plugin.getLogger().info("Current running Geyser build is outdated, attempting to download latest!");
+-                for (Player player : Bukkit.getOnlinePlayers()) {
+-                    if (player.hasPermission("gupdater.geyserupdate"))
+-                        player.sendMessage("[GeyserUpdater] Current running Geyser build is outdated, attempting to download latest!");
+-                }
+-                GeyserSpigotDownload.downloadGeyser();
+-            }
+-        }
+-    }
+-    public static void checkBuildNumberBungee() throws IOException {
+-        Logger logger = BungeeUpdater.plugin.getLogger();
+-        Properties gitProp = new Properties();
+-        gitProp.load(FileUtils.getResource("git.properties"));
+-        String buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
+-        if (buildXML.startsWith("<buildNumber>")) {
+-            int latestBuildNum = Integer.parseInt(buildXML.replaceAll("<(\\\\)?(/)?buildNumber>", "").trim());
+-            int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
+-            // Compare build numbers.
+-            if (latestBuildNum == buildNum) {
+-                logger.info("[GeyserUpdater] Geyser is on the latest build!");
+-                for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
+-                    if (all.hasPermission("gupdater.geyserupdate")) {
+-                        all.sendMessage(new TextComponent("[GeyserUpdater] Geyser is on the latest build!"));
+-                    }
+-                }
+-            } else {
+-                logger.info("[GeyserUpdater] Current running Geyser build is outdated, attempting to download latest!");
+-                for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
+-                    if (all.hasPermission("gupdater.geyserupdate")) {
+-                        all.sendMessage(new TextComponent("[GeyserUpdater] Current running Geyser build is outdated, attempting to download latest!"));
+-                    }
+-                }
+-                GeyserBungeeDownload.downloadGeyser();
+-            }
+-        }
+-    }
+-    public static void checkBuildNumberVelocity() {
+-        Properties gitProp = new Properties();
+-        try {
+-            gitProp.load(FileUtils.getResource("git.properties"));
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-        }
+-        String buildXML = null;
+-        try {
+-            buildXML = WebUtils.getBody("https://ci.opencollab.dev//job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitProp.getProperty("git.branch"), StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
+-        } catch (UnsupportedEncodingException e) {
+-            e.printStackTrace();
+-        }
+-        if (buildXML.startsWith("<buildNumber>")) {
+-            int latestBuildNum = Integer.parseInt(buildXML.replaceAll("<(\\\\)?(/)?buildNumber>", "").trim());
+-            int buildNum = Integer.parseInt(gitProp.getProperty("git.build.number"));
+-            // Compare build numbers.
+-            if (latestBuildNum == buildNum) {
+-                VelocityUpdater.logger.warn("Geyser is on the latest build!");
+-                for (com.velocitypowered.api.proxy.Player all : VelocityUpdater.server.getAllPlayers()) {
+-                    if (all.hasPermission("gupdater.geyserupdate")) {
+-                        all.sendMessage(Component.text("[GeyserUpdater] Geyser is on the latest build!"));
+-                    }
+-                }
+-            } else {
+-                VelocityUpdater.logger.warn("Current running Geyser build is outdated, attempting to download latest!");
+-                for (com.velocitypowered.api.proxy.Player all : VelocityUpdater.server.getAllPlayers()) {
+-                    if (all.hasPermission("gupdater.geyserupdate")) {
+-                        all.sendMessage(Component.text("[GeyserUpdater] Current running Geyser build is outdated, attempting to download latest!"));
+-                    }
+-                }
+-                GeyserVeloDownload.downloadGeyser();
+-            }
+-        }
+-    }
+-}
+\ No newline at end of file

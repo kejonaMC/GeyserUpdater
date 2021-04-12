@@ -3,7 +3,7 @@ package com.alysaa.geyserupdater.velocity;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
-import com.alysaa.geyserupdater.velocity.command.GeyserUpdaterCommand;
+import com.alysaa.geyserupdater.velocity.command.GeyserUpdateCommand;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.velocity.util.VelocityJoinListener;
 import com.alysaa.geyserupdater.velocity.util.bstats.Metrics;
@@ -50,7 +50,7 @@ public class VelocityUpdater {
         // Make startup script
         makeScriptFile();
         // Register our only command
-        server.getCommandManager().register("geyserupdate", new GeyserUpdaterCommand());
+        server.getCommandManager().register("geyserupdate", new GeyserUpdateCommand());
         // Player alert if a restart is required when they join
         server.getEventManager().register(this, new VelocityJoinListener());
         // Auto update Geyser if enabled in the config
