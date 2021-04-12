@@ -85,14 +85,14 @@ public class SpigotUpdater extends JavaPlugin {
         Logger logger = this.getLogger();
         String pluginVersion = this.getDescription().getVersion();
         String version = SpigotResourceUpdateChecker.getVersion(plugin);
-        if (version != null && version.length() != 0) {
+        if (version == null || version.length() == 0) {
+            logger.severe("Failed to check version of GeyserUpdater!");
+        } else {
             if (version.equals(pluginVersion)) {
                 logger.info("There are no new updates for GeyserUpdater available.");
             } else {
                 logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
             }
-        } else {
-            logger.severe("Failed to check version of GeyserUpdater!");
         }
     }
     public void onDisable() {

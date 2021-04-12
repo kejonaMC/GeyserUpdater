@@ -92,10 +92,14 @@ public final class BungeeUpdater extends Plugin {
         BungeeUpdater plugin = this;
         Runnable runnable = () -> {
             String version = BungeeResourceUpdateChecker.getVersion(plugin);
-            if (version.equals(pluginVersion)) {
-                logger.info("There are no new updates for GeyserUpdater available.");
+            if (version == null || version.length() == 0) {
+                logger.severe("Failed to check version of GeyserUpdater!");
             } else {
-                logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+                if (version.equals(pluginVersion)) {
+                    logger.info("There are no new updates for GeyserUpdater available.");
+                } else {
+                    logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+                }
             }
         };
 
