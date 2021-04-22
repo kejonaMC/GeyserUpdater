@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.spigot.util;
 
-import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import com.alysaa.geyserupdater.bungee.BungeeUpdater;
+import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,10 +54,13 @@ public class GeyserSpigotDownload {
                     }
                 }
                 // Check if the file was downloaded successfully
-                boolean downloadSuccess = CheckBuildFile.checkSpigotFile(false);
+                boolean downloadSuccess = FileUtils.checkFile("plugins/update/Geyser-Spigot.jar", false);
+                if (!downloadSuccess) {
+                    SpigotUpdater.plugin.getLogger().info("Failed to download a newer version of Geyser!");
+                }
                 // Restart the server if the option is enabled
                 if (SpigotUpdater.plugin.getConfig().getBoolean("Auto-Restart-Server") && downloadSuccess) {
-                    SpigotUpdater.plugin.getLogger().info("The Server will restart in 10 seconds!");
+                    SpigotUpdater.plugin.getLogger().info("A new version of Geyser has been downloaded, the server will restart in 10 Seconds!");
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', SpigotUpdater.getPlugin().getConfig().getString("Restart-Message-Players")));
                     }

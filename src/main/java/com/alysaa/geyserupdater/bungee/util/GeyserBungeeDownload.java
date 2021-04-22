@@ -1,7 +1,7 @@
 package com.alysaa.geyserupdater.bungee.util;
 
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
-import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import com.alysaa.geyserupdater.common.util.FileUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.logging.Logger;
 
 public class GeyserBungeeDownload {
     public static void downloadGeyser() {
@@ -56,10 +55,13 @@ public class GeyserBungeeDownload {
             }
         }
         // Check if the file was downloaded successfully
-        boolean downloadSuccess = CheckBuildFile.checkBungeeFile(false);
+        boolean downloadSuccess = FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar", false);
+        if (!downloadSuccess) {
+            BungeeUpdater.plugin.getLogger().info("Failed to download a newer version of Geyser!");
+        }
         // Restart the server if the option is enabled
         if (BungeeUpdater.getConfiguration().getBoolean("Auto-Restart-Server") && downloadSuccess) {
-            BungeeUpdater.plugin.getLogger().info("The Server will restart in 10 Seconds!");
+            BungeeUpdater.plugin.getLogger().info("A new version of Geyser has been downloaded, the server will restart in 10 Seconds!");
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("Restart-Message-Players"))));
             }

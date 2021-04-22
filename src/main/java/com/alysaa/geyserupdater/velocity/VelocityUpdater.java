@@ -1,6 +1,6 @@
 package com.alysaa.geyserupdater.velocity;
 
-import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import com.alysaa.geyserupdater.velocity.command.GeyserUpdateCommand;
@@ -27,7 +27,7 @@ import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.3.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
     public static ProxyServer server;
@@ -38,7 +38,7 @@ public class VelocityUpdater {
     @Inject
     public VelocityUpdater(ProxyServer server, Logger logger, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
         this.server = server;
-        com.alysaa.geyserupdater.velocity.VelocityUpdater.logger = logger;
+        this.logger = logger;
         configf = loadConfig(folder);
         this.metricsFactory = metricsFactory;
     }
@@ -58,7 +58,8 @@ public class VelocityUpdater {
         // Check if downloaded Geyser file exists periodically
         TimerTask task = new TimerTask() {
             public void run() {
-                CheckBuildFile.checkVelocityFile(true);
+                FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar", true);
+                logger.info("New Geyser build has been downloaded! Velocity restart is required!");
             }
         };
         Timer timer = new Timer("Timer");
@@ -89,7 +90,7 @@ public class VelocityUpdater {
         if (configf.getBoolean("Auto-Script-Generating")) {
             if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
                 try {
-                    ScriptCreator.createScript(true);
+                    ScriptCreator.createRestartScript(true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

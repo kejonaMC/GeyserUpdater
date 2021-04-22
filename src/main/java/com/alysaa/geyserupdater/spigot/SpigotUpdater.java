@@ -5,7 +5,7 @@ import com.alysaa.geyserupdater.spigot.command.GeyserUpdateCommand;
 import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
 import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
-import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
 import org.bukkit.Bukkit;
@@ -25,6 +25,7 @@ import com.alysaa.geyserupdater.spigot.util.bstats.Metrics;
 
 public class SpigotUpdater extends JavaPlugin {
     public static SpigotUpdater plugin;
+    public Logger logger;
     private FileConfiguration config;
 
     public static Plugin getPlugin() {
@@ -33,12 +34,13 @@ public class SpigotUpdater extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        plugin = this;
+        logger = getLogger();
         new Metrics(this, 10202);
         getLogger().info("GeyserUpdater v1.4.0 has been enabled");
-        this.getCommand("geyserupdate").setExecutor(new GeyserUpdateCommand());
+        getCommand("geyserupdate").setExecutor(new GeyserUpdateCommand());
         createFiles();
         checkConfigVer();
-        plugin = this;
         // If true start auto updating
         if (getConfig().getBoolean("Auto-Update-Geyser")) {
             try {
@@ -55,7 +57,7 @@ public class SpigotUpdater extends JavaPlugin {
         StartFileCheck = new Timer();
         // File Checking every 12h after 30min after server start
         StartFileCheck.schedule(new StartTimer(), 1000 * 60 * 30, 1000 * 60 * 720);
-        // Logger for check update on GeyserUpdater
+        // Check our version
         versionCheck();
         // Player alert if a restart is required when they join
         Bukkit.getServer().getPluginManager().registerEvents(new SpigotJoinListener(), this);
@@ -69,20 +71,17 @@ public class SpigotUpdater extends JavaPlugin {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+                getLogger().warning("Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
             }
         }
     }
     public void checkConfigVer(){
-        Logger logger = this.getLogger();
         //Change version number only when editing config.yml!
         if (!(getConfig().getInt("version") == 1)){
                 logger.info("Config.yml is outdated. please regenerate a new config.yml!");
             }
         }
     public void versionCheck() {
-        SpigotUpdater plugin = this;
-        Logger logger = this.getLogger();
         String pluginVersion = this.getDescription().getVersion();
         String version = SpigotResourceUpdateChecker.getVersion(plugin);
         if (version == null || version.length() == 0) {
@@ -123,7 +122,8 @@ public class SpigotUpdater extends JavaPlugin {
     private class StartTimer extends TimerTask {
         @Override
         public void run() {
-            CheckBuildFile.checkSpigotFile(false);
+            FileUtils.checkFile("plugins/update/Geyser-Spigot.jar", false);
+            logger.info("New Geyser build has been downloaded! Restart is required!");
         }
     }
     private class StartUpdate extends TimerTask {
@@ -132,11 +132,11 @@ public class SpigotUpdater extends JavaPlugin {
             try {
                 boolean isLatest = GeyserProperties.isLatestBuild();
                 if (!isLatest) {
-                    plugin.getLogger().info("A newer version of Geyser is available. Downloading now...");
+                    getLogger().info("A newer version of Geyser is available. Downloading now...");
                     GeyserSpigotDownload.downloadGeyser();
                 }
             } catch (IOException e) {
-                plugin.getLogger().severe("Failed to check if Geyser is outdated!");
+                getLogger().severe("Failed to check if Geyser is outdated!");
                 e.printStackTrace();
             }
         }

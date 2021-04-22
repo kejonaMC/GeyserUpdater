@@ -6,7 +6,7 @@ import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
-import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
@@ -49,7 +49,11 @@ public final class BungeeUpdater extends Plugin {
         // Player alert if a restart is required when they join
         getProxy().getPluginManager().registerListener(this, new BungeeJoinListener());
         // Check if downloaded Geyser file exists periodically
-        getProxy().getScheduler().schedule(this, () -> CheckBuildFile.checkBungeeFile(true), 30, 720, TimeUnit.MINUTES);
+        getProxy().getScheduler().schedule(this, () -> {
+            if (FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar", true)) {
+                logger.info("New Geyser build has been downloaded! BungeeCord restart is required!");
+            }
+        }, 30, 720, TimeUnit.MINUTES);
         // Check GeyserUpdater version periodically
         getProxy().getScheduler().schedule(this, this::versionCheck, 0, 24, TimeUnit.HOURS);
         // Make startup script
@@ -57,11 +61,11 @@ public final class BungeeUpdater extends Plugin {
     }
 
     private void makeScriptFile() {
-        if (this.getConfiguration().getBoolean("Auto-Script-Generating")) {
+        if (getConfiguration().getBoolean("Auto-Script-Generating")) {
             if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
                 try {
                 // Tell the createScript method that a loop is necessary because bungee has no restart system.
-                ScriptCreator.createScript(true);
+                ScriptCreator.createRestartScript(true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

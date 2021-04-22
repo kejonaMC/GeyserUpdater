@@ -9,7 +9,14 @@ import java.util.List;
 
 public class ScriptCreator {
 
-    public static void createScript(boolean runLoop) throws IOException {
+
+    /**
+     * Create a restart script for the server. If the platform is spigot, the restart-script value in spigot.yml will be set to the created script.
+     *
+     * @param runLoop Whether or not to integrate a loop into the script (should only be used for bungee/velocity)
+     * @throws IOException If there was a failure checking for an existing script, or creating a new one.
+     */
+    public static void createRestartScript(boolean runLoop) throws IOException {
         File file;
         String extension;
         if (OSUtils.isWindows()) {
@@ -30,7 +37,6 @@ public class ScriptCreator {
             } else if (OSUtils.isLinux() || OSUtils.isMac()) {
                 dos.writeBytes("#!/bin/sh\n");
             }
-            //
             // The restart signal from Spigot is being used in the GeyserSpigotDownload class, which means that a loop in this script is not necessary for spigot.
             // GeyserBungeeDownload can only use the stop signal, so a loop must be used to keep the script alive.
             if (runLoop) {

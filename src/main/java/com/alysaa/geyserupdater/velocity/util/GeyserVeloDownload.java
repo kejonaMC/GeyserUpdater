@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.velocity.util;
 
-import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+import com.alysaa.geyserupdater.bungee.BungeeUpdater;
+import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.velocity.VelocityUpdater;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
@@ -53,10 +54,13 @@ public class GeyserVeloDownload {
             }
         }
         // Check if the file was downloaded successfully
-        boolean downloadSuccess = CheckBuildFile.checkVelocityFile(false);
+        boolean downloadSuccess = FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar", false);
+        if (!downloadSuccess) {
+            VelocityUpdater.logger.info("Failed to download a newer version of Geyser!");
+        }
         // Restart the server if the option is enabled
         if (VelocityUpdater.configf.getBoolean("Auto-Restart-Server") && downloadSuccess) {
-            VelocityUpdater.logger.warn("The Server will restart in 10 Seconds!");
+            VelocityUpdater.logger.warn("A new version of Geyser has been downloaded, the server will restart in 10 Seconds!");
             for (Player player : VelocityUpdater.server.getAllPlayers()) {
                 player.sendMessage(Component.text(VelocityUpdater.configf.getString("Restart-Message-Players")));
             }
