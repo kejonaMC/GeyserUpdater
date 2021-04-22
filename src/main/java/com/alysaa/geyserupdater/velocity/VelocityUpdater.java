@@ -30,15 +30,17 @@ import java.util.TimerTask;
 @Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
+
     public static ProxyServer server;
     public static Logger logger;
     public Path dataDirectory;
     public static Toml configf;
     private final Metrics.Factory metricsFactory;
+
     @Inject
     public VelocityUpdater(ProxyServer server, Logger logger, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
-        this.server = server;
-        this.logger = logger;
+        VelocityUpdater.server  = server;
+        VelocityUpdater.logger = logger;
         configf = loadConfig(folder);
         this.metricsFactory = metricsFactory;
     }
@@ -54,7 +56,7 @@ public class VelocityUpdater {
         // Player alert if a restart is required when they join
         server.getEventManager().register(this, new VelocityJoinListener());
         // Auto update Geyser if enabled in the config
-        this.startAutoUpdate();
+        startAutoUpdate();
         // Check if downloaded Geyser file exists periodically
         TimerTask task = new TimerTask() {
             public void run() {
@@ -66,7 +68,8 @@ public class VelocityUpdater {
         timer.schedule(task, 60*30*1000,60*60*121000);
         Metrics metrics = metricsFactory.make(this, 10673);
     }
-    public void onDisable() {
+    @Subscribe(order = PostOrder.LAST)
+    public void onShutdown(ProxyShutdownEvent event) {
         try {
             this.moveGeyser();
         } catch (IOException e) {
@@ -77,6 +80,7 @@ public class VelocityUpdater {
         } catch (Exception ignored) {
         }
     }
+
     public void createUpdateFolder() {
         // Creating BuildUpdate folder
         File updateDir = new File("plugins/GeyserUpdater/BuildUpdate");
@@ -159,10 +163,6 @@ public class VelocityUpdater {
 
         return new Toml().read(file);
     }
-    @Subscribe(order = PostOrder.LAST)
-    public void onShutdown(ProxyShutdownEvent event) {
-        onDisable();
-    }
 
     public Logger getLogger() {
         return logger;
@@ -171,7 +171,6 @@ public class VelocityUpdater {
     public ProxyServer getProxyServer() {
         return server;
     }
-
 
     public Path getDataDirectory() {
         return dataDirectory;
