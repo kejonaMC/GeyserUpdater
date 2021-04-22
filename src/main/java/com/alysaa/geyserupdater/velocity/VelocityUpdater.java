@@ -21,12 +21,17 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import org.slf4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 @Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
@@ -59,14 +64,15 @@ public class VelocityUpdater {
         // Auto update Geyser if enabled in the config
         startAutoUpdate();
         // Check if downloaded Geyser file exists periodically
-        TimerTask task = new TimerTask() {
-            public void run() {
-                FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar", true);
-                logger.info("New Geyser build has been downloaded! Velocity restart is required!");
-            }
-        };
-        Timer timer = new Timer("Timer");
-        timer.schedule(task, 60*30*1000,60*60*121000);
+        server.getScheduler()
+                .buildTask(this, () -> {
+                    FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar", true);
+                    logger.info("New Geyser build has been downloaded! Velocity restart is required!");
+                })
+                .delay(30L, TimeUnit.MINUTES)
+                .repeat(12L, TimeUnit.HOURS)
+                .schedule();
+
         Metrics metrics = metricsFactory.make(this, 10673);
     }
     @Subscribe(order = PostOrder.LAST)
@@ -107,22 +113,21 @@ public class VelocityUpdater {
     public void startAutoUpdate() {
         if (configf.getBoolean("Auto-Update-Geyser")) {
             // Checking for the build numbers of current build.
-            TimerTask task = new TimerTask() {
-                public void run() {
-                    try {
-                        boolean isLatest = GeyserProperties.isLatestBuild();
-                        if (!isLatest) {
-                            logger.info("A newer version of Geyser is available. Downloading now...");
-                            GeyserVeloDownload.downloadGeyser();
+            server.getScheduler()
+                    .buildTask(this, () -> {
+                        try {
+                            boolean isLatest = GeyserProperties.isLatestBuild();
+                            if (!isLatest) {
+                                logger.info("A newer version of Geyser is available. Downloading now...");
+                                GeyserVeloDownload.downloadGeyser();
+                            }
+                        } catch (IOException e) {
+                            logger.error("Failed to check if Geyser is outdated!");
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        logger.error("Failed to check if Geyser is outdated!");
-                        e.printStackTrace();
-                    }
-                }
-            };
-            Timer timer = new Timer("Timer");
-            timer.schedule(task, 0,60*60*24*1000);
+                    })
+                    .repeat(24L, TimeUnit.HOURS)
+                    .schedule();
         }
     }
     public void moveGeyser() throws IOException {
