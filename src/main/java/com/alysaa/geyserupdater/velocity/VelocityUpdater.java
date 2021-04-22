@@ -6,6 +6,7 @@ import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import com.alysaa.geyserupdater.velocity.command.GeyserUpdateCommand;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.velocity.listeners.VelocityJoinListener;
+import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownload;
 import com.alysaa.geyserupdater.velocity.util.bstats.Metrics;
 import com.google.inject.Inject;
 
@@ -112,6 +113,7 @@ public class VelocityUpdater {
                         boolean isLatest = GeyserProperties.isLatestBuild();
                         if (!isLatest) {
                             logger.info("A newer version of Geyser is available. Downloading now...");
+                            GeyserVeloDownload.downloadGeyser();
                         }
                     } catch (IOException e) {
                         logger.error("Failed to check if Geyser is outdated!");

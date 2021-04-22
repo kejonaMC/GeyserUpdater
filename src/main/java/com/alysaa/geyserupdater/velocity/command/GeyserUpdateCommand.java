@@ -1,8 +1,8 @@
 package com.alysaa.geyserupdater.velocity.command;
 
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
-import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
 import com.alysaa.geyserupdater.velocity.VelocityUpdater;
+import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownload;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.RawCommand;
 import net.kyori.adventure.text.Component;
@@ -30,7 +30,7 @@ public class GeyserUpdateCommand implements RawCommand {
                 source.sendMessage(Component.text(latestMsg));
             } else {
                 source.sendMessage(Component.text(outdatedMsg));
-                GeyserSpigotDownload.downloadGeyser();
+                GeyserVeloDownload.downloadGeyser();
             }
         } catch (IOException e) {
             source.sendMessage(Component.text(failMsg));
