@@ -1,4 +1,4 @@
-package com.alysaa.geyserupdater.spigot.util;
+package com.alysaa.geyserupdater.spigot.listeners;
 
 import com.alysaa.geyserupdater.common.util.FileUtils;
 import org.bukkit.event.EventHandler;

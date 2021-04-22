@@ -1,4 +1,4 @@
-package com.alysaa.geyserupdater.bungee.util;
+package com.alysaa.geyserupdater.bungee.listeners;
 
 import com.alysaa.geyserupdater.common.util.FileUtils;
 import net.md_5.bungee.api.chat.TextComponent;

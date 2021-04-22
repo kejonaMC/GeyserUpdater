@@ -3,7 +3,7 @@ package com.alysaa.geyserupdater.spigot;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.spigot.command.GeyserUpdateCommand;
 import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
-import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
+import com.alysaa.geyserupdater.spigot.listeners.SpigotJoinListener;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
