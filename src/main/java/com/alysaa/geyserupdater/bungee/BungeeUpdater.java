@@ -62,15 +62,11 @@ public final class BungeeUpdater extends Plugin {
 
     private void makeScriptFile() {
         if (configuration.getBoolean("Auto-Script-Generating")) {
-            if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
-                try {
+            try {
                 // Tell the createScript method that a loop is necessary because bungee has no restart system.
                 ScriptCreator.createRestartScript(true);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

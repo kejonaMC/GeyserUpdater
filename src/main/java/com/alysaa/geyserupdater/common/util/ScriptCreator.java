@@ -11,7 +11,8 @@ public class ScriptCreator {
 
 
     /**
-     * Create a restart script for the server. If the platform is spigot, the restart-script value in spigot.yml will be set to the created script.
+     * Create a restart script for the server, if the OS is supported.
+     * If the platform is spigot, the restart-script value in spigot.yml will be set to the created script.
      *
      * @param runLoop Whether or not to integrate a loop into the script (should only be used for bungee/velocity)
      * @throws IOException If there was a failure checking for an existing script, or creating a new one.
@@ -21,7 +22,7 @@ public class ScriptCreator {
         String extension;
         if (OSUtils.isWindows()) {
             extension = "bat";
-        } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+        } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
             extension = "sh";
         } else {
             System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
@@ -34,7 +35,7 @@ public class ScriptCreator {
 
             if (OSUtils.isWindows()) {
                 dos.writeBytes("@echo off\n");
-            } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+            } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
                 dos.writeBytes("#!/bin/sh\n");
             }
             // The restart signal from Spigot is being used in the GeyserSpigotDownloader class, which means that a loop in this script is not necessary for spigot.
@@ -42,7 +43,7 @@ public class ScriptCreator {
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes(":restart\n");
-                } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+                } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
                     dos.writeBytes("while true; do\n");
                 }
             }
@@ -54,7 +55,7 @@ public class ScriptCreator {
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes("timeout 10 && Goto restart\n");
-                } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+                } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
                     dos.writeBytes("echo \"Server stopped, restarting in 10 seconds!\"; sleep 10; done\n");
                 }
             }

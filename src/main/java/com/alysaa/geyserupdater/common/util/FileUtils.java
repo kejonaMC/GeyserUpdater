@@ -55,6 +55,7 @@ public class FileUtils {
      */
     public static void downloadFile(String fileURL, String outputPath) throws IOException {
         // todo: something better than this?
+        // todo: fails to write file if the update folder doesnt exist (we create on startup but there should be safety)
         OutputStream os;
         InputStream is;
         // create a url object

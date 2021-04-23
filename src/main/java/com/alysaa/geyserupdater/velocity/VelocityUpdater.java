@@ -99,14 +99,10 @@ public class VelocityUpdater {
     }
     private void makeScriptFile() {
         if (configf.getBoolean("Auto-Script-Generating")) {
-            if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
-                try {
-                    ScriptCreator.createRestartScript(true);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                logger.warn("Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+            try {
+                ScriptCreator.createRestartScript(true);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

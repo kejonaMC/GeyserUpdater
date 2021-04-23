@@ -13,8 +13,22 @@ import java.util.logging.Logger;
 
 public class CheckSpigotRestart {
 
+
+    /**
+     * Run {@link ScriptCreator#createRestartScript(boolean)} if an existing restart script is not defined in spigot.yml
+     */
     public static void checkYml() {
-        Logger logger = SpigotUpdater.plugin.getLogger();
+        Logger logger = SpigotUpdater.getPlugin().getLogger();
+        // Do this early just as a check
+        String scriptName;
+        if (OSUtils.isWindows()) {
+            scriptName = "ServerRestartScript.bat";
+        } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
+            scriptName = "./ServerRestartScript.sh";
+        } else {
+            logger.info("Your OS is not supported for restart script creation!");
+            return;
+        }
         FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
         String scriptPath = spigot.getString("settings.restart-script");
         File script = new File(scriptPath);
@@ -29,15 +43,6 @@ public class CheckSpigotRestart {
                 return;
             }
             // Set the restart-script entry in spigot.yml to the one we just created
-            String scriptName;
-            if (OSUtils.isWindows()) {
-                scriptName = "ServerRestartScript.bat";
-            } else if (OSUtils.isLinux() || OSUtils.isMac()) {
-                scriptName = "./ServerRestartScript.sh";
-            } else {
-                logger.info("Your OS is not supported for script checking!");
-                return;
-            }
             spigot.set("settings.restart-script", scriptName);
             try {
                 spigot.save("spigot.yml");
