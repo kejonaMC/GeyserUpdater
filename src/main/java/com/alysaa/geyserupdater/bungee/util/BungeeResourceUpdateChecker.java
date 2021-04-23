@@ -12,6 +12,8 @@ import java.util.Scanner;
 
 public class BungeeResourceUpdateChecker {
 
+    // todo this mess too
+
     public static String getVersion(BungeeUpdater updater) {
 
         try (InputStream inputStream = new URL("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=88555").openStream(); Scanner scanner = new Scanner(inputStream)) {

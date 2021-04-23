@@ -6,7 +6,7 @@ import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import com.alysaa.geyserupdater.velocity.command.GeyserUpdateCommand;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.velocity.listeners.VelocityJoinListener;
-import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownload;
+import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownloader;
 import com.alysaa.geyserupdater.velocity.util.bstats.Metrics;
 import com.google.inject.Inject;
 
@@ -29,8 +29,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 @Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
@@ -38,14 +36,16 @@ import java.util.concurrent.TimeUnit;
 public class VelocityUpdater {
 
     public static ProxyServer server;
+    private static VelocityUpdater plugin;
     public static Logger logger;
     public Path dataDirectory;
-    public static Toml configf;
+    private static Toml configf;
     private final Metrics.Factory metricsFactory;
 
     @Inject
     public VelocityUpdater(ProxyServer server, Logger logger, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
         VelocityUpdater.server  = server;
+        VelocityUpdater.plugin = this;
         VelocityUpdater.logger = logger;
         configf = loadConfig(folder);
         this.metricsFactory = metricsFactory;
@@ -119,7 +119,7 @@ public class VelocityUpdater {
                             boolean isLatest = GeyserProperties.isLatestBuild();
                             if (!isLatest) {
                                 logger.info("A newer version of Geyser is available. Downloading now...");
-                                GeyserVeloDownload.downloadGeyser();
+                                GeyserVeloDownloader.updateGeyser();
                             }
                         } catch (IOException e) {
                             logger.error("Failed to check if Geyser is outdated!");
@@ -169,6 +169,14 @@ public class VelocityUpdater {
         }
 
         return new Toml().read(file);
+    }
+
+    public static VelocityUpdater getPlugin() {
+        return plugin;
+    }
+
+    public Toml getConfig() {
+        return configf;
     }
 
     public Logger getLogger() {

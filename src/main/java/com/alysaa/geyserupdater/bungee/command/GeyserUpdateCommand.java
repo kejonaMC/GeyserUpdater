@@ -39,7 +39,9 @@ public class GeyserUpdateCommand extends Command {
                     player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + latestMsg));
                 } else {
                     player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + outdatedMsg));
-                    GeyserBungeeDownload.downloadGeyser();
+                    if (!GeyserBungeeDownload.updateGeyser()) {
+                        player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] Failed to download a newer version of Geyser!"));
+                    }
                 }
             } catch (IOException e) {
                 player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + failMsg));
@@ -54,7 +56,7 @@ public class GeyserUpdateCommand extends Command {
                     logger.info(latestMsg);
                 } else {
                     logger.info(outdatedMsg);
-                    GeyserBungeeDownload.downloadGeyser();
+                    GeyserBungeeDownload.updateGeyser();
                 }
             } catch (IOException e) {
                 logger.severe(failMsg);

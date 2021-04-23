@@ -13,6 +13,8 @@ import java.util.Scanner;
 
 public class SpigotResourceUpdateChecker {
 
+    // todo this mess
+
     private JavaPlugin plugin;
     private int resourceId;
 
