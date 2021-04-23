@@ -2,10 +2,10 @@ package com.alysaa.geyserupdater.bungee;
 
 import com.alysaa.geyserupdater.bungee.command.GeyserUpdateCommand;
 import com.alysaa.geyserupdater.bungee.listeners.BungeeJoinListener;
+import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.bungee.util.Config;
 import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
-import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
