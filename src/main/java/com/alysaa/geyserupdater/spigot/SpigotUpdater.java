@@ -21,14 +21,9 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class SpigotUpdater extends JavaPlugin {
-    // todo make this private
-    public static SpigotUpdater plugin;
-    public Logger logger;
-    private FileConfiguration config;
 
-    public static SpigotUpdater getPlugin() {
-        return plugin;
-    }
+    private static SpigotUpdater plugin;
+    private Logger logger;
 
     @Override
     public void onEnable() {
@@ -119,7 +114,7 @@ public class SpigotUpdater extends JavaPlugin {
             configFile.getParentFile().mkdirs();
             saveResource("config.yml", false);
         }
-        config = new YamlConfiguration();
+        FileConfiguration config = new YamlConfiguration();
         try {
             config.load(configFile);
         } catch (IOException | InvalidConfigurationException e) {
@@ -131,5 +126,8 @@ public class SpigotUpdater extends JavaPlugin {
                 updateDir.mkdirs();
             } catch (Exception ignored) {}
         }
+    }
+    public static SpigotUpdater getPlugin() {
+        return plugin;
     }
 }

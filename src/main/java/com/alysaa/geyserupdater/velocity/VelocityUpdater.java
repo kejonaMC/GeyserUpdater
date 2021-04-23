@@ -4,7 +4,6 @@ import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import com.alysaa.geyserupdater.velocity.command.GeyserUpdateCommand;
-import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.velocity.listeners.VelocityJoinListener;
 import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownloader;
 import com.alysaa.geyserupdater.velocity.util.bstats.Metrics;
@@ -35,19 +34,20 @@ import java.util.concurrent.TimeUnit;
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
 
-    public static ProxyServer server;
     private static VelocityUpdater plugin;
-    public static Logger logger;
-    public Path dataDirectory;
-    private static Toml configf;
+    private final ProxyServer server;
+    private final Logger logger;
+    private final Path dataDirectory;
+    private final Toml config;
     private final Metrics.Factory metricsFactory;
 
     @Inject
     public VelocityUpdater(ProxyServer server, Logger logger, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
-        VelocityUpdater.server  = server;
         VelocityUpdater.plugin = this;
-        VelocityUpdater.logger = logger;
-        configf = loadConfig(folder);
+        this.server  = server;
+        this.logger = logger;
+        this.dataDirectory = folder;
+        this.config = loadConfig(dataDirectory);
         this.metricsFactory = metricsFactory;
     }
     @Subscribe
@@ -98,7 +98,7 @@ public class VelocityUpdater {
         }
     }
     private void makeScriptFile() {
-        if (configf.getBoolean("Auto-Script-Generating")) {
+        if (config.getBoolean("Auto-Script-Generating")) {
             try {
                 ScriptCreator.createRestartScript(true);
             } catch (IOException e) {
@@ -107,7 +107,7 @@ public class VelocityUpdater {
         }
     }
     public void startAutoUpdate() {
-        if (configf.getBoolean("Auto-Update-Geyser")) {
+        if (config.getBoolean("Auto-Update-Geyser")) {
             // Checking for the build numbers of current build.
             server.getScheduler()
                     .buildTask(this, () -> {
@@ -170,21 +170,17 @@ public class VelocityUpdater {
     public static VelocityUpdater getPlugin() {
         return plugin;
     }
-
-    public Toml getConfig() {
-        return configf;
-    }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
     public ProxyServer getProxyServer() {
         return server;
     }
-
+    public Logger getLogger() {
+        return logger;
+    }
     public Path getDataDirectory() {
         return dataDirectory;
+    }
+    public Toml getConfig() {
+        return config;
     }
 }
 

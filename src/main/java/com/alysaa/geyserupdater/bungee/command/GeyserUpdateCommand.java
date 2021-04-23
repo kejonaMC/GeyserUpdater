@@ -26,7 +26,7 @@ public class GeyserUpdateCommand extends Command {
         String outdatedMsg = "A newer version of Geyser is available. Downloading now...";
         String failMsg = "Failed to check if Geyser is outdated!";
 
-        Logger logger = BungeeUpdater.plugin.getLogger();
+        Logger logger = BungeeUpdater.getPlugin().getLogger();
 
         // TODO compress this. near duplication seems unnecessary just to send to different commandSenders.
 

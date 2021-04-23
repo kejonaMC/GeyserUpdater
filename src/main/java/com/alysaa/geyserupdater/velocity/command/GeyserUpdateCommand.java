@@ -21,7 +21,7 @@ public class GeyserUpdateCommand implements RawCommand {
         String failMsg = "Failed to check if Geyser is outdated!";
 
         CommandSource source = invocation.source();
-        Logger logger = VelocityUpdater.logger;
+        Logger logger = VelocityUpdater.getPlugin().getLogger();
 
         try {
             source.sendMessage(Component.text(checkMsg));

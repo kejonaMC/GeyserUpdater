@@ -8,7 +8,6 @@ import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
-import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
 import net.md_5.bungee.api.plugin.Plugin;
@@ -28,15 +27,16 @@ import java.util.logging.Logger;
 
 public final class BungeeUpdater extends Plugin {
 
-    public static BungeeUpdater plugin;
-    private static Configuration configuration;
-    Logger logger = this.getLogger();
+    private static BungeeUpdater plugin;
+    private Configuration configuration;
+    private Logger logger;
 
     @Override
     public void onEnable() {
-        new Metrics(this, 10203);
-        getLogger().info("GeyserUpdater v1.4.0 has been enabled");
         plugin = this;
+        logger = plugin.getLogger();
+        getLogger().info("Enabling GeyserUpdater v1.4.0");
+        new Metrics(this, 10203);
         this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         this.onConfig();
         this.createUpdateFolder();
@@ -89,7 +89,7 @@ public final class BungeeUpdater extends Plugin {
     }
     public void versionCheck() {
         getProxy().getScheduler().runAsync(this, () -> {
-            String pluginVersion = plugin.getDescription().getVersion();
+            String pluginVersion = getDescription().getVersion();
             String version = BungeeResourceUpdateChecker.getVersion(plugin);
             if (version == null || version.length() == 0) {
                 logger.severe("Failed to check version of GeyserUpdater!");
