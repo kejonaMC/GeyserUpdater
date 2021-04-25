@@ -33,7 +33,6 @@ public class SpigotUpdater extends JavaPlugin {
     @Override
     public void onEnable() {
         new Metrics(this, 10202);
-        getLogger().info("GeyserUpdater v1.3.0 has been enabled");
         this.getCommand("geyserupdate").setExecutor(new GeyserCommand());
         createFiles();
         checkConfigVer();
@@ -89,9 +88,6 @@ public class SpigotUpdater extends JavaPlugin {
         } else {
             logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
         }
-    }
-    public void onDisable() {
-        getLogger().info("Plugin has been disabled");
     }
     private void createFiles() {
         File configFile = new File(getDataFolder(), "config.yml");
