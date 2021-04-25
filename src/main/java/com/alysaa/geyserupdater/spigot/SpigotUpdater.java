@@ -117,11 +117,7 @@ public class SpigotUpdater extends JavaPlugin {
     private class StartUpdate extends TimerTask {
         @Override
         public void run() {
-            try {
-                CheckBuildNum.checkBuildNumberSpigot();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            CheckBuildNum.checkBuildNumberSpigot();
         }
     }
 }

@@ -120,12 +120,8 @@ public final class BungeeUpdater extends Plugin {
     public void startAutoUpdate() throws IOException {
         if (this.getConfiguration().getBoolean("Auto-Update-Geyser")) {
             getProxy().getScheduler().schedule(this, () -> {
-                try {
-                    // Checking for the build numbers of current build.
-                    CheckBuildNum.checkBuildNumberBungee();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                // Checking for the build numbers of current build.
+                CheckBuildNum.checkBuildNumberBungee();
             }, 0, 24, TimeUnit.HOURS);
         }
     }

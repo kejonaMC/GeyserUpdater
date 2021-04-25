@@ -16,20 +16,12 @@ public class GeyserCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (command.getName().equalsIgnoreCase("geyserupdate") && player.hasPermission("gupdater.geyserupdate")) {
-                try {
-                    sender.sendMessage(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version!");
-                    CheckBuildNum.checkBuildNumberSpigot();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                sender.sendMessage(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version!");
+                CheckBuildNum.checkBuildNumberSpigot();
             }
         } else if (sender instanceof ConsoleCommandSender) {
             SpigotUpdater.plugin.getLogger().info("Checking current Geyser version!");
-            try {
-                CheckBuildNum.checkBuildNumberSpigot();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            CheckBuildNum.checkBuildNumberSpigot();
         }
         return false;
     }
