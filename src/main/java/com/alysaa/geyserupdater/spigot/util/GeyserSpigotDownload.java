@@ -7,6 +7,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.io.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -61,9 +63,26 @@ public class GeyserSpigotDownload {
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', SpigotUpdater.getPlugin().getConfig().getString("Restart-Message-Players")));
                     }
                     Thread.sleep(10000);
-                    Bukkit.spigot().restart();
+                    Object spigotServer = null;
+                    try {
+                        spigotServer = SpigotUpdater.plugin.getServer().getClass().getMethod("spigot").invoke(SpigotUpdater.plugin.getServer());
+                    } catch (NoSuchMethodException e) {
+                        SpigotUpdater.plugin.getLogger().severe("You are not running Spigot (or a fork of it, such as Paper)! GeyserUpdater cannot automatically restart your server!");
+                        e.printStackTrace();
+                        return;
+                    }
+                    Method restartMethod = spigotServer.getClass().getMethod("restart");
+                    restartMethod.setAccessible(true);
+                    restartMethod.invoke(spigotServer);
                 }
             } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                SpigotUpdater.plugin.getLogger().severe("Your server version is too old to be able to be automatically restarted!");
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         };
