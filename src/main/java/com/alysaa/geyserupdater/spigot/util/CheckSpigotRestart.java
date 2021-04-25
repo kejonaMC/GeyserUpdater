@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class CheckSpigotRestart {
     public static void checkYml() {
-        FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(Bukkit.getServer().getWorldContainer(), "spigot.yml"));
+        FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(new File("").getAbsolutePath(), "spigot.yml"));
         String scriptPath = spigot.getString("settings.restart-script");
         File script = new File(scriptPath);
         if (script.exists()) {
