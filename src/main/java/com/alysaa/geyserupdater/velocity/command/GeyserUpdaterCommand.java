@@ -7,7 +7,7 @@ import net.kyori.adventure.text.Component;
 public class GeyserUpdaterCommand implements SimpleCommand {
     @Override
     public void execute(final Invocation invocation) {
-        invocation.source().sendMessage(Component.text("[GeyserUpdater] Checking current Geyser version!"));
+        invocation.source().sendMessage(Component.text("[GeyserUpdater] Checking for updates to Geyser..."));
         try {
             GeyserVelocityCheckBuildNum.checkBuildNumberVelocity();
         } catch (Exception e) {

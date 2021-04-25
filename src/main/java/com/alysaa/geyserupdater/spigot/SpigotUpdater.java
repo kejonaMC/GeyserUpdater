@@ -67,15 +67,15 @@ public class SpigotUpdater extends JavaPlugin {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+                System.out.println("[GeyserUpdater] Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
             }
         }
     }
-    public void checkConfigVer(){
+    public void checkConfigVer() {
         Logger logger = this.getLogger();
         //Change version number only when editing config.yml!
-        if (!(getConfig().getInt("version") ==1)){
-                logger.info("Config.yml is outdated. please regenerate a new config.yml!");
+        if (!(getConfig().getInt("version") == 1)) {
+                logger.info("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
             }
         }
     public void versionCheck() {
@@ -84,7 +84,7 @@ public class SpigotUpdater extends JavaPlugin {
         String pluginVersion = this.getDescription().getVersion();
         String version = SpigotResourceUpdateChecker.getVersion(plugin);
         if (version.equals(pluginVersion)) {
-            logger.info("There are no new updates for GeyserUpdater available.");
+            logger.info("You are using the latest version of GeyserUpdater!");
         } else {
             logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
         }

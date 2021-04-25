@@ -19,10 +19,10 @@ public class GeyserCommand extends Command {
     public void execute(CommandSender commandSender, String[] args) {
         if (commandSender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) commandSender;
-            player.sendMessage(new TextComponent(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version!"));
+            player.sendMessage(new TextComponent(ChatColor.WHITE + "[GeyserUpdater] Checking for updates to Geyser..."));
             GeyserBungeeCheckBuildNum.checkBuildNumberBungee();
         } else {
-            BungeeUpdater.plugin.getLogger().info("Checking current Geyser version!");
+            BungeeUpdater.plugin.getLogger().info("Checking for updates to Geyser...");
             GeyserBungeeCheckBuildNum.checkBuildNumberBungee();
         }
     }

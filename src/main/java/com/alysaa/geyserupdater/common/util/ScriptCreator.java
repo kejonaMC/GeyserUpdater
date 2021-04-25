@@ -17,7 +17,7 @@ public class ScriptCreator {
         } else if (OSUtils.isLinux() || OSUtils.isMac()) {
             extension = "sh";
         } else {
-            System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+            System.out.println("[GeyserUpdater] Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
             return;
         }
         file = new File("ServerRestartScript." + extension);
@@ -52,9 +52,9 @@ public class ScriptCreator {
                     dos.writeBytes("echo \"Server stopped, restarting in 10 seconds!\"; sleep 10; done\n");
                 }
             }
-            System.out.println("[GeyserUpdater] A custom restart script has been made for you.");
+            System.out.println("[GeyserUpdater] GeyserUpdater has finished creating a custom restart script for you.");
             if (runLoop) {
-                System.out.println("[GeyserUpdater] You will need to shutdown and start the server with our provided restart script.");
+                System.out.println("[GeyserUpdater] You will need to shut down and start the server again using the newly-generated script in order for this functionality to work.");
             }
         }
     }

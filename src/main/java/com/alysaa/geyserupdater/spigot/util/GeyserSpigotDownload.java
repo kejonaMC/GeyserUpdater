@@ -62,7 +62,7 @@ public class GeyserSpigotDownload {
                 boolean downloadSuccess = CheckBuildFile.checkSpigotFile(false);
                 // Restart the server if the option is enabled
                 if (SpigotUpdater.plugin.getConfig().getBoolean("Auto-Restart-Server") && downloadSuccess) {
-                    SpigotUpdater.plugin.getLogger().info("The Server will restart in 10 seconds!");
+                    SpigotUpdater.plugin.getLogger().info("This server will be restarting in 10 seconds!");
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', SpigotUpdater.getPlugin().getConfig().getString("Restart-Message-Players")));
                     }

@@ -32,7 +32,7 @@ import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.3.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.3.0-SNAPSHOT", description = "Automatically downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
     public static ProxyServer server;
@@ -49,7 +49,7 @@ public class VelocityUpdater {
     }
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        logger.info("Plugin has enabled!");
+        logger.info("GeyserUpdater has been enabled!");
         // Create folder for storing new Geyser jar
         createUpdateFolder();
         // Make startup script
@@ -74,7 +74,7 @@ public class VelocityUpdater {
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            logger.warn("No updates have been implemented.");
+            logger.error("An I/O error occurred while attempting to update Geyser!");
         }
         try {
             this.deleteBuild();
@@ -99,7 +99,7 @@ public class VelocityUpdater {
                     e.printStackTrace();
                 }
             } else {
-                logger.warn("Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+                logger.warn("Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
             }
         }
     }

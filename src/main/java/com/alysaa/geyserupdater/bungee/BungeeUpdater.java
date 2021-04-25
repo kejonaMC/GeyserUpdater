@@ -64,7 +64,7 @@ public final class BungeeUpdater extends Plugin {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+                System.out.println("[GeyserUpdater] Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
             }
         }
     }
@@ -73,7 +73,7 @@ public final class BungeeUpdater extends Plugin {
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            logger.info("No updates have been implemented.");
+            logger.severe("An I/O error occurred while attempting to updating Geyser!");
         }
         try {
             this.deleteBuild();
@@ -82,7 +82,7 @@ public final class BungeeUpdater extends Plugin {
     public void checkConfigVer(){
         //Change version number only when editing config.yml!
          if (!(getConfiguration().getInt("version") == 1)){
-            logger.info("Config.yml is outdated. please regenerate a new config.yml!");
+            logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
          }
     }
     public void versionCheck() {
@@ -91,7 +91,7 @@ public final class BungeeUpdater extends Plugin {
         Runnable runnable = () -> {
             String version = BungeeResourceUpdateChecker.getVersion(plugin);
             if (version.equals(pluginVersion)) {
-                logger.info("There are no new updates for GeyserUpdater available.");
+                logger.info("You are using the latest version of GeyserUpdater!");
             } else {
                 logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
             }

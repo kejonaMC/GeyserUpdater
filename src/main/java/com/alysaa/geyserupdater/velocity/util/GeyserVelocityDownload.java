@@ -56,7 +56,7 @@ public class GeyserVelocityDownload {
         boolean downloadSuccess = CheckBuildFile.checkVelocityFile(false);
         // Restart the server if the option is enabled
         if (VelocityUpdater.configf.getBoolean("Auto-Restart-Server") && downloadSuccess) {
-            VelocityUpdater.logger.warn("The Server will restart in 10 Seconds!");
+            VelocityUpdater.logger.warn("This server will be restarting in 10 seconds!");
             for (Player player : VelocityUpdater.server.getAllPlayers()) {
                 player.sendMessage(Component.text(VelocityUpdater.configf.getString("Restart-Message-Players")));
             }

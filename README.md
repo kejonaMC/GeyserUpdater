@@ -65,7 +65,7 @@ When enabled, a restart script named ServerRestartScript.bat or ServerRestartScr
 
 ### `Restart-Message-Players`:
 
-*Default:* `'&2The server will restart in 10 Seconds!'`  
+*Default:* `'&2This server will be restarting in 10 seconds!'`  
 
 This is the message that is sent to all players when `Auto-Restart-Server` is going to restart the server in 10 seconds. 
 

@@ -32,7 +32,7 @@ public class SpigotResourceUpdateChecker {
             String version = jsonObject.get("current_version").getAsString();
             return version;
         } catch (IOException exception) {
-            updater.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
+            updater.plugin.getLogger().severe("Failed to check for updates: " + exception.getMessage());
             return null;
         }
     }

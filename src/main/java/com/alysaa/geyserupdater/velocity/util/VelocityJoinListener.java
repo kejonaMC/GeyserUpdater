@@ -12,7 +12,7 @@ public class VelocityJoinListener {
         // We allow a cached result of maximum age 30 minutes to be used
         if (CheckBuildFile.checkVelocityFile(true)) {
             if (event.getPlayer().hasPermission("gupdater.geyserupdate")) {
-                event.getPlayer().sendMessage(Component.text("[GeyserUpdater] New Geyser build has been downloaded! Velocity restart is required!"));
+                event.getPlayer().sendMessage(Component.text("[GeyserUpdater] A new Geyser build has been downloaded! Please restart Velocity in order to use the updated build!"));
             }
         }
     }

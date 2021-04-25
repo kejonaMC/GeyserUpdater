@@ -13,7 +13,7 @@ public class SpigotJoinListener implements Listener {
         // We allow a cached result of maximum age 30 minutes to be used
         if (CheckBuildFile.checkSpigotFile(true)) {
             if (event.getPlayer().hasPermission("gupdater.geyserupdate")) {
-                event.getPlayer().sendMessage("[GeyserUpdater] New Geyser build has been downloaded! Server restart is required!");
+                event.getPlayer().sendMessage("[GeyserUpdater] A new Geyser build has been downloaded! Please restart the server in order to use the updated build!");
             }
         }
     }

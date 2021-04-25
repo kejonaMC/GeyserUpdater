@@ -28,7 +28,7 @@ public class CheckBuildFile {
         Path p = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         boolean exists = Files.exists(p);
         if (exists) {
-            BungeeUpdater.plugin.getLogger().info("New Geyser build has been downloaded! BungeeCord restart is required!");
+            BungeeUpdater.plugin.getLogger().info("A new Geyser build has been downloaded! Please restart BungeeCord in order to use the updated build!");
             cachedResult = true;
             return true;
         }
@@ -46,7 +46,7 @@ public class CheckBuildFile {
         Path p = Paths.get("plugins/update/Geyser-Spigot.jar");
         boolean exists = Files.exists(p);
         if (exists) {
-            SpigotUpdater.plugin.getLogger().info("New Geyser build has been downloaded! Server restart is required!");
+            SpigotUpdater.plugin.getLogger().info("A new Geyser build has been downloaded! Please restart the server in order to use the updated build!");
             cachedResult = true;
             return true;
         }
@@ -64,7 +64,7 @@ public class CheckBuildFile {
         Path p = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar");
         boolean exists = Files.exists(p);
         if (exists) {
-            VelocityUpdater.logger.warn("New Geyser build has been downloaded! Velocity restart is required!");
+            VelocityUpdater.logger.warn("A new Geyser build has been downloaded! Please restart Velocity in order to use the updated build!");
             cachedResult = true;
             return true;
         }

@@ -11,17 +11,17 @@ public class GeyserBungeeCheckBuildNum {
 	public static void checkBuildNumberBungee() {
         // Compare build numbers.
         if (CheckBuildNum.getCurrentGeyserBuildNumber() >= CheckBuildNum.getLatestGeyserBuildNumber()) {
-            BungeeUpdater.plugin.getLogger().info("[GeyserUpdater] Geyser is on the latest build!");
+            BungeeUpdater.plugin.getLogger().info("[GeyserUpdater] You are using the latest build of Geyser!");
             for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
                 if (all.hasPermission("gupdater.geyserupdate")) {
-                    all.sendMessage(new TextComponent("[GeyserUpdater] Geyser is on the latest build!"));
+                    all.sendMessage(new TextComponent("[GeyserUpdater] You are using the latest build of Geyser!"));
                 }
             }
         } else {
-            BungeeUpdater.plugin.getLogger().info("[GeyserUpdater] Current running Geyser build is outdated, attempting to download latest!");
+            BungeeUpdater.plugin.getLogger().info("[GeyserUpdater] The current build of Geyser on this server is outdated! Attempting to download the latest build...");
             for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
                 if (all.hasPermission("gupdater.geyserupdate")) {
-                    all.sendMessage(new TextComponent("[GeyserUpdater] Current running Geyser build is outdated, attempting to download latest!"));
+                    all.sendMessage(new TextComponent("[GeyserUpdater] The current build of Geyser on this server is outdated! Attempting to download the latest build..."));
                 }
             }
             GeyserBungeeDownload.downloadGeyser();

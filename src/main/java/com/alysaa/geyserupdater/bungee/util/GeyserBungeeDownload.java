@@ -58,7 +58,7 @@ public class GeyserBungeeDownload {
         boolean downloadSuccess = CheckBuildFile.checkBungeeFile(false);
         // Restart the server if the option is enabled
         if (BungeeUpdater.getConfiguration().getBoolean("Auto-Restart-Server") && downloadSuccess) {
-            BungeeUpdater.plugin.getLogger().info("The Server will restart in 10 Seconds!");
+            BungeeUpdater.plugin.getLogger().info("This server will be restarting in 10 seconds!");
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', BungeeUpdater.getConfiguration().getString("Restart-Message-Players"))));
             }
