@@ -1,10 +1,10 @@
 package com.alysaa.geyserupdater.velocity;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import com.alysaa.geyserupdater.velocity.command.GeyserUpdaterCommand;
+import com.alysaa.geyserupdater.velocity.util.GeyserVelocityCheckBuildNum;
 import com.alysaa.geyserupdater.velocity.util.VelocityJoinListener;
 import com.alysaa.geyserupdater.velocity.util.bstats.Metrics;
 
@@ -108,7 +108,7 @@ public class VelocityUpdater {
             // Checking for the build numbers of current build.
             TimerTask task = new TimerTask() {
                 public void run() {
-                    CheckBuildNum.checkBuildNumberVelocity();
+                    GeyserVelocityCheckBuildNum.checkBuildNumberVelocity();
                 }
             };
             Timer timer = new Timer("Timer");

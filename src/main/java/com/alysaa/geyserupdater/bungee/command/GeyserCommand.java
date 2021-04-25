@@ -1,7 +1,7 @@
 package com.alysaa.geyserupdater.bungee.command;
 
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.bungee.util.GeyserBungeeCheckBuildNum;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -20,10 +20,10 @@ public class GeyserCommand extends Command {
         if (commandSender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) commandSender;
             player.sendMessage(new TextComponent(ChatColor.WHITE + "[GeyserUpdater] Checking current Geyser version!"));
-            CheckBuildNum.checkBuildNumberBungee();
+            GeyserBungeeCheckBuildNum.checkBuildNumberBungee();
         } else {
             BungeeUpdater.plugin.getLogger().info("Checking current Geyser version!");
-            CheckBuildNum.checkBuildNumberBungee();
+            GeyserBungeeCheckBuildNum.checkBuildNumberBungee();
         }
     }
 }

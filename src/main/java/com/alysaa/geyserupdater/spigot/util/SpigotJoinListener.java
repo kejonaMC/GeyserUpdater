@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.spigot.util;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

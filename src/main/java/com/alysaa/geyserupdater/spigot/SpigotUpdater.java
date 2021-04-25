@@ -1,10 +1,10 @@
 package com.alysaa.geyserupdater.spigot;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
+import com.alysaa.geyserupdater.spigot.util.GeyserSpigotCheckBuildNum;
 import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.spigot.util.bstats.Metrics;
@@ -117,7 +117,7 @@ public class SpigotUpdater extends JavaPlugin {
     private class StartUpdate extends TimerTask {
         @Override
         public void run() {
-            CheckBuildNum.checkBuildNumberSpigot();
+            GeyserSpigotCheckBuildNum.checkBuildNumberSpigot();
         }
     }
 }

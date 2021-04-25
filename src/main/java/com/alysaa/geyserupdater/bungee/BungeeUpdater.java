@@ -4,9 +4,9 @@ import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
 import com.alysaa.geyserupdater.bungee.util.BungeeJoinListener;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.bungee.util.Config;
+import com.alysaa.geyserupdater.bungee.util.GeyserBungeeCheckBuildNum;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
@@ -121,7 +121,7 @@ public final class BungeeUpdater extends Plugin {
         if (this.getConfiguration().getBoolean("Auto-Update-Geyser")) {
             getProxy().getScheduler().schedule(this, () -> {
                 // Checking for the build numbers of current build.
-                CheckBuildNum.checkBuildNumberBungee();
+                GeyserBungeeCheckBuildNum.checkBuildNumberBungee();
             }, 0, 24, TimeUnit.HOURS);
         }
     }

@@ -1,6 +1,6 @@
 package com.alysaa.geyserupdater.velocity.command;
 
-import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.velocity.util.GeyserVelocityCheckBuildNum;
 import com.velocitypowered.api.command.SimpleCommand;
 import net.kyori.adventure.text.Component;
 
@@ -9,7 +9,7 @@ public class GeyserUpdaterCommand implements SimpleCommand {
     public void execute(final Invocation invocation) {
         invocation.source().sendMessage(Component.text("[GeyserUpdater] Checking current Geyser version!"));
         try {
-            CheckBuildNum.checkBuildNumberVelocity();
+            GeyserVelocityCheckBuildNum.checkBuildNumberVelocity();
         } catch (Exception e) {
             e.printStackTrace();
         }
