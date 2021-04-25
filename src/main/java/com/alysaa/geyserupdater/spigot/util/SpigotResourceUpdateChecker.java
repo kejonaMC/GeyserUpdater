@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.spigot.util;
 
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 

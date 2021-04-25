@@ -2,14 +2,16 @@ package com.alysaa.geyserupdater.velocity;
 
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import com.alysaa.geyserupdater.velocity.command.GeyserUpdaterCommand;
-import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.velocity.util.VelocityJoinListener;
 import com.alysaa.geyserupdater.velocity.util.bstats.Metrics;
-import com.google.inject.Inject;
 
+import com.google.inject.Inject;
 import com.moandjiezana.toml.Toml;
+import org.slf4j.Logger;
+
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -18,9 +20,12 @@ import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import org.slf4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

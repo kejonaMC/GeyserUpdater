@@ -1,6 +1,5 @@
 package com.alysaa.geyserupdater.bungee.util;
 
-
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

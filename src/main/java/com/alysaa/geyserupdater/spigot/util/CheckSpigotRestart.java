@@ -3,7 +3,6 @@ package com.alysaa.geyserupdater.spigot.util;
 import com.alysaa.geyserupdater.common.util.OSUtils;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

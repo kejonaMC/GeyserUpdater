@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.bungee.util;
 
 import net.md_5.bungee.api.plugin.Plugin;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;

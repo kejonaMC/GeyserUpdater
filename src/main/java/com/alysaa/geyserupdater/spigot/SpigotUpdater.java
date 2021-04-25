@@ -1,12 +1,14 @@
 package com.alysaa.geyserupdater.spigot;
 
-import com.alysaa.geyserupdater.common.util.OSUtils;
-import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
-import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
-import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.common.util.CheckBuildFile;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+import com.alysaa.geyserupdater.common.util.OSUtils;
+import com.alysaa.geyserupdater.spigot.command.GeyserCommand;
 import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
+import com.alysaa.geyserupdater.spigot.util.SpigotJoinListener;
+import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
+import com.alysaa.geyserupdater.spigot.util.bstats.Metrics;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,8 +21,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
-
-import com.alysaa.geyserupdater.spigot.util.bstats.Metrics;
 
 public class SpigotUpdater extends JavaPlugin {
     public static SpigotUpdater plugin;

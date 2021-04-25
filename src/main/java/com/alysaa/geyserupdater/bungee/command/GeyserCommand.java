@@ -2,13 +2,12 @@ package com.alysaa.geyserupdater.bungee.command;
 
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.alysaa.geyserupdater.common.util.CheckBuildNum;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-
-import java.io.IOException;
 
 
 public class GeyserCommand extends Command {
