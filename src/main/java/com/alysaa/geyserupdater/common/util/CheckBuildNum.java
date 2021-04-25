@@ -5,7 +5,7 @@ import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
 import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownload;
 import com.alysaa.geyserupdater.velocity.VelocityUpdater;
-import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownload;
+import com.alysaa.geyserupdater.velocity.util.GeyserVelocityDownload;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -106,7 +106,7 @@ public class CheckBuildNum {
                         all.sendMessage(Component.text("[GeyserUpdater] Current running Geyser build is outdated, attempting to download latest!"));
                     }
                 }
-                GeyserVeloDownload.downloadGeyser();
+                GeyserVelocityDownload.downloadGeyser();
             }
         }
     }

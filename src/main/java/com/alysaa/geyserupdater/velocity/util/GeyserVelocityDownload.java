@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class GeyserVeloDownload {
+public class GeyserVelocityDownload {
     public static void downloadGeyser() {
         OutputStream os = null;
         InputStream is = null;
