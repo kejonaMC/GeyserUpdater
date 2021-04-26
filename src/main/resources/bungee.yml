@@ -1,6 +1,6 @@
 name: GeyserUpdater
 main: com.alysaa.geyserupdater.bungee.BungeeUpdater
-version: 1.4.0
+version: ${project.version}
 description: Geyser Auto Updating Plugin Addon.
 author: Jens
 depends: ["Geyser-BungeeCord"]
