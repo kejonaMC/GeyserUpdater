@@ -2,7 +2,7 @@ package com.alysaa.geyserupdater.velocity.command;
 
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.velocity.VelocityUpdater;
-import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownloader;
+import com.alysaa.geyserupdater.velocity.util.GeyserVelocityDownloader;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.RawCommand;
 import net.kyori.adventure.text.Component;
@@ -30,7 +30,7 @@ public class GeyserUpdateCommand implements RawCommand {
                 source.sendMessage(Component.text(latestMsg));
             } else {
                 source.sendMessage(Component.text(outdatedMsg));
-                if (!GeyserVeloDownloader.updateGeyser()) {
+                if (!GeyserVelocityDownloader.updateGeyser()) {
                     // todo this currently sends a double message
                     source.sendMessage(Component.text("Failed to download a newer version of Geyser!"));
                 }

@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class GeyserVeloDownloader {
+public class GeyserVelocityDownloader {
 
     private static boolean downloadSuccess;
 
