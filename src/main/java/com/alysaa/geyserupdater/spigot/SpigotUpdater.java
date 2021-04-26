@@ -30,7 +30,6 @@ public class SpigotUpdater extends JavaPlugin {
         plugin = this;
         logger = getLogger();
         new Metrics(this, 10202);
-        getLogger().info("GeyserUpdater v1.4.0 has been enabled");
         Objects.requireNonNull(getCommand("geyserupdate")).setExecutor(new GeyserUpdateCommand());
         createFiles();
         checkConfigVer();
@@ -104,9 +103,6 @@ public class SpigotUpdater extends JavaPlugin {
                 }
             }
         }.runTaskAsynchronously(this);
-    }
-    public void onDisable() {
-        getLogger().info("Plugin has been disabled");
     }
     private void createFiles() {
         File configFile = new File(getDataFolder(), "config.yml");

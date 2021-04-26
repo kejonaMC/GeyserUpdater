@@ -49,7 +49,6 @@ public class VelocityUpdater {
     }
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        logger.info("GeyserUpdater v1.4.0 has been enabled");
         // Create folder for storing new Geyser jar
         createUpdateFolder();
         // Make startup script
