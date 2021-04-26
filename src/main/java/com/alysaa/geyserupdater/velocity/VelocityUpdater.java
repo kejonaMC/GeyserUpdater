@@ -1,16 +1,15 @@
 package com.alysaa.geyserupdater.velocity;
 
-import com.alysaa.geyserupdater.common.util.CheckBuildFile;
-import com.alysaa.geyserupdater.common.util.OSUtils;
+import com.alysaa.geyserupdater.common.util.FileUtils;
+import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
-import com.alysaa.geyserupdater.velocity.command.GeyserUpdaterCommand;
-import com.alysaa.geyserupdater.velocity.util.GeyserVelocityCheckBuildNum;
-import com.alysaa.geyserupdater.velocity.util.VelocityJoinListener;
+import com.alysaa.geyserupdater.velocity.command.GeyserUpdateCommand;
+import com.alysaa.geyserupdater.velocity.listeners.VelocityJoinListener;
+import com.alysaa.geyserupdater.velocity.util.GeyserVeloDownloader;
 import com.alysaa.geyserupdater.velocity.util.bstats.Metrics;
 
 import com.google.inject.Inject;
 import com.moandjiezana.toml.Toml;
-import org.slf4j.Logger;
 
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
@@ -20,67 +19,72 @@ import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import org.slf4j.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.3.0-SNAPSHOT", description = "Automatically downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
-    public static ProxyServer server;
-    public static Logger logger;
-    public Path dataDirectory;
-    public static Toml configf;
+
+    private static VelocityUpdater plugin;
+    private final ProxyServer server;
+    private final Logger logger;
+    private final Path dataDirectory;
+    private final Toml config;
     private final Metrics.Factory metricsFactory;
+
     @Inject
     public VelocityUpdater(ProxyServer server, Logger logger, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
-        this.server = server;
-        com.alysaa.geyserupdater.velocity.VelocityUpdater.logger = logger;
-        configf = loadConfig(folder);
+        VelocityUpdater.plugin = this;
+        this.server  = server;
+        this.logger = logger;
+        this.dataDirectory = folder;
+        this.config = loadConfig(dataDirectory);
         this.metricsFactory = metricsFactory;
     }
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        logger.info("GeyserUpdater has been enabled!");
+        logger.info("GeyserUpdater v1.4.0 has been enabled");
         // Create folder for storing new Geyser jar
         createUpdateFolder();
         // Make startup script
         makeScriptFile();
         // Register our only command
-        server.getCommandManager().register("geyserupdate", new GeyserUpdaterCommand());
+        server.getCommandManager().register("geyserupdate", new GeyserUpdateCommand());
         // Player alert if a restart is required when they join
         server.getEventManager().register(this, new VelocityJoinListener());
         // Auto update Geyser if enabled in the config
-        this.startAutoUpdate();
+        startAutoUpdate();
         // Check if downloaded Geyser file exists periodically
-        TimerTask task = new TimerTask() {
-            public void run() {
-                CheckBuildFile.checkVelocityFile(true);
-            }
-        };
-        Timer timer = new Timer("Timer");
-        timer.schedule(task, 60*30*1000,60*60*121000);
+        server.getScheduler()
+                .buildTask(this, () -> {
+                    FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar", true);
+                    logger.info("New Geyser build has been downloaded! Velocity restart is required!");
+                })
+                .delay(30L, TimeUnit.MINUTES)
+                .repeat(12L, TimeUnit.HOURS)
+                .schedule();
+
         Metrics metrics = metricsFactory.make(this, 10673);
     }
-    public void onDisable() {
+    @Subscribe(order = PostOrder.LAST)
+    public void onShutdown(ProxyShutdownEvent event) {
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            logger.error("An I/O error occurred while attempting to update Geyser!");
+            logger.warn("No updates have been implemented.");
         }
         try {
             this.deleteBuild();
         } catch (Exception ignored) {
         }
     }
+
     public void createUpdateFolder() {
         // Creating BuildUpdate folder
         File updateDir = new File("plugins/GeyserUpdater/BuildUpdate");
@@ -91,28 +95,32 @@ public class VelocityUpdater {
         }
     }
     private void makeScriptFile() {
-        if (configf.getBoolean("Auto-Script-Generating")) {
-            if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
-                try {
-                    ScriptCreator.createScript(true);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                logger.warn("Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
+        if (config.getBoolean("Auto-Script-Generating")) {
+            try {
+                ScriptCreator.createRestartScript(true);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
     public void startAutoUpdate() {
-        if (configf.getBoolean("Auto-Update-Geyser")) {
+        if (config.getBoolean("Auto-Update-Geyser")) {
             // Checking for the build numbers of current build.
-            TimerTask task = new TimerTask() {
-                public void run() {
-                    GeyserVelocityCheckBuildNum.checkBuildNumberVelocity();
-                }
-            };
-            Timer timer = new Timer("Timer");
-            timer.schedule(task, 0,60*60*24*1000);
+            server.getScheduler()
+                    .buildTask(this, () -> {
+                        try {
+                            boolean isLatest = GeyserProperties.isLatestBuild();
+                            if (!isLatest) {
+                                logger.info("A newer version of Geyser is available. Downloading now...");
+                                GeyserVeloDownloader.updateGeyser();
+                            }
+                        } catch (IOException e) {
+                            logger.error("Failed to check if Geyser is outdated!");
+                            e.printStackTrace();
+                        }
+                    })
+                    .repeat(24L, TimeUnit.HOURS)
+                    .schedule();
         }
     }
     public void moveGeyser() throws IOException {
@@ -155,22 +163,21 @@ public class VelocityUpdater {
 
         return new Toml().read(file);
     }
-    @Subscribe(order = PostOrder.LAST)
-    public void onShutdown(ProxyShutdownEvent event) {
-        onDisable();
-    }
 
-    public Logger getLogger() {
-        return logger;
+    public static VelocityUpdater getPlugin() {
+        return plugin;
     }
-
     public ProxyServer getProxyServer() {
         return server;
     }
-
-
+    public Logger getLogger() {
+        return logger;
+    }
     public Path getDataDirectory() {
         return dataDirectory;
+    }
+    public Toml getConfig() {
+        return config;
     }
 }
 

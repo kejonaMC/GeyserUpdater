@@ -1,18 +1,18 @@
-# Geyser-Updater
-# Made by Jens & YHDiamond
+#Geyser-Updater
+#Made by Jens & YHDiamond
 
-# NOTICE: Please read the information on our GitHub page before using this plugin!
+# NOTICE! Read the information on our GitHub before using this plugin!
 # https://github.com/YHDiamond/GeyserUpdater
 
-# When enabled, GeyserUpdater will check for new Geyser builds on server start, and then every 24 hours after that.
+# When enabled it will check for geyser updates on server restart and each 24h after server start.
 Auto-Update-Geyser=false
 
-# When enabled, GeyserUpdater will automatically restart the server after a new build of Geyser has been downloaded.
+# When enabled it will restart the server automatic after Geyser build has been downloaded.
 Auto-Restart-Server=false
 
-# Configure the message that is sent to all online players warning them that the server will be restarting in 10 seconds.
-Restart-Message-Players='&2This server will be restarting in 10 seconds!'
+# Send a text to your online players to warn them that the server is restarting.
+Restart-Message-Players='&2The server will restart in 10 Seconds!'
 
-# When enabled, GeyserUpdater will automatically generate a restart script and set it up in `spigot.yml` for you.
-# You will need to use the generated script to start your server! More info about this can be found on GitHub.
+# When enabled it will generate a restart script and set it up in the spigot.yml for you.
+# you will need to use our script to start server! More info about this on Github.
 Auto-Script-Generating=false

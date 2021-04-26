@@ -2,36 +2,50 @@ package com.alysaa.geyserupdater.common.util;
 
 public class OSUtils {
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
+    private static boolean isWindows = false;
+    private static boolean isLinux = false;
+    private static boolean isMacos = false;
+    private static boolean isKnownOS = false;
+    private static boolean isInitialized = false;
 
+    private static void initialize() {
+        String OS = System.getProperty("os.name").toLowerCase();
+        if (OS.contains("win")) {
+            isWindows = true;
+            isKnownOS = true;
+        } else if (OS.contains("nix") || OS.contains("nux") || OS.contains("aix")) {
+            isLinux = true;
+            isKnownOS = true;
+        } else if (OS.contains("mac")) {
+            isMacos = true;
+            isKnownOS = true;
+        }
+        isInitialized = true;
+    }
     public static boolean isWindows() {
-        return (OS.indexOf("win") >= 0);
+        if (!isInitialized) {
+            initialize();
+        }
+        return isWindows;
     }
-
-    public static boolean isMac() {
-        return (OS.indexOf("mac") >= 0);
+    public static boolean isMacos() {
+        if (!isInitialized) {
+            initialize();
+        }
+        return isMacos;
     }
-
     public static boolean isLinux() {
-        return (OS.indexOf("nix") >= 0
-                || OS.indexOf("nux") >= 0
-                || OS.indexOf("aix") > 0);
+        if (!isInitialized) {
+            initialize();
+        }
+        return isLinux;
     }
-
-    public static OSType getOS() {
-        if (isLinux()) return OSType.LINUX;
-        else if (isMac()) return OSType.MACOS;
-        else if (isWindows()) return OSType.WINDOWS;
-        else return null;
+    public static boolean isKnownOS() {
+        if (!isInitialized) {
+            initialize();
+        }
+        return isKnownOS;
     }
-}
-
-enum OSType {
-    WINDOWS("windows"),
-    MACOS("macos"),
-    LINUX("linux");
-
-    OSType(String windows) {}
 }
 
 

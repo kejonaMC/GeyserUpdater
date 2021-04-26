@@ -1,13 +1,13 @@
 package com.alysaa.geyserupdater.bungee;
 
-import com.alysaa.geyserupdater.bungee.command.GeyserCommand;
-import com.alysaa.geyserupdater.bungee.util.BungeeJoinListener;
+import com.alysaa.geyserupdater.bungee.command.GeyserUpdateCommand;
+import com.alysaa.geyserupdater.bungee.listeners.BungeeJoinListener;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.bungee.util.Config;
-import com.alysaa.geyserupdater.bungee.util.GeyserBungeeCheckBuildNum;
+import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
-import com.alysaa.geyserupdater.common.util.CheckBuildFile;
-import com.alysaa.geyserupdater.common.util.OSUtils;
+import com.alysaa.geyserupdater.common.util.FileUtils;
+import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.common.util.ScriptCreator;
 
 import net.md_5.bungee.api.plugin.Plugin;
@@ -27,15 +27,17 @@ import java.util.logging.Logger;
 
 public final class BungeeUpdater extends Plugin {
 
-    public static BungeeUpdater plugin;
-    public static Configuration configuration;
-    Logger logger = this.getLogger();
+    private static BungeeUpdater plugin;
+    private Configuration configuration;
+    private Logger logger;
 
     @Override
     public void onEnable() {
-        new Metrics(this, 10203);
         plugin = this;
-        this.getProxy().getPluginManager().registerCommand(this, new GeyserCommand());
+        logger = plugin.getLogger();
+        getLogger().info("Enabling GeyserUpdater v1.4.0");
+        new Metrics(this, 10203);
+        this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         this.onConfig();
         this.createUpdateFolder();
         try {
@@ -47,7 +49,11 @@ public final class BungeeUpdater extends Plugin {
         // Player alert if a restart is required when they join
         getProxy().getPluginManager().registerListener(this, new BungeeJoinListener());
         // Check if downloaded Geyser file exists periodically
-        getProxy().getScheduler().schedule(this, () -> CheckBuildFile.checkBungeeFile(true), 30, 720, TimeUnit.MINUTES);
+        getProxy().getScheduler().schedule(this, () -> {
+            if (FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar", true)) {
+                logger.info("New Geyser build has been downloaded! BungeeCord restart is required!");
+            }
+        }, 30, 720, TimeUnit.MINUTES);
         // Check GeyserUpdater version periodically
         getProxy().getScheduler().schedule(this, this::versionCheck, 0, 24, TimeUnit.HOURS);
         // Make startup script
@@ -55,16 +61,12 @@ public final class BungeeUpdater extends Plugin {
     }
 
     private void makeScriptFile() {
-        if (this.getConfiguration().getBoolean("Auto-Script-Generating")) {
-            if (OSUtils.isWindows() || OSUtils.isLinux() || OSUtils.isMac()) {
-                try {
+        if (configuration.getBoolean("Auto-Script-Generating")) {
+            try {
                 // Tell the createScript method that a loop is necessary because bungee has no restart system.
-                ScriptCreator.createScript(true);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                System.out.println("[GeyserUpdater] Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
+                ScriptCreator.createRestartScript(true);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -73,7 +75,7 @@ public final class BungeeUpdater extends Plugin {
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            logger.severe("An I/O error occurred while attempting to updating Geyser!");
+            logger.info("No updates have been implemented.");
         }
         try {
             this.deleteBuild();
@@ -81,24 +83,25 @@ public final class BungeeUpdater extends Plugin {
     }
     public void checkConfigVer(){
         //Change version number only when editing config.yml!
-         if (!(getConfiguration().getInt("version") == 1)){
-            logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
+         if (!(configuration.getInt("version") == 1)){
+            logger.info("Config.yml is outdated. please regenerate a new config.yml!");
          }
     }
     public void versionCheck() {
-        String pluginVersion = this.getDescription().getVersion();
-        BungeeUpdater plugin = this;
-        Runnable runnable = () -> {
+        getProxy().getScheduler().runAsync(this, () -> {
+            String pluginVersion = getDescription().getVersion();
             String version = BungeeResourceUpdateChecker.getVersion(plugin);
-            if (version.equals(pluginVersion)) {
-                logger.info("You are using the latest version of GeyserUpdater!");
+            if (version == null || version.length() == 0) {
+                logger.severe("Failed to check version of GeyserUpdater!");
             } else {
-                logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+                if (version.equals(pluginVersion)) {
+                    logger.info("There are no new updates for GeyserUpdater available.");
+                } else {
+                    logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+                }
             }
-        };
 
-        Thread thread = new Thread(runnable);
-        thread.start();
+        });
     }
 
     public void onConfig() {
@@ -118,10 +121,19 @@ public final class BungeeUpdater extends Plugin {
         }
     }
     public void startAutoUpdate() throws IOException {
-        if (this.getConfiguration().getBoolean("Auto-Update-Geyser")) {
+        if (configuration.getBoolean("Auto-Update-Geyser")) {
             getProxy().getScheduler().schedule(this, () -> {
-                // Checking for the build numbers of current build.
-                GeyserBungeeCheckBuildNum.checkBuildNumberBungee();
+                try {
+                    // Checking for the build numbers of current build.
+                    boolean isLatest = GeyserProperties.isLatestBuild();
+                    if (!isLatest) {
+                        logger.info("A newer version of Geyser is available. Downloading now...");
+                        GeyserBungeeDownload.updateGeyser();
+                    }
+                } catch (IOException e) {
+                    logger.severe("Failed to check if Geyser is outdated!");
+                    e.printStackTrace();
+                }
             }, 0, 24, TimeUnit.HOURS);
         }
     }
@@ -143,7 +155,10 @@ public final class BungeeUpdater extends Plugin {
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         Files.delete(file);
     }
-    public static Configuration getConfiguration() {
+    public static BungeeUpdater getPlugin() {
+        return plugin;
+    }
+    public Configuration getConfiguration() {
         return configuration;
     }
 }

@@ -9,15 +9,23 @@ import java.util.List;
 
 public class ScriptCreator {
 
-    public static void createScript(boolean runLoop) throws IOException {
+
+    /**
+     * Create a restart script for the server, if the OS is supported.
+     * If the platform is spigot, the restart-script value in spigot.yml will be set to the created script.
+     *
+     * @param runLoop Whether or not to integrate a loop into the script (should only be used for bungee/velocity)
+     * @throws IOException If there was a failure checking for an existing script, or creating a new one.
+     */
+    public static void createRestartScript(boolean runLoop) throws IOException {
         File file;
         String extension;
         if (OSUtils.isWindows()) {
             extension = "bat";
-        } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+        } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
             extension = "sh";
         } else {
-            System.out.println("[GeyserUpdater] Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
+            System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
             return;
         }
         file = new File("ServerRestartScript." + extension);
@@ -27,16 +35,15 @@ public class ScriptCreator {
 
             if (OSUtils.isWindows()) {
                 dos.writeBytes("@echo off\n");
-            } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+            } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
                 dos.writeBytes("#!/bin/sh\n");
             }
-            //
-            // The restart signal from Spigot is being used in the GeyserSpigotDownload class, which means that a loop in this script is not necessary for spigot.
+            // The restart signal from Spigot is being used in the GeyserSpigotDownloader class, which means that a loop in this script is not necessary for spigot.
             // GeyserBungeeDownload can only use the stop signal, so a loop must be used to keep the script alive.
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes(":restart\n");
-                } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+                } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
                     dos.writeBytes("while true; do\n");
                 }
             }
@@ -48,13 +55,13 @@ public class ScriptCreator {
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes("timeout 10 && Goto restart\n");
-                } else if (OSUtils.isLinux() || OSUtils.isMac()) {
+                } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
                     dos.writeBytes("echo \"Server stopped, restarting in 10 seconds!\"; sleep 10; done\n");
                 }
             }
-            System.out.println("[GeyserUpdater] GeyserUpdater has finished creating a custom restart script for you.");
+            System.out.println("[GeyserUpdater] A custom restart script has been made for you.");
             if (runLoop) {
-                System.out.println("[GeyserUpdater] You will need to shut down and start the server again using the newly-generated script in order for this functionality to work.");
+                System.out.println("[GeyserUpdater] You will need to shutdown and start the server with our provided restart script.");
             }
         }
     }

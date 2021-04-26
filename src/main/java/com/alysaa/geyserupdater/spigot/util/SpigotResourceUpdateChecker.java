@@ -1,10 +1,8 @@
 package com.alysaa.geyserupdater.spigot.util;
 
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -13,6 +11,8 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class SpigotResourceUpdateChecker {
+
+    // todo this mess
 
     private JavaPlugin plugin;
     private int resourceId;
@@ -32,7 +32,7 @@ public class SpigotResourceUpdateChecker {
             String version = jsonObject.get("current_version").getAsString();
             return version;
         } catch (IOException exception) {
-            updater.plugin.getLogger().severe("Failed to check for updates: " + exception.getMessage());
+            updater.getLogger().info("Cannot look for updates: " + exception.getMessage());
             return null;
         }
     }
