@@ -10,7 +10,7 @@
 # GeyserUpdater
 ### GeyserUpdater is a plugin that can update Geyser on Spigot, Bungeecord and Velocity manually or automatically.
 
-[Here](https://discord.gg/xXzzdAXa2b) is our Discord link, you can come to get support, get GitHub feeds, or just hang out. Don't ping anyone that doesn't have the pingable role!
+[Here](https://discord.gg/xXzzdAXa2b) is our Discord link, you can come to get support, ask about contributing, get GitHub feeds, or just hang out. Don't ping anyone that doesn't have the pingable role!
 
 Note: This is NOT an official GeyserMC plugin. It is made to work with GeyserMC but it is not maintained or produced by GeyserMC. If you need support with this plugin, do not ask Geyser devs, and instead, go to our Discord server linked above.
 
