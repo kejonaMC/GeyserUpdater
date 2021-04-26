@@ -40,6 +40,4 @@ public class LongClassName {
 }
 ```
 
-If you are making a change to the README.md, fixing a typo, or changing code format, please append `[ci skip]` to the end of your commit message, so it won't trigger a new build.
-
 If you need help with code for this, you can go to [our Discord](https://discord.gg/xXzzdAXa2b). Please do not ping anyone without the "Pingable" role assigned!
