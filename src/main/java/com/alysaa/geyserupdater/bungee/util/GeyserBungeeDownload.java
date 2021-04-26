@@ -2,6 +2,7 @@ package com.alysaa.geyserupdater.bungee.util;
 
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
 import com.alysaa.geyserupdater.common.util.FileUtils;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

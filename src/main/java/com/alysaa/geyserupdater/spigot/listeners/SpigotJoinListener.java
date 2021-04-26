@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.spigot.listeners;
 
 import com.alysaa.geyserupdater.common.util.FileUtils;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

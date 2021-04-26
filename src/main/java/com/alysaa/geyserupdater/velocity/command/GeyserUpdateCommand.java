@@ -3,9 +3,12 @@ package com.alysaa.geyserupdater.velocity.command;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.velocity.VelocityUpdater;
 import com.alysaa.geyserupdater.velocity.util.GeyserVelocityDownloader;
+
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.RawCommand;
+
 import net.kyori.adventure.text.Component;
+
 import org.slf4j.Logger;
 
 import java.io.IOException;

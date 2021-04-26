@@ -1,8 +1,10 @@
 package com.alysaa.geyserupdater.velocity.listeners;
 
 import com.alysaa.geyserupdater.common.util.FileUtils;
+
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
+
 import net.kyori.adventure.text.Component;
 
 public class VelocityJoinListener {

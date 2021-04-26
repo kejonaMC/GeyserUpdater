@@ -8,6 +8,7 @@ import com.alysaa.geyserupdater.spigot.util.CheckSpigotRestart;
 import com.alysaa.geyserupdater.spigot.util.GeyserSpigotDownloader;
 import com.alysaa.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
 import com.alysaa.geyserupdater.spigot.util.bstats.Metrics;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;

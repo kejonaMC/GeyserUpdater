@@ -2,6 +2,7 @@ package com.alysaa.geyserupdater.spigot.util;
 
 import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

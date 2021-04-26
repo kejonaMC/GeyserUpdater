@@ -2,9 +2,12 @@ package com.alysaa.geyserupdater.velocity.util;
 
 import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.velocity.VelocityUpdater;
+
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+
 import net.kyori.adventure.text.Component;
+
 import org.slf4j.Logger;
 
 import java.io.IOException;
