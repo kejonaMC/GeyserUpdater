@@ -14,7 +14,7 @@ public class BungeeJoinListener implements Listener {
         // We allow a cached result of maximum age 30 minutes to be used
         if (FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar", true)) {
             if (event.getPlayer().hasPermission("gupdater.geyserupdate")) {
-                event.getPlayer().sendMessage(new TextComponent("[GeyserUpdater] New Geyser build has been downloaded! BungeeCord restart is required!"));
+                event.getPlayer().sendMessage(new TextComponent("[GeyserUpdater] A new Geyser build has been downloaded! Please restart BungeeCord in order to use the updated build!"));
             }
         }
     }

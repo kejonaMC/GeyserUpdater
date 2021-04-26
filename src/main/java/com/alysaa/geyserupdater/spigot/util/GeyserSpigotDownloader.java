@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.spigot.util;
 
 import com.alysaa.geyserupdater.common.util.FileUtils;
+import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.spigot.SpigotUpdater;
 
 import org.bukkit.Bukkit;
@@ -14,11 +15,10 @@ import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 public class GeyserSpigotDownloader {
-
     private static boolean downloadSuccess;
 
     /**
-     * Download the most recent geyser. If enabled in the config, the server will also attempt to restart.
+     * Downloads the most recent Geyser build. If enabled in the config, the server will also attempt to restart.
      *
      * @return true if the download was successful
      */
@@ -47,13 +47,13 @@ public class GeyserSpigotDownloader {
         }.runTaskAsynchronously(plugin);
 
         if (!downloadSuccess) {
-            logger.info("Failed to download a newer version of Geyser!");
+            logger.severe("Failed to download the latest build of Geyser!");
             return false;
         }
 
         // Restart the server if the option is enabled
         if (plugin.getConfig().getBoolean("Auto-Restart-Server")) {
-            plugin.getLogger().info("A new version of Geyser has been downloaded, the server will restart in 10 Seconds!");
+            plugin.getLogger().info("A new version of Geyser has been downloaded. The server will be restarting in 10 seconds!");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players")));
             }
@@ -81,7 +81,7 @@ public class GeyserSpigotDownloader {
                         e.printStackTrace();
                     }
                 }
-            }.runTaskLater(plugin, 200);
+            }.runTaskLater(plugin, 200); // 200 ticks is around 10 seconds (at 20 TPS)
         }
         return true;
     }

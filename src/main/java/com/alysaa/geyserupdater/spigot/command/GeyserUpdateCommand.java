@@ -21,10 +21,11 @@ public class GeyserUpdateCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 
-        String checkMsg = "Checking current Geyser version!";
-        String latestMsg = "Geyser is on the latest build!";
-        String outdatedMsg = "A newer version of Geyser is available. Downloading now...";
-        String failMsg = "Failed to check if Geyser is outdated!";
+        String checkMsg = "Checking for updates to Geyser...";
+        String latestMsg = "You are using the latest build of Geyser!";
+        String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
+        String failUpdateCheckMsg = "Failed to check for updates to Geyser!";
+        String failDownloadMsg = "Failed to download the latest build of Geyser!";
 
         Logger logger = SpigotUpdater.getPlugin().getLogger();
 
@@ -42,12 +43,12 @@ public class GeyserUpdateCommand implements CommandExecutor {
                     } else {
                         sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + outdatedMsg);
                         if (!GeyserSpigotDownloader.updateGeyser()) {
-                            sender.sendMessage(ChatColor.RED + "[GeyserUpdater] Failed to download the newest Geyser!");
+                            sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + failDownloadMsg);
                         }
                     }
                 } catch (IOException e) {
-                    sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + failMsg);
-                    logger.severe(failMsg);
+                    sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + failUpdateCheckMsg);
+                    logger.severe(failUpdateCheckMsg);
                     e.printStackTrace();
                 }
             }
@@ -62,7 +63,7 @@ public class GeyserUpdateCommand implements CommandExecutor {
                     GeyserSpigotDownloader.updateGeyser();
                 }
             } catch (IOException e) {
-                logger.severe(failMsg);
+                logger.severe(failUpdateCheckMsg);
                 e.printStackTrace();
             }
         } else {

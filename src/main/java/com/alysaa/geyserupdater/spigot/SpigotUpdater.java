@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class SpigotUpdater extends JavaPlugin {
-
     private static SpigotUpdater plugin;
     private Logger logger;
 
@@ -35,7 +34,7 @@ public class SpigotUpdater extends JavaPlugin {
         createFiles();
         checkConfigVer();
 
-        // If true start auto updating
+        // If true, start auto updating
         if (getConfig().getBoolean("Auto-Update-Geyser")) {
             new BukkitRunnable() {
 
@@ -44,11 +43,11 @@ public class SpigotUpdater extends JavaPlugin {
                     try {
                         boolean isLatest = GeyserProperties.isLatestBuild();
                         if (!isLatest) {
-                            getLogger().info("A newer version of Geyser is available. Downloading now...");
+                            getLogger().info("A newer build of Geyser is available! Attempting to download the latest build now...");
                             GeyserSpigotDownloader.updateGeyser();
                         }
                     } catch (IOException e) {
-                        getLogger().severe("Failed to check if Geyser is outdated!");
+                        getLogger().severe("Failed to check for updates to Geyser!");
                         e.printStackTrace();
                     }
                 }
@@ -61,7 +60,7 @@ public class SpigotUpdater extends JavaPlugin {
             @Override
             public void run() {
                 if (FileUtils.checkFile("plugins/update/Geyser-Spigot.jar", false)) {
-                    logger.info("New Geyser build has been downloaded! Restart is required!");
+                    logger.info("A new Geyser build has been downloaded! Please restart the server in order to use the updated build!");
                 }
             }
         }.runTaskTimerAsynchronously(this, 30 * 60 * 20, 12 * 60 * 60 * 20);
@@ -83,7 +82,7 @@ public class SpigotUpdater extends JavaPlugin {
     public void checkConfigVer(){
         //Change version number only when editing config.yml!
         if (!(getConfig().getInt("version") == 1)){
-                logger.info("Config.yml is outdated. please regenerate a new config.yml!");
+                logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
             }
         }
     public void versionCheck() {
@@ -94,10 +93,10 @@ public class SpigotUpdater extends JavaPlugin {
                 String pluginVersion = plugin.getDescription().getVersion();
                 String version = SpigotResourceUpdateChecker.getVersion(plugin);
                 if (version == null || version.length() == 0) {
-                    logger.severe("Failed to check version of GeyserUpdater!");
+                    logger.severe("Failed to determine the current GeyserUpdater version!");
                 } else {
                     if (version.equals(pluginVersion)) {
-                        logger.info("There are no new updates for GeyserUpdater available.");
+                        logger.info("You are using the latest version of GeyserUpdater!");
                     } else {
                         logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
                     }

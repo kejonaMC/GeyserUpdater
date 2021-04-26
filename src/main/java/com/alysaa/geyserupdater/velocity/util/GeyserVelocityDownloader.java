@@ -1,6 +1,7 @@
 package com.alysaa.geyserupdater.velocity.util;
 
 import com.alysaa.geyserupdater.common.util.FileUtils;
+import com.alysaa.geyserupdater.common.util.GeyserProperties;
 import com.alysaa.geyserupdater.velocity.VelocityUpdater;
 
 import com.velocitypowered.api.proxy.Player;
@@ -18,7 +19,7 @@ public class GeyserVelocityDownloader {
     private static boolean downloadSuccess;
 
     /**
-     * Download the most recent geyser. If enabled in the config, the server will also attempt to restart.
+     * Downloads the most recent Geyser build. If enabled in the config, the server will also attempt to restart.
      *
      * @return true if the download was successful
      */
@@ -46,13 +47,13 @@ public class GeyserVelocityDownloader {
                 .schedule();
 
         if (!downloadSuccess) {
-            logger.info("Failed to download a newer version of Geyser!");
+            logger.error("Failed to download the latest build of Geyser!");
             return false;
         }
 
         // Restart the server if the option is enabled
         if (plugin.getConfig().getBoolean("Auto-Restart-Server")) {
-            logger.warn("A new version of Geyser has been downloaded, the server will restart in 10 Seconds!");
+            logger.info("A new version of Geyser has been downloaded. The server will be restarting in 10 seconds!");
             for (Player player : server.getAllPlayers()) {
                 player.sendMessage(Component.text(plugin.getConfig().getString("Restart-Message-Players")));
             }

@@ -11,8 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileUtils {
-
-    // todo this whole cached thing only works if you're using checkFile for one file...
+    // TODO: this whole cached thing only works if you're using checkFile for one file...
 
     /**
      * Epoch time of that last occurrence that {@link #checkFile(String, boolean)} directly checked a file. Returns a value of 0 if the check file method has never been called.
@@ -54,8 +53,8 @@ public class FileUtils {
      * @param outputPath the path of the output file to write to
      */
     public static void downloadFile(String fileURL, String outputPath) throws IOException {
-        // todo: something better than this?
-        // todo: fails to write file if the update folder doesnt exist (we create on startup but there should be safety)
+        // TODO: something better than this?
+        // TODO: fails to write file if the update folder doesnt exist (we create on startup but there should be safety)
         OutputStream os;
         InputStream is;
         // create a url object

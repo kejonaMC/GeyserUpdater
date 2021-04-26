@@ -8,8 +8,6 @@ import java.lang.management.ManagementFactory;
 import java.util.List;
 
 public class ScriptCreator {
-
-
     /**
      * Create a restart script for the server, if the OS is supported.
      * If the platform is spigot, the restart-script value in spigot.yml will be set to the created script.
@@ -25,7 +23,7 @@ public class ScriptCreator {
         } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
             extension = "sh";
         } else {
-            System.out.println("[GeyserUpdater] Your OS is not supported! We support Linux, Mac, and Windows for automatic script creation!");
+            System.out.println("[GeyserUpdater] Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
             return;
         }
         file = new File("ServerRestartScript." + extension);
@@ -54,14 +52,14 @@ public class ScriptCreator {
             dos.writeBytes("java " + runtimeFlags + " -jar " + ManagementFactory.getRuntimeMXBean().getClassPath() + " nogui\n");
             if (runLoop) {
                 if (OSUtils.isWindows()) {
-                    dos.writeBytes("timeout 10 && Goto restart\n");
+                    dos.writeBytes("timeout 10 && goto restart\n");
                 } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
                     dos.writeBytes("echo \"Server stopped, restarting in 10 seconds!\"; sleep 10; done\n");
                 }
             }
-            System.out.println("[GeyserUpdater] A custom restart script has been made for you.");
+            System.out.println("[GeyserUpdater] GeyserUpdater has finished creating a restart script.");
             if (runLoop) {
-                System.out.println("[GeyserUpdater] You will need to shutdown and start the server with our provided restart script.");
+                System.out.println("[GeyserUpdater] You will need to shut down and start the server again using the newly-generated script in order for the auto-restart functionality to begin working.");
             }
         }
     }

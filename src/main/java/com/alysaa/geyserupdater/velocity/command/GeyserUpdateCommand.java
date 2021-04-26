@@ -18,10 +18,11 @@ public class GeyserUpdateCommand implements RawCommand {
     @Override
     public void execute(final Invocation invocation) {
 
-        String checkMsg = "Checking current Geyser version!";
-        String latestMsg = "Geyser is on the latest build!";
-        String outdatedMsg = "A newer version of Geyser is available. Downloading now...";
-        String failMsg = "Failed to check if Geyser is outdated!";
+        String checkMsg = "Checking for updates to Geyser...";
+        String latestMsg = "You are using the latest build of Geyser!";
+        String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
+        String failUpdateCheckMsg = "Failed to check for updates to Geyser!";
+        String failDownloadMsg = "Failed to download the latest build of Geyser!";
 
         CommandSource source = invocation.source();
         Logger logger = VelocityUpdater.getPlugin().getLogger();
@@ -34,13 +35,13 @@ public class GeyserUpdateCommand implements RawCommand {
             } else {
                 source.sendMessage(Component.text(outdatedMsg));
                 if (!GeyserVelocityDownloader.updateGeyser()) {
-                    // todo this currently sends a double message
-                    source.sendMessage(Component.text("Failed to download a newer version of Geyser!"));
+                    // TODO: This currently sends a double message
+                    source.sendMessage(Component.text(failDownloadMsg));
                 }
             }
         } catch (IOException e) {
-            source.sendMessage(Component.text(failMsg));
-            logger.error(failMsg);
+            source.sendMessage(Component.text(failUpdateCheckMsg));
+            logger.error(failUpdateCheckMsg);
             e.printStackTrace();
         }
     }

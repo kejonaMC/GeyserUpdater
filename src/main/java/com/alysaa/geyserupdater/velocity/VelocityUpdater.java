@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0-SNAPSHOT", description = "Updating Geyser with ease", authors = {"Jens"},
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0-SNAPSHOT", description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
 
@@ -69,7 +69,7 @@ public class VelocityUpdater {
         server.getScheduler()
                 .buildTask(this, () -> {
                     FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar", true);
-                    logger.info("New Geyser build has been downloaded! Velocity restart is required!");
+                    logger.info("A new Geyser build has been downloaded! Please restart Velocity in order to use the updated build!");
                 })
                 .delay(30L, TimeUnit.MINUTES)
                 .repeat(12L, TimeUnit.HOURS)
@@ -82,7 +82,7 @@ public class VelocityUpdater {
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            logger.warn("No updates have been implemented.");
+            logger.warn("An I/O error occurred while attempting to update Geyser!");
         }
         try {
             this.deleteBuild();
@@ -116,11 +116,11 @@ public class VelocityUpdater {
                         try {
                             boolean isLatest = GeyserProperties.isLatestBuild();
                             if (!isLatest) {
-                                logger.info("A newer version of Geyser is available. Downloading now...");
+                                logger.info("A newer build of Geyser is available! Attempting to download the latest build now...");
                                 GeyserVelocityDownloader.updateGeyser();
                             }
                         } catch (IOException e) {
-                            logger.error("Failed to check if Geyser is outdated!");
+                            logger.error("Failed to check for updates to Geyser!");
                             e.printStackTrace();
                         }
                     })
@@ -165,7 +165,6 @@ public class VelocityUpdater {
                 return null;
             }
         }
-
         return new Toml().read(file);
     }
 
