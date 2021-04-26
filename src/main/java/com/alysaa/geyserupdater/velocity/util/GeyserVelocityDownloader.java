@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class GeyserVelocityDownloader {
-
     private static boolean downloadSuccess;
 
     /**
@@ -32,10 +31,12 @@ public class GeyserVelocityDownloader {
         server.getScheduler().buildTask(plugin, () -> {
             String fileUrl = null;
             try {
-                fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValueForPropertyKey("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/velocity/target/Geyser-Velocity.jar";
+                fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/velocity/target/Geyser-Velocity.jar";
             } catch (IOException e) {
                 logger.error("Failed to get the current Geyser build's Git branch!");
                 e.printStackTrace();
+                downloadSuccess = false;
+                return;
             }
             String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar";
             try {
