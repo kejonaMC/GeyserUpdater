@@ -26,7 +26,13 @@ public class GeyserBungeeDownload {
 
         // Download the file
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
-            String fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar";
+            String fileUrl = null;
+            try {
+                fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValueForPropertyKey("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar";
+            } catch (IOException e) {
+                logger.severe("Failed to get the current Geyser build's Git branch!");
+                e.printStackTrace();
+            }
             String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar";
             try {
                 FileUtils.downloadFile(fileUrl, outputPath);

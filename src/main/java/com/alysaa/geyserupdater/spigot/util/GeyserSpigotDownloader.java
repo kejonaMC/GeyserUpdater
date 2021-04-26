@@ -31,7 +31,13 @@ public class GeyserSpigotDownloader {
 
             @Override
             public void run() {
-                String fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar";
+                String fileUrl = null;
+                try {
+                    fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValueForPropertyKey("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar";
+                } catch (IOException e) {
+                    logger.severe("Failed to get the current Geyser build's Git branch!");
+                    e.printStackTrace();
+                }
                 String outputPath = "plugins/update/Geyser-Spigot.jar";
                 try {
                     FileUtils.downloadFile(fileUrl, outputPath);

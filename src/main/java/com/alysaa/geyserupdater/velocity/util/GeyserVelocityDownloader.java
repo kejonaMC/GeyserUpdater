@@ -29,22 +29,26 @@ public class GeyserVelocityDownloader {
         Logger logger = plugin.getLogger();
 
         // Download the file
-        server.getScheduler()
-                .buildTask(plugin, () -> {
-                    String fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/velocity/target/Geyser-Velocity.jar";
-                    String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar";
-                    try {
-                        FileUtils.downloadFile(fileUrl, outputPath);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        downloadSuccess = false;
-                        return;
-                    }
+        server.getScheduler().buildTask(plugin, () -> {
+            String fileUrl = null;
+            try {
+                fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValueForPropertyKey("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/velocity/target/Geyser-Velocity.jar";
+            } catch (IOException e) {
+                logger.error("Failed to get the current Geyser build's Git branch!");
+                e.printStackTrace();
+            }
+            String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar";
+            try {
+                FileUtils.downloadFile(fileUrl, outputPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                downloadSuccess = false;
+                return;
+            }
 
-                    // Check if the file was downloaded successfully
-                    downloadSuccess = FileUtils.checkFile(outputPath, false);
-                })
-                .schedule();
+            // Check if the file was downloaded successfully
+            downloadSuccess = FileUtils.checkFile(outputPath, false);
+        }).schedule();
 
         if (!downloadSuccess) {
             logger.error("Failed to download the latest build of Geyser!");
