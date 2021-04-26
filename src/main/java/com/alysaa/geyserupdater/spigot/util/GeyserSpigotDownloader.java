@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 public class GeyserSpigotDownloader {
@@ -57,7 +59,26 @@ public class GeyserSpigotDownloader {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    Bukkit.spigot().restart();
+                    try {
+                        Object spigotServer = null;
+                        try {
+                            spigotServer = SpigotUpdater.getPlugin().getServer().getClass().getMethod("spigot").invoke(SpigotUpdater.getPlugin().getServer());
+                        } catch (NoSuchMethodException e) {
+                            SpigotUpdater.getPlugin().getLogger().severe("You are not running Spigot (or a fork of it, such as Paper)! GeyserUpdater cannot automatically restart your server!");
+                            e.printStackTrace();
+                            return;
+                        }
+                        Method restartMethod = spigotServer.getClass().getMethod("restart");
+                        restartMethod.setAccessible(true);
+                        restartMethod.invoke(spigotServer);
+                    } catch (NoSuchMethodException e) {
+                        SpigotUpdater.getPlugin().getLogger().severe("Your server version is too old to be able to be automatically restarted!");
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                 }
             }.runTaskLater(plugin, 200);
         }
