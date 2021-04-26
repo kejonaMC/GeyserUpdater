@@ -37,7 +37,7 @@ public class ScriptCreator {
                 dos.writeBytes("#!/bin/sh\n");
             }
             // The restart signal from Spigot is being used in the GeyserSpigotDownloader class, which means that a loop in this script is not necessary for spigot.
-            // GeyserBungeeDownload can only use the stop signal, so a loop must be used to keep the script alive.
+            // GeyserBungeeDownloader can only use the stop signal, so a loop must be used to keep the script alive.
             if (runLoop) {
                 if (OSUtils.isWindows()) {
                     dos.writeBytes(":restart\n");

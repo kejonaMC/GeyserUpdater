@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class GeyserBungeeDownload {
+public class GeyserBungeeDownloader {
     private static boolean downloadSuccess;
 
     /**

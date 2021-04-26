@@ -4,7 +4,7 @@ import com.alysaa.geyserupdater.bungee.command.GeyserUpdateCommand;
 import com.alysaa.geyserupdater.bungee.listeners.BungeeJoinListener;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.bungee.util.Config;
-import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
+import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
@@ -127,7 +127,7 @@ public final class BungeeUpdater extends Plugin {
                     boolean isLatest = GeyserProperties.isLatestBuild();
                     if (!isLatest) {
                         logger.info("A newer build of Geyser is available! Attempting to download the latest build now...");
-                        GeyserBungeeDownload.updateGeyser();
+                        GeyserBungeeDownloader.updateGeyser();
                     }
                 } catch (IOException e) {
                     logger.severe("Failed to check for updates to Geyser!");

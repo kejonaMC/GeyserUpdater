@@ -1,7 +1,7 @@
 package com.alysaa.geyserupdater.bungee.command;
 
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
-import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
+import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
 
 import net.md_5.bungee.api.ChatColor;
@@ -41,7 +41,7 @@ public class GeyserUpdateCommand extends Command {
                     player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + latestMsg));
                 } else {
                     player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + outdatedMsg));
-                    if (!GeyserBungeeDownload.updateGeyser()) {
+                    if (!GeyserBungeeDownloader.updateGeyser()) {
                         player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + failDownloadMsg));
                     }
                 }
@@ -58,7 +58,7 @@ public class GeyserUpdateCommand extends Command {
                     logger.info(latestMsg);
                 } else {
                     logger.info(outdatedMsg);
-                    GeyserBungeeDownload.updateGeyser();
+                    GeyserBungeeDownloader.updateGeyser();
                 }
             } catch (IOException e) {
                 logger.severe(failUpdateCheckMsg);
