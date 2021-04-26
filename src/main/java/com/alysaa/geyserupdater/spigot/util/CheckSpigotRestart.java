@@ -29,8 +29,8 @@ public class CheckSpigotRestart {
             logger.info("Your OS is not supported for restart script creation!");
             return;
         }
-        FileConfiguration spigot = YamlConfiguration.loadConfiguration(new File(new File("").getAbsolutePath(), "spigot.yml"));
-        String scriptPath = spigot.getString("settings.restart-script");
+        FileConfiguration spigotConfigurationYamlFile = YamlConfiguration.loadConfiguration(new File(new File("").getAbsolutePath(), "spigot.yml"));
+        String scriptPath = spigotConfigurationYamlFile.getString("settings.restart-script");
         File script = new File(scriptPath);
         if (script.exists()) {
             logger.info("Has detected a restart script.");
@@ -43,9 +43,9 @@ public class CheckSpigotRestart {
                 return;
             }
             // Set the restart-script entry in spigot.yml to the one we just created
-            spigot.set("settings.restart-script", scriptName);
+            spigotConfigurationYamlFile.set("settings.restart-script", scriptName);
             try {
-                spigot.save("spigot.yml");
+                spigotConfigurationYamlFile.save("spigot.yml");
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
