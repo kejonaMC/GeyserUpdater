@@ -21,8 +21,8 @@ public class GeyserProperties {
         int jenkinsBuildNumber = getLatestGeyserBuildNumberFromJenkins(getGeyserGitPropertiesValue("git.branch"));
         int localBuildNumber = Integer.parseInt(getGeyserGitPropertiesValue("git.build.number"));
         // Compare build numbers.
-        // We treat higher build numbers as out of date here because Geyser's build numbers have been (accidentally) reset in the past.
-        // TODO: Verify if non-Jenkins (self-compiled) builds have a build number associated with them.
+        // We treat higher build numbers as "out of date" here because Geyser's build numbers have been (accidentally) reset in the past.
+        // Self-compiled builds of Geyser simply do not have a `git.build.number` value, so it is /very/ unlikely that a user will ever have a Git build number higher than upstream anyway.
         return jenkinsBuildNumber == localBuildNumber;
     }
 
