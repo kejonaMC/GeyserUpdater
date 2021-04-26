@@ -23,7 +23,7 @@ If you don't want to use the Spigot website, you can download the plugin from [o
 
 ## Installation
 
-GeyserUpdater can be installed on [Spigot](https://www.spigotmc.org/wiki/buildtools/) / [CraftBukkit](https://www.spigotmc.org/wiki/buildtools/#compile-craftbukkit), [BungeeCord](https://www.spigotmc.org/wiki/bungeecord-installation/), and [Velocity](https://velocitypowered.com/downloads) (or any of their forks, such as [Paper]((https://papermc.io/downloads)) or [Waterfall](https://papermc.io/downloads#Waterfall)).
+GeyserUpdater can be installed on [Spigot](https://www.spigotmc.org/wiki/buildtools/) / [CraftBukkit](https://www.spigotmc.org/wiki/buildtools/#compile-craftbukkit), [BungeeCord](https://www.spigotmc.org/wiki/bungeecord-installation/), and [Velocity](https://velocitypowered.com/downloads) (or any of their forks, such as [Paper](https://papermc.io/downloads) or [Waterfall](https://papermc.io/downloads#Waterfall)).
 
 Simply place the GeyserUpdater `*.jar` file in your server's plugins folder and restart your server.
 
