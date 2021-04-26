@@ -4,7 +4,7 @@ import com.alysaa.geyserupdater.bungee.command.GeyserUpdateCommand;
 import com.alysaa.geyserupdater.bungee.listeners.BungeeJoinListener;
 import com.alysaa.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.alysaa.geyserupdater.bungee.util.Config;
-import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
+import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.alysaa.geyserupdater.bungee.util.bstats.Metrics;
 import com.alysaa.geyserupdater.common.util.FileUtils;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
@@ -35,7 +35,6 @@ public final class BungeeUpdater extends Plugin {
     public void onEnable() {
         plugin = this;
         logger = plugin.getLogger();
-        getLogger().info("Enabling GeyserUpdater v1.4.0");
         new Metrics(this, 10203);
         this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         this.onConfig();
@@ -51,7 +50,7 @@ public final class BungeeUpdater extends Plugin {
         // Check if downloaded Geyser file exists periodically
         getProxy().getScheduler().schedule(this, () -> {
             if (FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar", true)) {
-                logger.info("New Geyser build has been downloaded! BungeeCord restart is required!");
+                logger.info("A new Geyser build has been downloaded! Please restart BungeeCord in order to use the updated build!");
             }
         }, 30, 720, TimeUnit.MINUTES);
         // Check GeyserUpdater version periodically
@@ -75,7 +74,7 @@ public final class BungeeUpdater extends Plugin {
         try {
             this.moveGeyser();
         } catch (IOException e) {
-            logger.info("No updates have been implemented.");
+            logger.severe("An I/O error occurred while attempting to update Geyser!");
         }
         try {
             this.deleteBuild();
@@ -84,7 +83,7 @@ public final class BungeeUpdater extends Plugin {
     public void checkConfigVer(){
         //Change version number only when editing config.yml!
          if (!(configuration.getInt("version") == 1)){
-            logger.info("Config.yml is outdated. please regenerate a new config.yml!");
+            logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
          }
     }
     public void versionCheck() {
@@ -92,10 +91,10 @@ public final class BungeeUpdater extends Plugin {
             String pluginVersion = getDescription().getVersion();
             String version = BungeeResourceUpdateChecker.getVersion(plugin);
             if (version == null || version.length() == 0) {
-                logger.severe("Failed to check version of GeyserUpdater!");
+                logger.severe("Failed to determine the current GeyserUpdater version!");
             } else {
                 if (version.equals(pluginVersion)) {
-                    logger.info("There are no new updates for GeyserUpdater available.");
+                    logger.info("You are using the latest version of GeyserUpdater!");
                 } else {
                     logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
                 }
@@ -127,11 +126,11 @@ public final class BungeeUpdater extends Plugin {
                     // Checking for the build numbers of current build.
                     boolean isLatest = GeyserProperties.isLatestBuild();
                     if (!isLatest) {
-                        logger.info("A newer version of Geyser is available. Downloading now...");
-                        GeyserBungeeDownload.updateGeyser();
+                        logger.info("A newer build of Geyser is available! Attempting to download the latest build now...");
+                        GeyserBungeeDownloader.updateGeyser();
                     }
                 } catch (IOException e) {
-                    logger.severe("Failed to check if Geyser is outdated!");
+                    logger.severe("Failed to check for updates to Geyser!");
                     e.printStackTrace();
                 }
             }, 0, 24, TimeUnit.HOURS);

@@ -1,9 +1,8 @@
 name: GeyserUpdater
 main: com.alysaa.geyserupdater.spigot.SpigotUpdater
-version: 1.4.0
-api-version: 1.15
+version: ${project.version}
 depend: [Geyser-Spigot]
-description: Geyser Auto Updating Plugin Addon.
+description: Automatically or manually downloads new builds of Geyser and applies them on server restart.
 
 commands:
   geyserupdate:

@@ -1,8 +1,9 @@
 package com.alysaa.geyserupdater.bungee.command;
 
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
-import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownload;
+import com.alysaa.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.alysaa.geyserupdater.common.util.GeyserProperties;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -21,14 +22,15 @@ public class GeyserUpdateCommand extends Command {
 
     public void execute(CommandSender commandSender, String[] args) {
 
-        String checkMsg = "Checking current Geyser version!";
-        String latestMsg = "Geyser is on the latest build!";
-        String outdatedMsg = "A newer version of Geyser is available. Downloading now...";
-        String failMsg = "Failed to check if Geyser is outdated!";
+        String checkMsg = "Checking for updates to Geyser...";
+        String latestMsg = "You are using the latest build of Geyser!";
+        String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
+        String failUpdateCheckMsg = "Failed to check for updates to Geyser!";
+        String failDownloadMsg = "Failed to download the latest build of Geyser!";
 
         Logger logger = BungeeUpdater.getPlugin().getLogger();
 
-        // TODO compress this. near duplication seems unnecessary just to send to different commandSenders.
+        // TODO: compress this. near duplication seems unnecessary just to send to different commandSenders.
 
         if (commandSender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) commandSender;
@@ -39,16 +41,16 @@ public class GeyserUpdateCommand extends Command {
                     player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + latestMsg));
                 } else {
                     player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + outdatedMsg));
-                    if (!GeyserBungeeDownload.updateGeyser()) {
-                        player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] Failed to download a newer version of Geyser!"));
+                    if (!GeyserBungeeDownloader.updateGeyser()) {
+                        player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + failDownloadMsg));
                     }
                 }
             } catch (IOException e) {
-                player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + failMsg));
+                player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + failUpdateCheckMsg));
                 e.printStackTrace();
             }
         } else {
-            // TODO filter this against command blocks
+            // TODO: filter this against command blocks
             try {
                 logger.info(checkMsg);
                 boolean isLatest = GeyserProperties.isLatestBuild();
@@ -56,10 +58,10 @@ public class GeyserUpdateCommand extends Command {
                     logger.info(latestMsg);
                 } else {
                     logger.info(outdatedMsg);
-                    GeyserBungeeDownload.updateGeyser();
+                    GeyserBungeeDownloader.updateGeyser();
                 }
             } catch (IOException e) {
-                logger.severe(failMsg);
+                logger.severe(failUpdateCheckMsg);
                 e.printStackTrace();
             }
         }
