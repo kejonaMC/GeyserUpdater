@@ -40,7 +40,7 @@ public final class BungeeUpdater extends Plugin {
         this.onConfig();
         this.createUpdateFolder();
         try {
-            this.startAutoUpdate();
+            startAutoUpdate();
         } catch (IOException e) {
             e.printStackTrace();
         }

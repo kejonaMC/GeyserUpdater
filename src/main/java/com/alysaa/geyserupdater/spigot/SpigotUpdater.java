@@ -34,7 +34,7 @@ public class SpigotUpdater extends JavaPlugin {
         createFiles();
         checkConfigVer();
 
-        // If true, start auto updating
+        // If true, start auto updating now and every 24 hours
         if (getConfig().getBoolean("Auto-Update-Geyser")) {
             new BukkitRunnable() {
 
@@ -51,7 +51,7 @@ public class SpigotUpdater extends JavaPlugin {
                         e.printStackTrace();
                     }
                 }
-            }.runTaskTimer(this, 30 * 60 * 20, 12 * 60 * 60 * 20);
+            }.runTaskTimer(this, 0, 12 * 60 * 60 * 20);
         }
 
         // Enable File Checking here. delay of 30 minutes and period of 12 hours (given in ticks)
@@ -87,7 +87,6 @@ public class SpigotUpdater extends JavaPlugin {
         }
     public void versionCheck() {
         new BukkitRunnable() {
-
             @Override
             public void run() {
                 String pluginVersion = plugin.getDescription().getVersion();
