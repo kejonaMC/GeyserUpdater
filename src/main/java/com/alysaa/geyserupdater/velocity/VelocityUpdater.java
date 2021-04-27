@@ -55,8 +55,6 @@ public class VelocityUpdater {
     }
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        // Create folder for storing new Geyser jar
-        createUpdateFolder();
         // Make startup script
         makeScriptFile();
         // Register our only command
@@ -87,16 +85,6 @@ public class VelocityUpdater {
         try {
             this.deleteBuild();
         } catch (Exception ignored) {
-        }
-    }
-
-    public void createUpdateFolder() {
-        // Creating BuildUpdate folder
-        File updateDir = new File("plugins/GeyserUpdater/BuildUpdate");
-        if (!updateDir.exists()) {
-            try {
-                updateDir.mkdirs();
-            } catch (Exception ignored) { }
         }
     }
     private void makeScriptFile() {

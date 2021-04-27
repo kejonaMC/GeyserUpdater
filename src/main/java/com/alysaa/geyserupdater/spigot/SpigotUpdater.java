@@ -115,12 +115,6 @@ public class SpigotUpdater extends JavaPlugin {
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
-        File updateDir = new File("plugins/update");
-        if (!updateDir.exists()) {
-            try {
-                updateDir.mkdirs();
-            } catch (Exception ignored) {}
-        }
     }
     public static SpigotUpdater getPlugin() {
         return plugin;

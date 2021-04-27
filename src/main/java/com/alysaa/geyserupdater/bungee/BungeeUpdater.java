@@ -38,7 +38,6 @@ public final class BungeeUpdater extends Plugin {
         new Metrics(this, 10203);
         this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         this.onConfig();
-        this.createUpdateFolder();
         try {
             startAutoUpdate();
         } catch (IOException e) {
@@ -108,15 +107,6 @@ public final class BungeeUpdater extends Plugin {
             configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(Config.startConfig(this, "config.yml"));
         } catch (IOException exception) {
             exception.printStackTrace();
-        }
-    }
-    public void createUpdateFolder() {
-        // Creating BuildUpdate folder
-        File updateDir = new File("plugins/GeyserUpdater/BuildUpdate");
-        if (!updateDir.exists()) {
-            try {
-                updateDir.mkdirs();
-            } catch (Exception ignored) { }
         }
     }
     public void startAutoUpdate() throws IOException {
