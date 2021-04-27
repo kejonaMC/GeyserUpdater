@@ -26,7 +26,6 @@ public class GeyserUpdateCommand extends Command {
         String latestMsg = "You are using the latest build of Geyser!";
         String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
         String failUpdateCheckMsg = "Failed to check for updates to Geyser!";
-        String failDownloadMsg = "Failed to download the latest build of Geyser!";
 
         Logger logger = BungeeUpdater.getPlugin().getLogger();
 
@@ -41,9 +40,7 @@ public class GeyserUpdateCommand extends Command {
                     player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + latestMsg));
                 } else {
                     player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + outdatedMsg));
-                    if (!GeyserBungeeDownloader.updateGeyser()) {
-                        player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + failDownloadMsg));
-                    }
+                    GeyserBungeeDownloader.updateGeyser();
                 }
             } catch (IOException e) {
                 player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + failUpdateCheckMsg));
