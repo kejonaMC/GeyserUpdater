@@ -24,9 +24,9 @@ public class GeyserBungeeDownloader {
         plugin = BungeeUpdater.getPlugin();
         logger = plugin.getLogger();
 
-        // Start the process async
+        // New task so that we don't block the main thread. All new tasks on bungeecord are async.
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
-            // Download the newest build and store the success state
+            // Download the newest geyser build
             if (downloadGeyser()) {
                 String successMsg = "The latest build of Geyser has been downloaded! A restart must occur in order for changes to take effect.";
                 logger.info(successMsg);
@@ -58,13 +58,13 @@ public class GeyserBungeeDownloader {
     private static boolean downloadGeyser() {
         String fileUrl;
         try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar";
+            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar";
         } catch (IOException e) {
             logger.severe("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
             e.printStackTrace();
             return false;
         }
-        String outputPath = "plugins/update/Geyser-Spigot.jar";
+        String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar";
         try {
             FileUtils.downloadFile(fileUrl, outputPath);
         } catch (IOException e) {
@@ -90,6 +90,5 @@ public class GeyserBungeeDownloader {
             player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', plugin.getConfiguration().getString("Restart-Message-Players"))));
         }
         plugin.getProxy().getScheduler().schedule(plugin, () -> plugin.getProxy().stop(), 10L, TimeUnit.SECONDS);
-
     }
 }
