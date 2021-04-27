@@ -25,12 +25,10 @@ public class GeyserUpdateCommand implements CommandExecutor {
         String latestMsg = "You are using the latest build of Geyser!";
         String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
         String failUpdateCheckMsg = "Failed to check for updates to Geyser!";
-        String failDownloadMsg = "Failed to download the latest build of Geyser!";
 
         Logger logger = SpigotUpdater.getPlugin().getLogger();
 
-        // I guess this could be thrown into a different method
-        // But we wouldn't have as much control over the messages
+        //todo: shrink this
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -42,9 +40,7 @@ public class GeyserUpdateCommand implements CommandExecutor {
                         sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + latestMsg);
                     } else {
                         sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + outdatedMsg);
-                        if (!GeyserSpigotDownloader.updateGeyser()) {
-                            sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + failDownloadMsg);
-                        }
+                        GeyserSpigotDownloader.updateGeyser();
                     }
                 } catch (IOException e) {
                     sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + failUpdateCheckMsg);
