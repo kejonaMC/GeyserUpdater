@@ -106,7 +106,7 @@ public class VelocityUpdater {
                                 GeyserVelocityDownloader.updateGeyser();
                             }
                         } catch (IOException e) {
-                            logger.error("Failed to check for updates to Geyser!");
+                            logger.error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
                             e.printStackTrace();
                         }
                     })

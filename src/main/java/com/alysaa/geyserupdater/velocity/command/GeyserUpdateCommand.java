@@ -21,7 +21,7 @@ public class GeyserUpdateCommand implements RawCommand {
         String checkMsg = "Checking for updates to Geyser...";
         String latestMsg = "You are using the latest build of Geyser!";
         String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
-        String failUpdateCheckMsg = "Failed to check for updates to Geyser!";
+        String failUpdateCheckMsg = "Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.";
 
         CommandSource source = invocation.source();
         Logger logger = VelocityUpdater.getPlugin().getLogger();

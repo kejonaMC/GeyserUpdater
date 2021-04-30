@@ -47,7 +47,7 @@ public class SpigotUpdater extends JavaPlugin {
                             GeyserSpigotDownloader.updateGeyser();
                         }
                     } catch (IOException e) {
-                        getLogger().severe("Failed to check for updates to Geyser!");
+                        getLogger().severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
                         e.printStackTrace();
                     }
                 }

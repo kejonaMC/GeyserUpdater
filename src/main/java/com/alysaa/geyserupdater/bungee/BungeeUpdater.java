@@ -120,7 +120,7 @@ public final class BungeeUpdater extends Plugin {
                         GeyserBungeeDownloader.updateGeyser();
                     }
                 } catch (IOException e) {
-                    logger.severe("Failed to check for updates to Geyser!");
+                    logger.severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
                     e.printStackTrace();
                 }
             }, 0, 24, TimeUnit.HOURS);
