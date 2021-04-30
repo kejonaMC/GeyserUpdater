@@ -55,14 +55,21 @@ public class VelocityUpdater {
     }
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        // Make startup script
-        makeScriptFile();
+        Metrics metrics = metricsFactory.make(this, 10673);
+
         // Register our only command
         server.getCommandManager().register("geyserupdate", new GeyserUpdateCommand());
         // Player alert if a restart is required when they join
         server.getEventManager().register(this, new VelocityJoinListener());
+
+        // Make startup script if enabled
+        if (config.getBoolean("Auto-Script-Generating")) {
+            makeScriptFile();
+        }
         // Auto update Geyser if enabled in the config
-        startAutoUpdate();
+        if (config.getBoolean("Auto-Update-Geyser")) {
+            startAutoUpdate();
+        }
         // Check if downloaded Geyser file exists periodically
         server.getScheduler()
                 .buildTask(this, () -> {
@@ -72,8 +79,6 @@ public class VelocityUpdater {
                 .delay(30L, TimeUnit.MINUTES)
                 .repeat(12L, TimeUnit.HOURS)
                 .schedule();
-
-        Metrics metrics = metricsFactory.make(this, 10673);
     }
     @Subscribe(order = PostOrder.LAST)
     public void onShutdown(ProxyShutdownEvent event) {
@@ -86,33 +91,29 @@ public class VelocityUpdater {
         }
     }
     private void makeScriptFile() {
-        if (config.getBoolean("Auto-Script-Generating")) {
-            try {
-                ScriptCreator.createRestartScript(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            ScriptCreator.createRestartScript(true);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     public void startAutoUpdate() {
-        if (config.getBoolean("Auto-Update-Geyser")) {
-            // Checking for the build numbers of current build.
-            server.getScheduler()
-                    .buildTask(this, () -> {
-                        try {
-                            boolean isLatest = GeyserProperties.isLatestBuild();
-                            if (!isLatest) {
-                                logger.info("A newer build of Geyser is available! Attempting to download the latest build now...");
-                                GeyserVelocityDownloader.updateGeyser();
-                            }
-                        } catch (IOException e) {
-                            logger.error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
-                            e.printStackTrace();
+        // Checking for the build numbers of current build.
+        server.getScheduler()
+                .buildTask(this, () -> {
+                    try {
+                        boolean isLatest = GeyserProperties.isLatestBuild();
+                        if (!isLatest) {
+                            logger.info("A newer build of Geyser is available! Attempting to download the latest build now...");
+                            GeyserVelocityDownloader.updateGeyser();
                         }
-                    })
-                    .repeat(24L, TimeUnit.HOURS)
-                    .schedule();
-        }
+                    } catch (IOException e) {
+                        logger.error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
+                        e.printStackTrace();
+                    }
+                })
+                .repeat(24L, TimeUnit.HOURS)
+                .schedule();
     }
     public void moveGeyser() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".

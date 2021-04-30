@@ -30,10 +30,24 @@ public class SpigotUpdater extends JavaPlugin {
         plugin = this;
         logger = getLogger();
         new Metrics(this, 10202);
-        Objects.requireNonNull(getCommand("geyserupdate")).setExecutor(new GeyserUpdateCommand());
         createFiles();
         checkConfigVer();
+        // Check our version
+        versionCheck();
 
+        Objects.requireNonNull(getCommand("geyserupdate")).setExecutor(new GeyserUpdateCommand());
+        // Player alert if a restart is required when they join
+        Bukkit.getServer().getPluginManager().registerEvents(new SpigotJoinListener(), this);
+
+        // Check if a restart script already exists
+        // We create one if it doesn't
+        if (getConfig().getBoolean("Auto-Script-Generating")) {
+            try {
+                CheckSpigotRestart.checkYml();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         // If true, start auto updating now and every 24 hours
         if (getConfig().getBoolean("Auto-Update-Geyser")) {
             new BukkitRunnable() {
@@ -53,7 +67,6 @@ public class SpigotUpdater extends JavaPlugin {
                 }
             }.runTaskTimer(this, 0, 12 * 60 * 60 * 20);
         }
-
         // Enable File Checking here. delay of 30 minutes and period of 12 hours (given in ticks)
         new BukkitRunnable() {
 
@@ -64,20 +77,6 @@ public class SpigotUpdater extends JavaPlugin {
                 }
             }
         }.runTaskTimerAsynchronously(this, 30 * 60 * 20, 12 * 60 * 60 * 20);
-
-        // Check our version
-        versionCheck();
-        // Player alert if a restart is required when they join
-        Bukkit.getServer().getPluginManager().registerEvents(new SpigotJoinListener(), this);
-        // Check if a restart script already exists
-        // We create one if it doesn't
-        if (getConfig().getBoolean("Auto-Script-Generating")) {
-            try {
-                CheckSpigotRestart.checkYml();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
     public void checkConfigVer(){
         //Change version number only when editing config.yml!

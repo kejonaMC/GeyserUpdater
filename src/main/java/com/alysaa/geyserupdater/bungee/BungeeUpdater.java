@@ -36,36 +36,38 @@ public final class BungeeUpdater extends Plugin {
         plugin = this;
         logger = plugin.getLogger();
         new Metrics(this, 10203);
-        this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         this.onConfig();
-        try {
-            startAutoUpdate();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         this.checkConfigVer();
+        // Check GeyserUpdater version
+        this.versionCheck();
+
+        this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         // Player alert if a restart is required when they join
         getProxy().getPluginManager().registerListener(this, new BungeeJoinListener());
+
+        // Make startup script
+        if (configuration.getBoolean("Auto-Script-Generating")) {
+            makeScriptFile();
+        }
+        // Auto update Geyser if enabled
+        if (configuration.getBoolean("Auto-Update-Geyser")) {
+            startAutoUpdate();
+        }
         // Check if downloaded Geyser file exists periodically
         getProxy().getScheduler().schedule(this, () -> {
             if (FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar", true)) {
                 logger.info("A new Geyser build has been downloaded! Please restart BungeeCord in order to use the updated build!");
             }
         }, 30, 720, TimeUnit.MINUTES);
-        // Check GeyserUpdater version periodically
-        getProxy().getScheduler().schedule(this, this::versionCheck, 0, 24, TimeUnit.HOURS);
-        // Make startup script
-        makeScriptFile();
+
     }
 
     private void makeScriptFile() {
-        if (configuration.getBoolean("Auto-Script-Generating")) {
-            try {
-                // Tell the createScript method that a loop is necessary because bungee has no restart system.
-                ScriptCreator.createRestartScript(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            // Tell the createScript method that a loop is necessary because bungee has no restart system.
+            ScriptCreator.createRestartScript(true);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     public void onDisable() {
@@ -109,22 +111,20 @@ public final class BungeeUpdater extends Plugin {
             exception.printStackTrace();
         }
     }
-    public void startAutoUpdate() throws IOException {
-        if (configuration.getBoolean("Auto-Update-Geyser")) {
-            getProxy().getScheduler().schedule(this, () -> {
-                try {
-                    // Checking for the build numbers of current build.
-                    boolean isLatest = GeyserProperties.isLatestBuild();
-                    if (!isLatest) {
-                        logger.info("A newer build of Geyser is available! Attempting to download the latest build now...");
-                        GeyserBungeeDownloader.updateGeyser();
-                    }
-                } catch (IOException e) {
-                    logger.severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
-                    e.printStackTrace();
+    public void startAutoUpdate() {
+        getProxy().getScheduler().schedule(this, () -> {
+            try {
+                // Checking for the build numbers of current build.
+                boolean isLatest = GeyserProperties.isLatestBuild();
+                if (!isLatest) {
+                    logger.info("A newer build of Geyser is available! Attempting to download the latest build now...");
+                    GeyserBungeeDownloader.updateGeyser();
                 }
-            }, 0, 24, TimeUnit.HOURS);
-        }
+            } catch (IOException e) {
+                logger.severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
+                e.printStackTrace();
+            }
+        }, 0, 24, TimeUnit.HOURS);
     }
     public void moveGeyser() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".
