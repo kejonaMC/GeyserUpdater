@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# This is only for testing. It will create multiple directories in the directory it is run in.
+# A script to deploy GeyserUpdater and Geyser on Spigot, Paper, BungeeCord, Waterfall, and Velocity only for testing purposes.
+# It will make multiple directories in the directory it is run in. 
 
 
 #Directories
@@ -23,7 +24,7 @@ waterLink="https://papermc.io/api/v2/projects/waterfall/versions/1.16/builds/413
 velocityLink="https://versions.velocitypowered.com/download/1.1.5.jar"
 
 
-echo "[WARN] This script can download and generate up to 500MB of data!"
+echo "[WARN] This script can generate up to 500MB of data!"
 echo "[WARN] By running this script, you are agreeing to the mojang EULA"
 sleep 5
 
