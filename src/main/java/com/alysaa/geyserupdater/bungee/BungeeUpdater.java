@@ -47,7 +47,12 @@ public final class BungeeUpdater extends Plugin {
 
         // Make startup script
         if (configuration.getBoolean("Auto-Script-Generating")) {
-            makeScriptFile();
+            try {
+                // Tell the createScript method that a loop is necessary because bungee has no restart system.
+                ScriptCreator.createRestartScript(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         // Auto update Geyser if enabled
         if (configuration.getBoolean("Auto-Update-Geyser")) {
@@ -62,14 +67,6 @@ public final class BungeeUpdater extends Plugin {
 
     }
 
-    private void makeScriptFile() {
-        try {
-            // Tell the createScript method that a loop is necessary because bungee has no restart system.
-            ScriptCreator.createRestartScript(true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     public void onDisable() {
         // Force Geyser to disable so we can modify the jar in the plugins folder without issue
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
@@ -81,12 +78,31 @@ public final class BungeeUpdater extends Plugin {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Load GeyserUpdater's config
+     */
+    public void onConfig() {
+        try {
+            configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(Config.startConfig(this, "config.yml"));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    /**
+     * Check the config version of GeyserUpdater
+     */
     public void checkConfigVer(){
         //Change version number only when editing config.yml!
          if (!(configuration.getInt("version") == 1)){
             logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
          }
     }
+
+    /**
+     * Check the version of GeyserUpdater against the spigot resource page
+     */
     public void versionCheck() {
         getProxy().getScheduler().runAsync(this, () -> {
             String pluginVersion = getDescription().getVersion();
@@ -104,13 +120,9 @@ public final class BungeeUpdater extends Plugin {
         });
     }
 
-    public void onConfig() {
-        try {
-            configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(Config.startConfig(this, "config.yml"));
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
+    /**
+     * Check for a newer version of Geyser every 24hrs
+     */
     public void startAutoUpdate() {
         getProxy().getScheduler().schedule(this, () -> {
             try {
@@ -126,6 +138,13 @@ public final class BungeeUpdater extends Plugin {
             }
         }, 0, 24, TimeUnit.HOURS);
     }
+
+    /**
+     * Replace the Geyser jar in the plugin folder with the one in GeyserUpdater/BuildUpdate
+     * Should only be called once Geyser has been disabled
+     *
+     * @throws IOException if there was an IO failure
+     */
     public void moveGeyser() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".
         File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
@@ -142,6 +161,12 @@ public final class BungeeUpdater extends Plugin {
             output.close();
         }
     }
+
+    /**
+     * Delete the Geyser jar in GeyserUpdater/BuildUpdate
+     *
+     * @throws IOException If it failed to delete
+     */
     private void deleteBuild() throws IOException {
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         Files.deleteIfExists(file);

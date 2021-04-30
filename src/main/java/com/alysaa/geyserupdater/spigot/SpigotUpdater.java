@@ -50,22 +50,7 @@ public class SpigotUpdater extends JavaPlugin {
         }
         // If true, start auto updating now and every 24 hours
         if (getConfig().getBoolean("Auto-Update-Geyser")) {
-            new BukkitRunnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        boolean isLatest = GeyserProperties.isLatestBuild();
-                        if (!isLatest) {
-                            getLogger().info("A newer build of Geyser is available! Attempting to download the latest build now...");
-                            GeyserSpigotDownloader.updateGeyser();
-                        }
-                    } catch (IOException e) {
-                        getLogger().severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
-                        e.printStackTrace();
-                    }
-                }
-            }.runTaskTimer(this, 0, 12 * 60 * 60 * 20);
+            startAutoUpdate();
         }
         // Enable File Checking here. delay of 30 minutes and period of 12 hours (given in ticks)
         new BukkitRunnable() {
@@ -78,12 +63,37 @@ public class SpigotUpdater extends JavaPlugin {
             }
         }.runTaskTimerAsynchronously(this, 30 * 60 * 20, 12 * 60 * 60 * 20);
     }
-    public void checkConfigVer(){
-        //Change version number only when editing config.yml!
-        if (!(getConfig().getInt("version") == 1)){
-                logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
-            }
+
+    /**
+     * Load GeyserUpdater's config
+     */
+    private void createFiles() {
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            configFile.getParentFile().mkdirs();
+            saveResource("config.yml", false);
         }
+        FileConfiguration config = new YamlConfiguration();
+        try {
+            config.load(configFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check the config version of GeyserUpdater
+     */
+    public void checkConfigVer() {
+        //Change version number only when editing config.yml!
+        if (!(getConfig().getInt("version") == 1 )) {
+                logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
+        }
+    }
+
+    /**
+     * Check the version of GeyserUpdater against the spigot resource page
+     */
     public void versionCheck() {
         new BukkitRunnable() {
             @Override
@@ -102,19 +112,29 @@ public class SpigotUpdater extends JavaPlugin {
             }
         }.runTaskAsynchronously(this);
     }
-    private void createFiles() {
-        File configFile = new File(getDataFolder(), "config.yml");
-        if (!configFile.exists()) {
-            configFile.getParentFile().mkdirs();
-            saveResource("config.yml", false);
-        }
-        FileConfiguration config = new YamlConfiguration();
-        try {
-            config.load(configFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+
+    /**
+     * Check for a newer version of Geyser every 24hrs
+     */
+    public void startAutoUpdate() {
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                try {
+                    boolean isLatest = GeyserProperties.isLatestBuild();
+                    if (!isLatest) {
+                        getLogger().info("A newer build of Geyser is available! Attempting to download the latest build now...");
+                        GeyserSpigotDownloader.updateGeyser();
+                    }
+                } catch (IOException e) {
+                    getLogger().severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskTimer(this, 0, 12 * 60 * 60 * 20);
     }
+
     public static SpigotUpdater getPlugin() {
         return plugin;
     }
