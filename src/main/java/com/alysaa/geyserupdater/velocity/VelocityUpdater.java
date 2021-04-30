@@ -78,13 +78,11 @@ public class VelocityUpdater {
     @Subscribe(order = PostOrder.LAST)
     public void onShutdown(ProxyShutdownEvent event) {
         try {
-            this.moveGeyser();
+            moveGeyser();
+            deleteBuild();
         } catch (IOException e) {
             logger.warn("An I/O error occurred while attempting to update Geyser!");
-        }
-        try {
-            this.deleteBuild();
-        } catch (Exception ignored) {
+            e.printStackTrace();
         }
     }
     private void makeScriptFile() {
@@ -119,20 +117,22 @@ public class VelocityUpdater {
     public void moveGeyser() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".
         File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar");
-        FileInputStream input = new FileInputStream(fileToCopy);
-        File newFile = new File("plugins/Geyser-Velocity.jar");
-        FileOutputStream output = new FileOutputStream(newFile);
-        byte[] buf = new byte[1024];
-        int bytesRead;
-        while ((bytesRead = input.read(buf)) > 0) {
-            output.write(buf, 0, bytesRead);
+        if (fileToCopy.exists()) {
+            FileInputStream input = new FileInputStream(fileToCopy);
+            File newFile = new File("plugins/Geyser-Velocity.jar");
+            FileOutputStream output = new FileOutputStream(newFile);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = input.read(buf)) > 0) {
+                output.write(buf, 0, bytesRead);
+            }
+            input.close();
+            output.close();
         }
-        input.close();
-        output.close();
     }
     private void deleteBuild() throws IOException {
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar");
-        Files.delete(file);
+        Files.deleteIfExists(file);
     }
     private Toml loadConfig(Path path) {
         File folder = path.toFile();

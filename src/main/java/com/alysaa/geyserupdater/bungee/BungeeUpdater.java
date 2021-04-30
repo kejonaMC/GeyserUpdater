@@ -69,15 +69,15 @@ public final class BungeeUpdater extends Plugin {
         }
     }
     public void onDisable() {
+        // Force Geyser to disable so we can modify the jar in the plugins folder without issue
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         try {
-            this.moveGeyser();
+            moveGeyser();
+            deleteBuild();
         } catch (IOException e) {
             logger.severe("An I/O error occurred while attempting to update Geyser!");
+            e.printStackTrace();
         }
-        try {
-            this.deleteBuild();
-        } catch (Exception ignored) { }
     }
     public void checkConfigVer(){
         //Change version number only when editing config.yml!
@@ -129,20 +129,22 @@ public final class BungeeUpdater extends Plugin {
     public void moveGeyser() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".
         File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
-        FileInputStream input = new FileInputStream(fileToCopy);
-        File newFile = new File("plugins/Geyser-BungeeCord.jar");
-        FileOutputStream output = new FileOutputStream(newFile);
-        byte[] buf = new byte[1024];
-        int bytesRead;
-        while ((bytesRead = input.read(buf)) > 0) {
-            output.write(buf, 0, bytesRead);
+        if (fileToCopy.exists()) {
+            FileInputStream input = new FileInputStream(fileToCopy);
+            File newFile = new File("plugins/Geyser-BungeeCord.jar");
+            FileOutputStream output = new FileOutputStream(newFile);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = input.read(buf)) > 0) {
+                output.write(buf, 0, bytesRead);
+            }
+            input.close();
+            output.close();
         }
-        input.close();
-        output.close();
     }
     private void deleteBuild() throws IOException {
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
-        Files.delete(file);
+        Files.deleteIfExists(file);
     }
     public static BungeeUpdater getPlugin() {
         return plugin;
