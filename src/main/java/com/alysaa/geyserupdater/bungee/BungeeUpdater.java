@@ -36,10 +36,10 @@ public final class BungeeUpdater extends Plugin {
         plugin = this;
         logger = plugin.getLogger();
         new Metrics(this, 10203);
-        this.onConfig();
-        this.checkConfigVer();
+        this.loadConfig();
+        this.checkConfigVersion();
         // Check GeyserUpdater version
-        this.versionCheck();
+        this.checkUpdaterVersion();
 
         this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         // Player alert if a restart is required when they join
@@ -56,7 +56,7 @@ public final class BungeeUpdater extends Plugin {
         }
         // Auto update Geyser if enabled
         if (configuration.getBoolean("Auto-Update-Geyser")) {
-            startAutoUpdate();
+            scheduleAutoUpdate();
         }
         // Check if downloaded Geyser file exists periodically
         getProxy().getScheduler().schedule(this, () -> {
@@ -71,8 +71,8 @@ public final class BungeeUpdater extends Plugin {
         // Force Geyser to disable so we can modify the jar in the plugins folder without issue
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         try {
-            moveGeyser();
-            deleteBuild();
+            moveGeyserJar();
+            deleteGeyserJar();
         } catch (IOException e) {
             logger.severe("An I/O error occurred while attempting to update Geyser!");
             e.printStackTrace();
@@ -80,9 +80,9 @@ public final class BungeeUpdater extends Plugin {
     }
 
     /**
-     * Load GeyserUpdater's config
+     * Load GeyserUpdater's config, create it if it doesn't exist
      */
-    public void onConfig() {
+    public void loadConfig() {
         try {
             configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(Config.startConfig(this, "config.yml"));
         } catch (IOException exception) {
@@ -93,7 +93,7 @@ public final class BungeeUpdater extends Plugin {
     /**
      * Check the config version of GeyserUpdater
      */
-    public void checkConfigVer(){
+    public void checkConfigVersion(){
         //Change version number only when editing config.yml!
          if (!(configuration.getInt("version") == 1)){
             logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
@@ -103,7 +103,7 @@ public final class BungeeUpdater extends Plugin {
     /**
      * Check the version of GeyserUpdater against the spigot resource page
      */
-    public void versionCheck() {
+    public void checkUpdaterVersion() {
         getProxy().getScheduler().runAsync(this, () -> {
             String pluginVersion = getDescription().getVersion();
             String version = BungeeResourceUpdateChecker.getVersion(plugin);
@@ -123,7 +123,7 @@ public final class BungeeUpdater extends Plugin {
     /**
      * Check for a newer version of Geyser every 24hrs
      */
-    public void startAutoUpdate() {
+    public void scheduleAutoUpdate() {
         getProxy().getScheduler().schedule(this, () -> {
             try {
                 // Checking for the build numbers of current build.
@@ -145,7 +145,7 @@ public final class BungeeUpdater extends Plugin {
      *
      * @throws IOException if there was an IO failure
      */
-    public void moveGeyser() throws IOException {
+    public void moveGeyserJar() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".
         File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         if (fileToCopy.exists()) {
@@ -167,14 +167,14 @@ public final class BungeeUpdater extends Plugin {
      *
      * @throws IOException If it failed to delete
      */
-    private void deleteBuild() throws IOException {
+    private void deleteGeyserJar() throws IOException {
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         Files.deleteIfExists(file);
     }
     public static BungeeUpdater getPlugin() {
         return plugin;
     }
-    public Configuration getConfiguration() {
+    public Configuration getConfig() {
         return configuration;
     }
 }

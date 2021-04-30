@@ -73,7 +73,7 @@ public class VelocityUpdater {
         }
         // Auto update Geyser if enabled in the config
         if (config.getBoolean("Auto-Update-Geyser")) {
-            startAutoUpdate();
+            scheduleAutoUpdate();
         }
         // Check if downloaded Geyser file exists periodically
         server.getScheduler()
@@ -88,8 +88,8 @@ public class VelocityUpdater {
     @Subscribe(order = PostOrder.LAST)
     public void onShutdown(ProxyShutdownEvent event) {
         try {
-            moveGeyser();
-            deleteBuild();
+            moveGeyserJar();
+            deleteGeyserJar();
         } catch (IOException e) {
             logger.warn("An I/O error occurred while attempting to update Geyser!");
             e.printStackTrace();
@@ -128,7 +128,7 @@ public class VelocityUpdater {
     /**
      * Check for a newer version of Geyser every 24hrs
      */
-    public void startAutoUpdate() {
+    public void scheduleAutoUpdate() {
         // Checking for the build numbers of current build.
         server.getScheduler()
                 .buildTask(this, () -> {
@@ -153,7 +153,7 @@ public class VelocityUpdater {
      *
      * @throws IOException if there was an IO failure
      */
-    public void moveGeyser() throws IOException {
+    public void moveGeyserJar() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".
         File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar");
         if (fileToCopy.exists()) {
@@ -175,7 +175,7 @@ public class VelocityUpdater {
      *
      * @throws IOException if it failed to delete
      */
-    private void deleteBuild() throws IOException {
+    private void deleteGeyserJar() throws IOException {
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar");
         Files.deleteIfExists(file);
     }

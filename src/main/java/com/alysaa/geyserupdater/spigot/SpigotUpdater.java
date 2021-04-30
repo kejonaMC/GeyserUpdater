@@ -30,10 +30,10 @@ public class SpigotUpdater extends JavaPlugin {
         plugin = this;
         logger = getLogger();
         new Metrics(this, 10202);
-        createFiles();
-        checkConfigVer();
+        loadConfig();
+        checkConfigVersion();
         // Check our version
-        versionCheck();
+        checkUpdaterVersion();
 
         Objects.requireNonNull(getCommand("geyserupdate")).setExecutor(new GeyserUpdateCommand());
         // Player alert if a restart is required when they join
@@ -50,7 +50,7 @@ public class SpigotUpdater extends JavaPlugin {
         }
         // If true, start auto updating now and every 24 hours
         if (getConfig().getBoolean("Auto-Update-Geyser")) {
-            startAutoUpdate();
+            scheduleAutoUpdate();
         }
         // Enable File Checking here. delay of 30 minutes and period of 12 hours (given in ticks)
         new BukkitRunnable() {
@@ -65,9 +65,9 @@ public class SpigotUpdater extends JavaPlugin {
     }
 
     /**
-     * Load GeyserUpdater's config
+     * Load GeyserUpdater's config, create it if it doesn't exist
      */
-    private void createFiles() {
+    private void loadConfig() {
         File configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()) {
             configFile.getParentFile().mkdirs();
@@ -84,7 +84,7 @@ public class SpigotUpdater extends JavaPlugin {
     /**
      * Check the config version of GeyserUpdater
      */
-    public void checkConfigVer() {
+    public void checkConfigVersion() {
         //Change version number only when editing config.yml!
         if (!(getConfig().getInt("version") == 1 )) {
                 logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
@@ -94,7 +94,7 @@ public class SpigotUpdater extends JavaPlugin {
     /**
      * Check the version of GeyserUpdater against the spigot resource page
      */
-    public void versionCheck() {
+    public void checkUpdaterVersion() {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -116,7 +116,7 @@ public class SpigotUpdater extends JavaPlugin {
     /**
      * Check for a newer version of Geyser every 24hrs
      */
-    public void startAutoUpdate() {
+    public void scheduleAutoUpdate() {
         new BukkitRunnable() {
 
             @Override
