@@ -11,6 +11,8 @@ import java.util.Properties;
 
 public class GeyserProperties {
 
+    // todo: a check to see if the local git branch is available on the CI (that knows if it failed because of a bad connection or not)
+
     /**
      * Compare the local build number to the latest build number on Geyser CI
      *

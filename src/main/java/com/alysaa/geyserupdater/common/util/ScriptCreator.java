@@ -8,6 +8,9 @@ import java.lang.management.ManagementFactory;
 import java.util.List;
 
 public class ScriptCreator {
+
+    // todo: make this return a boolean and add a parameter for file extension so that we can process all messages externally
+
     /**
      * Create a restart script for the server, if the OS is supported.
      * If the platform is spigot, the restart-script value in spigot.yml will be set to the created script.
