@@ -114,17 +114,17 @@ deploySpigot () {
   echo "[INFO] Deploying Spigot..."
 
   # BuildTools shenanigans
-  if compgen -G "BuildTools/spigot-*.jar" > /dev/null; then
+  if compgen -G "$buildTools/spigot-*.jar" > /dev/null; then
     echo "[WARN] Using cached spigot jar, delete BuildTools directory if you want to rebuild. "
   else
     if [[ ! -x "$(command -v git)" ]]; then
       echo "[SEVERE] Git is not installed, can't run BuildTools! Skipping Spigot deployment." && return
     fi
-    if [[ -d "BuildTools" ]]; then
-      rm -r "BuildTools"
+    if [[ -d "$buildTools" ]]; then
+      rm -r "$buildTools"
     fi
-    mkdir "BuildTools"
-    cd "BuildTools"
+    mkdir "$buildTools"
+    cd "$buildTools"
     echo "[INFO] Downloading BuildTools"
     download "$buildToolsLink"
     # unset core.autocrlf according to BuildTools docs
@@ -132,14 +132,14 @@ deploySpigot () {
     git config --unset core.autocrlf
     fi
     java -Xmx2G -jar BuildTools.jar
-    if ! compgen -G "BuildTools/spigot-*.jar" > /dev/null; then
+    if ! compgen -G "$buildTools/spigot-*.jar" > /dev/null; then
       echo "[SEVERE] Failed to build spigot jar! Skipping spigot deployment!" && cd ../ && return
     fi
     cd ../
   fi
 
   mkdir "$spigotDir"
-  cp BuildTools/spigot*.jar "$spigotDir"
+  cp "$buildTools"/spigot*.jar "$spigotDir"
   cd "$spigotDir"
   echo "eula=true" >> eula.txt
 
