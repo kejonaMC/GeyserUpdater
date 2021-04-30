@@ -48,8 +48,8 @@ public class CheckSpigotRestart {
                 e.printStackTrace();
                 return;
             }
-            logger.info("The configuration value `restart-script` in spigot.yml has been set to " + scriptName + "!");
-            logger.info("Use /restart to restart the server.");
+            logger.warning("The config value 'restart-script' in spigot.yml has been set to " + scriptName);
+            logger.warning("You must restart the server in order for the restart functionality to work!");
         }
     }
 }

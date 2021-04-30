@@ -85,7 +85,7 @@ public class GeyserBungeeDownloader {
      * Attempt to restart the server
      */
     private static void restartServer() {
-        logger.info("The server will be restarting in 10 seconds!");
+        logger.warning("The server will be restarting in 10 seconds!");
         for (ProxiedPlayer player : plugin.getProxy().getPlayers()) {
             player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players"))));
         }

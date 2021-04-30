@@ -90,7 +90,7 @@ public class GeyserVelocityDownloader {
      * Attempt to restart the server
      */
     private static void restartServer() {
-        logger.info("The server will be restarting in 10 seconds!");
+        logger.warn("The server will be restarting in 10 seconds!");
         for (Player player : server.getAllPlayers()) {
             player.sendMessage(Component.text(plugin.getConfig().getString("Restart-Message-Players")));
         }

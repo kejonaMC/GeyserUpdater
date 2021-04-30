@@ -100,7 +100,7 @@ public class GeyserSpigotDownloader {
      * Attempt to restart the server
      */
     private static void restartServer() {
-        logger.info("The server will be restarting in 10 seconds!");
+        logger.warning("The server will be restarting in 10 seconds!");
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players")));
         }
@@ -121,8 +121,7 @@ public class GeyserSpigotDownloader {
                     restartMethod.setAccessible(true);
                     restartMethod.invoke(spigotServer);
                 } catch (NoSuchMethodException e) {
-                    SpigotUpdater.getPlugin().getLogger().severe("Your server version is too old to be able to be automatically restarted!");
-                    // todo: do we really need to print a stacktrace for this?
+                    logger.severe("Your server version is too old to be able to be automatically restarted!");
                     e.printStackTrace();
                 } catch (InvocationTargetException | IllegalAccessException e) {
                     logger.severe("Failed to restart the server!");

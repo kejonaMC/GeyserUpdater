@@ -37,7 +37,6 @@ public class GeyserUpdateCommand implements RawCommand {
             }
         } catch (IOException e) {
             source.sendMessage(Component.text(failUpdateCheckMsg));
-            logger.error(failUpdateCheckMsg);
             e.printStackTrace();
         }
     }

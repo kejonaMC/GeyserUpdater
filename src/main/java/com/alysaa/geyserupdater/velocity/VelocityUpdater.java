@@ -91,7 +91,7 @@ public class VelocityUpdater {
             moveGeyserJar();
             deleteGeyserJar();
         } catch (IOException e) {
-            logger.warn("An I/O error occurred while attempting to update Geyser!");
+            logger.error("An I/O error occurred while attempting to update Geyser!");
             e.printStackTrace();
         }
     }
