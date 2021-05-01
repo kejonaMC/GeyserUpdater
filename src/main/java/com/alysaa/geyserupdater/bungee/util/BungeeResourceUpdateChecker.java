@@ -1,7 +1,7 @@
 package com.alysaa.geyserupdater.bungee.util;
 
-
 import com.alysaa.geyserupdater.bungee.BungeeUpdater;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -11,6 +11,8 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class BungeeResourceUpdateChecker {
+
+    // todo this mess too
 
     public static String getVersion(BungeeUpdater updater) {
 
@@ -23,7 +25,7 @@ public class BungeeResourceUpdateChecker {
             String version = jsonObject.get("current_version").getAsString();
             return version;
         } catch (IOException e) {
-            updater.plugin.getLogger().info("Cannot look for updates: " + e.getMessage());
+            updater.getLogger().severe("Failed to check for updates: " + e.getMessage());
             return null;
         }
     }

@@ -1,6 +1,8 @@
-To clone the repo run `git clone https://github.com/YHDiamond/GeyserUpdater.git` in your command line or terminal.
+### If you want to contribute to GeyserUpdater, please ask in our [Discord](https://discord.gg/xXzzdAXa2b) to find out which branch would be best to make changes to.
 
-You can build locally and install dependencies using maven. `mvn clean install` to install all require dependencies and `mvn clean package` to build. The built jar will be located in the target folder.
+- To clone the repo, run `git clone https://github.com/YHDiamond/GeyserUpdater.git` in your command line or terminal.
+
+- You can build locally and install dependencies using maven. Use `mvn clean install` to install all required dependencies, and `mvn clean package` to build. The built jar will be located in the target folder.
 
 Please follow the guidelines below for any code you wish to contribute, we are always open for PRs!
 
@@ -38,6 +40,4 @@ public class LongClassName {
 }
 ```
 
-
-If you are making a change to the README.md, fixing a typo, or changing code format, please append `[ci skip]` to the end of your commit message so it won't trigger a new build.
-If you need help with code for this you can go to [our Discord](https://discord.gg/xXzzdAXa2b). Don't ping anyone that doesn't have the "Pingable" role!
+If you need help with code for this, you can go to [our Discord](https://discord.gg/xXzzdAXa2b). Please do not ping anyone without the "Pingable" role assigned!
