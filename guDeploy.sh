@@ -94,8 +94,8 @@ Auto-Script-Generating: true" > config.yml
 
   mkdir "Velocity"
   cd "Velocity"
-  mkdir "GeyserUpdater"
-  cd "GeyserUpdater"
+  mkdir "geyserupdater"
+  cd "geyserupdater"
   echo "Auto-Update-Geyser=true
 Auto-Restart-Server=true
 Restart-Message-Players='&2This server will be restarting in 10 seconds!'
