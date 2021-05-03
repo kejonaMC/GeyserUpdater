@@ -28,8 +28,6 @@ public class GeyserUpdateCommand implements CommandExecutor {
 
         Logger logger = SpigotUpdater.getPlugin().getLogger();
 
-        //todo: shrink this
-
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (command.getName().equalsIgnoreCase("geyserupdate") && player.hasPermission("gupdater.geyserupdate")) {

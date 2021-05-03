@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0-SNAPSHOT", description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0", description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
 

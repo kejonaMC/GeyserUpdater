@@ -36,6 +36,7 @@ public class SpigotUpdater extends JavaPlugin {
         checkUpdaterVersion();
 
         Objects.requireNonNull(getCommand("geyserupdate")).setExecutor(new GeyserUpdateCommand());
+        getCommand("geyserupdate").setPermission("gupdater.geyserupdate");
         // Player alert if a restart is required when they join
         Bukkit.getServer().getPluginManager().registerEvents(new SpigotJoinListener(), this);
 
