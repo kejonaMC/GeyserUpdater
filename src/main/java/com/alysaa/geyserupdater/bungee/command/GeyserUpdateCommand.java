@@ -29,8 +29,6 @@ public class GeyserUpdateCommand extends Command {
 
         Logger logger = BungeeUpdater.getPlugin().getLogger();
 
-        // TODO: compress this. near duplication seems unnecessary just to send to different commandSenders.
-
         if (commandSender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) commandSender;
             try {
