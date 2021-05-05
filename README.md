@@ -42,10 +42,15 @@ Please note that for BungeeCord and Velocity, if the server is not shut down cle
 ### `Auto-Update-Geyser`:
 *Default:* `false`  
 
-If enabled, GeyserUpdater will check for a newer version of Geyser on server startup and every 24 hours thereafter. If a newer build exists, it will be downloaded.  
+If enabled, GeyserUpdater will check for a newer version of Geyser on server startup and on an interval specified by the next option. If a newer build exists, it will be downloaded.  
+
+### `Auto-Update-Interval`:
+*Default:* `24`
+
+The interval in hours between each auto update check.
+
 
 ### `Auto-Restart-Server`:
-
 *Default:* `false`  
 
 If enabled, GeyserUpdater will attempt to restart the server 10 seconds after a new version of Geyser has been successfully downloaded. 
@@ -55,7 +60,6 @@ If enabled, GeyserUpdater will attempt to restart the server 10 seconds after a 
 - **BungeeCord/Velocity:** The server will simply stop. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a `systemd` unit (or similar) to run the server, your proxy should automatically restart. If not, you can use a script to *start* the proxy that will make it start again once it has stopped. 
 
 ### `Auto-Script-Generating`:
-
 *Default:* `false`  
 
 Do not use this if you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a `systemd` unit (or similar) to run your server.
@@ -67,7 +71,6 @@ When enabled, a restart script named `ServerRestartScript.sh` (macOS, Linux) or 
 - **BungeeCord/Velocity:** You must use the generated script to start the proxy. This will make the server restart after it has stopped. 
 
 ### `Restart-Message-Players`:
-
 *Default:* `'&2This server will be restarting in 10 seconds!'`  
 
 This is the message that is sent to all players when `Auto-Restart-Server` is going to restart the server in 10 seconds. 
@@ -108,10 +111,8 @@ This is the message that is sent to all players when `Auto-Restart-Server` is go
 ## Meta
 
 The project is owned by:
-- [Jens](https://github.com/Jens-Co)
-- [YHDiamond](https://github.com/YHDiamond)
+- [ProjectG](https://github.com/ProjectG-Plugins)
 </br>
 
 Special thanks to:
-- [rtm516](https://github.com/rtm516), who helped us with basically everything. Without him, this project wouldn't even have a README.  
-- [Konica](https://github.com/Konicai), who did a lot of work on the updater code.
+- [rtm516](https://github.com/rtm516), who helped us with basically everything. Without him, this project wouldn't even have a README.

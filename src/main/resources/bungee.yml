@@ -1,5 +1,5 @@
-name: GeyserUpdater
-main: com.alysaa.geyserupdater.bungee.BungeeUpdater
+name: ${project.name}
+main: com.projectg.geyserupdater.bungee.BungeeUpdater
 version: ${project.version}
 description: Automatically or manually downloads new builds of Geyser and applies them on server restart.
 author: Jens

@@ -14,7 +14,7 @@ waterDir="Waterfall-guDeploy"
 velocityDir="Velocity-guDeploy"
 
 #Links
-guLink="https://ci.alysaa.net/job/GeyserUpdater/job/v1.4.0/lastSuccessfulBuild/artifact/target/GeyserUpdater-1.4.0-SNAPSHOT.jar"
+guLink="https://ci.alysaa.net/job/GeyserUpdater/job/1.5.0/lastSuccessfulBuild/artifact/target/GeyserUpdater-1.5.0-SNAPSHOT.jar"
 geyserLink="https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/682/artifact/bootstrap/"
 
 buildToolsLink="https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
