@@ -87,7 +87,7 @@ public class SpigotUpdater extends JavaPlugin {
      */
     public void checkConfigVersion() {
         //Change version number only when editing config.yml!
-        if (!(getConfig().getInt("version") == 1 )) {
+        if (!(getConfig().getInt("Config-Version") == 2)) {
                 logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
         }
     }
@@ -132,8 +132,9 @@ public class SpigotUpdater extends JavaPlugin {
                     getLogger().severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
                     e.printStackTrace();
                 }
+                // Auto-Update-Interval is in hours. We convert it into ticks
             }
-        }.runTaskTimer(this, 0, 12 * 60 * 60 * 20);
+        }.runTaskTimer(this, 60 * 20, getConfig().getLong("Auto-Update-Interval", 24L) * 60 * 60 * 20);
     }
 
     public static SpigotUpdater getPlugin() {

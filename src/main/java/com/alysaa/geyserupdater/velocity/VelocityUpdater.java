@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.4.0", description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.5.0", description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
 
@@ -56,7 +56,9 @@ public class VelocityUpdater {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         Metrics metrics = metricsFactory.make(this, 10673);
-        // todo: meta version checking and config version checking
+        checkConfigVersion();
+        // todo: meta version checking
+
 
         // Register our only command
         server.getCommandManager().register("geyserupdate", new GeyserUpdateCommand());
@@ -124,6 +126,15 @@ public class VelocityUpdater {
         return new Toml().read(file);
     }
 
+    /**
+     * Check the config version of GeyserUpdater
+     */
+    public void checkConfigVersion() {
+        //Change version number only when editing config.yml!
+        if (!(getConfig().getDouble("Config-Version") == 2)) {
+            logger.warn("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
+        }
+    }
 
     /**
      * Check for a newer version of Geyser every 24hrs
@@ -143,7 +154,8 @@ public class VelocityUpdater {
                         e.printStackTrace();
                     }
                 })
-                .repeat(24L, TimeUnit.HOURS)
+                .delay(1L, TimeUnit.MINUTES)
+                .repeat(getConfig().getLong("Auto-Update-Interval", 24L), TimeUnit.HOURS)
                 .schedule();
     }
 

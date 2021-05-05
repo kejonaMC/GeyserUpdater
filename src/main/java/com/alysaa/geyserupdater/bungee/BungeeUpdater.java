@@ -95,7 +95,7 @@ public final class BungeeUpdater extends Plugin {
      */
     public void checkConfigVersion(){
         //Change version number only when editing config.yml!
-         if (!(configuration.getInt("version") == 1)){
+         if (!(configuration.getInt("Config-Version") == 2)){
             logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
          }
     }
@@ -136,7 +136,7 @@ public final class BungeeUpdater extends Plugin {
                 logger.severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
                 e.printStackTrace();
             }
-        }, 0, 24, TimeUnit.HOURS);
+        }, 1, getConfig().getLong("Auto-Update-Interval", 24L) * 60, TimeUnit.MINUTES);
     }
 
     /**
