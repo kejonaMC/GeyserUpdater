@@ -42,13 +42,12 @@ Please note that for BungeeCord and Velocity, if the server is not shut down cle
 ### `Auto-Update-Geyser`:
 *Default:* `false`  
 
-If enabled, GeyserUpdater will check for a newer version of Geyser on server startup and on an interval specified by the next option. If a newer build exists, it will be downloaded.  
+If enabled, GeyserUpdater will check for new Geyser builds on server start, and on the interval specified by `Auto-Update-Interval`. If a new build exists, it will be downloaded.
 
 ### `Auto-Update-Interval`:
 *Default:* `24`
 
 The interval in hours between each auto update check.
-
 
 ### `Auto-Restart-Server`:
 *Default:* `false`  
@@ -83,6 +82,14 @@ This is the message that is sent to all players when `Auto-Restart-Server` is go
 [Velocity stats](https://bstats.org/plugin/velocity/GeyserUpdater/10673)
 
 ## Release History
+*1.5.0
+    * This update breaks existing configurations. Please rename or delete the old one to generate a new configuration.
+    * Add option to automatically check for updates on a custom interval.
+*1.4.0
+    * Any branch of Geyser that is available on their Jenkins CI can now be updated.
+    * Added support for CraftBukkit.
+    * Added support for non-default Bukkit/Spigot world-containers
+    * Important bugfixes, general increase in quality and better documentation.
 * 1.3.0
     * Added Velocity support.
 * 1.2.0
@@ -116,3 +123,4 @@ The project is owned by:
 
 Special thanks to:
 - [rtm516](https://github.com/rtm516), who helped us with basically everything. Without him, this project wouldn't even have a README.
+- [Karen/あけみ ](https://github.com/akemin-dayo)

@@ -79,6 +79,7 @@ public class GeyserSpigotDownloader {
             e.printStackTrace();
             return false;
         }
+        // todo: make sure we use the update folder defined in bukkit.yml (it can be changed)
         String outputPath = "plugins/update/Geyser-Spigot.jar";
         try {
             FileUtils.downloadFile(fileUrl, outputPath);

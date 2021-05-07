@@ -141,6 +141,7 @@ public class VelocityUpdater {
      */
     public void scheduleAutoUpdate() {
         // Checking for the build numbers of current build.
+        // todo: build this in different way so that we don't repeat it if the Auto-Update-Interval is zero or -1 or something
         server.getScheduler()
                 .buildTask(this, () -> {
                     try {
