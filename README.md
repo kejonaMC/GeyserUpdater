@@ -82,10 +82,10 @@ This is the message that is sent to all players when `Auto-Restart-Server` is go
 [Velocity stats](https://bstats.org/plugin/velocity/GeyserUpdater/10673)
 
 ## Release History
-*1.5.0
+* 1.5.0
     * This update breaks existing configurations. Please rename or delete the old one to generate a new configuration.
     * Add option to automatically check for updates on a custom interval.
-*1.4.0
+* 1.4.0
     * Any branch of Geyser that is available on their Jenkins CI can now be updated.
     * Added support for CraftBukkit.
     * Added support for non-default Bukkit/Spigot world-containers
