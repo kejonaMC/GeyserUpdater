@@ -53,9 +53,11 @@ public class VelocityUpdater {
         this.config = loadConfig(dataDirectory);
         this.metricsFactory = metricsFactory;
     }
+
     @Subscribe
+    @SuppressWarnings("unused")
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        Metrics metrics = metricsFactory.make(this, 10673);
+        metricsFactory.make(this, 10673);
         checkConfigVersion();
         // todo: meta version checking
 
@@ -87,7 +89,9 @@ public class VelocityUpdater {
                 .repeat(12L, TimeUnit.HOURS)
                 .schedule();
     }
+
     @Subscribe(order = PostOrder.LAST)
+    @SuppressWarnings("unused")
     public void onShutdown(ProxyShutdownEvent event) {
         try {
             moveGeyserJar();
