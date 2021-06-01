@@ -14,13 +14,13 @@ waterDir="Waterfall-guDeploy"
 velocityDir="Velocity-guDeploy"
 
 #Links
-guLink="https://ci.alysaa.net/job/GeyserUpdater/job/v1.4.0/lastSuccessfulBuild/artifact/target/GeyserUpdater-1.4.0-SNAPSHOT.jar"
-geyserLink="https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/682/artifact/bootstrap/"
+guLink="https://ci.alysaa.net/job/GeyserUpdater/job/1.5.0/lastSuccessfulBuild/artifact/target/GeyserUpdater-1.5.0-SNAPSHOT.jar"
+geyserLink="https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/700/artifact/bootstrap/"
 
 buildToolsLink="https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
-paperLink="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/631/downloads/paper-1.16.5-631.jar"
+paperLink="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/750/downloads/paper-1.16.5-750.jar"
 bungeeLink="https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/bootstrap/target/BungeeCord.jar"
-waterLink="https://papermc.io/api/v2/projects/waterfall/versions/1.16/builds/413/downloads/waterfall-1.16-413.jar"
+waterLink="https://papermc.io/api/v2/projects/waterfall/versions/1.16/builds/425/downloads/waterfall-1.16-425.jar"
 velocityLink="https://versions.velocitypowered.com/download/1.1.5.jar"
 
 
