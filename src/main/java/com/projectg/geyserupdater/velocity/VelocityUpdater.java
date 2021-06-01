@@ -131,7 +131,7 @@ public class VelocityUpdater {
      */
     public void checkConfigVersion() {
         //Change version number only when editing config.yml!
-        if (!(getConfig().getDouble("Config-Version") == 2)) {
+        if (!(getConfig().getDouble("Config-Version", 0D) == 2)) {
             logger.warn("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
         }
     }

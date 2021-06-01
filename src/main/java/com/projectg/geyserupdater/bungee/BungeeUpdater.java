@@ -95,7 +95,7 @@ public final class BungeeUpdater extends Plugin {
      */
     public void checkConfigVersion(){
         //Change version number only when editing config.yml!
-         if (!(configuration.getInt("Config-Version") == 2)){
+         if (!(configuration.getInt("Config-Version", 0) == 2)){
             logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
          }
     }
