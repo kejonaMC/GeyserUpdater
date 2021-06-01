@@ -96,10 +96,10 @@ public class SpigotUpdater extends JavaPlugin {
      * Check the version of GeyserUpdater against the spigot resource page
      */
     public void checkUpdaterVersion() {
+        String pluginVersion = plugin.getDescription().getVersion();
         new BukkitRunnable() {
             @Override
             public void run() {
-                String pluginVersion = plugin.getDescription().getVersion();
                 String version = SpigotResourceUpdateChecker.getVersion(plugin);
                 if (version == null || version.length() == 0) {
                     logger.severe("Failed to determine the current GeyserUpdater version!");
