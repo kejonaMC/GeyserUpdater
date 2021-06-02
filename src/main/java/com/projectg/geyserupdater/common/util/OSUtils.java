@@ -1,5 +1,7 @@
 package com.projectg.geyserupdater.common.util;
 
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+
 public class OSUtils {
 
     private static boolean isWindows = false;
@@ -19,6 +21,8 @@ public class OSUtils {
         } else if (OS.contains("mac")) {
             isMacos = true;
             isKnownOS = true;
+        } else {
+            UpdaterLogger.getLogger().warn("Operating system is unsupported: " + OS);
         }
         isInitialized = true;
     }

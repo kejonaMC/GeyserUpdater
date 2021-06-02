@@ -3,9 +3,10 @@ package com.projectg.geyserupdater.bungee;
 import com.projectg.geyserupdater.bungee.command.GeyserUpdateCommand;
 import com.projectg.geyserupdater.bungee.listeners.BungeeJoinListener;
 import com.projectg.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
-import com.projectg.geyserupdater.bungee.util.Config;
 import com.projectg.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.projectg.geyserupdater.bungee.util.bstats.Metrics;
+import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.common.util.ScriptCreator;
@@ -23,19 +24,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public final class BungeeUpdater extends Plugin {
 
     private static BungeeUpdater plugin;
     private Configuration configuration;
-    private Logger logger;
+    private UpdaterLogger logger;
 
     @Override
     public void onEnable() {
         plugin = this;
-        logger = plugin.getLogger();
+        logger = new JavaUtilUpdaterLogger(getLogger());
+        if (getConfig().getBoolean("Enable-Debug", false)) {
+            UpdaterLogger.getLogger().enableDebug();
+        }
         new Metrics(this, 10203);
+
         this.loadConfig();
         this.checkConfigVersion();
         // Check GeyserUpdater version
@@ -69,12 +73,13 @@ public final class BungeeUpdater extends Plugin {
 
     public void onDisable() {
         // Force Geyser to disable so we can modify the jar in the plugins folder without issue
+        logger.debug("Forcing Geyser to disable first...");
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         try {
             moveGeyserJar();
             deleteGeyserJar();
         } catch (IOException e) {
-            logger.severe("An I/O error occurred while attempting to update Geyser!");
+            logger.error("An I/O error occurred while attempting to update Geyser!");
             e.printStackTrace();
         }
     }
@@ -96,7 +101,7 @@ public final class BungeeUpdater extends Plugin {
     public void checkConfigVersion(){
         //Change version number only when editing config.yml!
          if (!(configuration.getInt("Config-Version", 0) == 2)){
-            logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
+            logger.error("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
          }
     }
 
@@ -106,9 +111,9 @@ public final class BungeeUpdater extends Plugin {
     public void checkUpdaterVersion() {
         getProxy().getScheduler().runAsync(this, () -> {
             String pluginVersion = getDescription().getVersion();
-            String version = BungeeResourceUpdateChecker.getVersion(plugin);
+            String version = BungeeResourceUpdateChecker.getVersion();
             if (version == null || version.length() == 0) {
-                logger.severe("Failed to determine the current GeyserUpdater version!");
+                logger.error("Failed to determine the current GeyserUpdater version!");
             } else {
                 if (version.equals(pluginVersion)) {
                     logger.info("You are using the latest version of GeyserUpdater!");
@@ -126,6 +131,7 @@ public final class BungeeUpdater extends Plugin {
     public void scheduleAutoUpdate() {
         // todo: build this in different way so that we don't repeat it if the Auto-Update-Interval is zero or -1 or something
         getProxy().getScheduler().schedule(this, () -> {
+            logger.debug("Checking if a new build of Geyser exists.");
             try {
                 // Checking for the build numbers of current build.
                 boolean isLatest = GeyserProperties.isLatestBuild();
@@ -134,7 +140,7 @@ public final class BungeeUpdater extends Plugin {
                     GeyserBungeeDownloader.updateGeyser();
                 }
             } catch (IOException e) {
-                logger.severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
+                logger.error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
                 e.printStackTrace();
             }
         }, 1, getConfig().getLong("Auto-Update-Interval", 24L) * 60, TimeUnit.MINUTES);
@@ -150,6 +156,7 @@ public final class BungeeUpdater extends Plugin {
         // Moving Geyser Jar to Plugins folder "Overwriting".
         File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         if (fileToCopy.exists()) {
+            logger.debug("Moving the new Geyser jar to the plugins folder.");
             FileInputStream input = new FileInputStream(fileToCopy);
             File newFile = new File("plugins/Geyser-BungeeCord.jar");
             FileOutputStream output = new FileOutputStream(newFile);
@@ -160,6 +167,8 @@ public final class BungeeUpdater extends Plugin {
             }
             input.close();
             output.close();
+        } else {
+            logger.debug("Found no new Geyser jar to copy to the plugins folder.");
         }
     }
 
@@ -169,6 +178,7 @@ public final class BungeeUpdater extends Plugin {
      * @throws IOException If it failed to delete
      */
     private void deleteGeyserJar() throws IOException {
+        UpdaterLogger.getLogger().debug("Deleting the Geyser jar in the BuildUpdate folder if it exists");
         Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar");
         Files.deleteIfExists(file);
     }

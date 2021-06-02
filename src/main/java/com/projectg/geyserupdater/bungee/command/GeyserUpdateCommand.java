@@ -1,7 +1,7 @@
 package com.projectg.geyserupdater.bungee.command;
 
-import com.projectg.geyserupdater.bungee.BungeeUpdater;
 import com.projectg.geyserupdater.bungee.util.GeyserBungeeDownloader;
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 
 import net.md_5.bungee.api.ChatColor;
@@ -11,7 +11,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 
 public class GeyserUpdateCommand extends Command {
@@ -27,7 +26,7 @@ public class GeyserUpdateCommand extends Command {
         String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
         String failUpdateCheckMsg = "Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.";
 
-        Logger logger = BungeeUpdater.getPlugin().getLogger();
+        UpdaterLogger logger = UpdaterLogger.getLogger();
 
         if (commandSender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) commandSender;
@@ -56,7 +55,7 @@ public class GeyserUpdateCommand extends Command {
                     GeyserBungeeDownloader.updateGeyser();
                 }
             } catch (IOException e) {
-                logger.severe(failUpdateCheckMsg);
+                logger.error(failUpdateCheckMsg);
                 e.printStackTrace();
             }
         }

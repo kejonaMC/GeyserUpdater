@@ -1,5 +1,7 @@
 package com.projectg.geyserupdater.common.util;
 
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,8 +11,6 @@ import java.util.List;
 
 public class ScriptCreator {
 
-    // todo: make this return a boolean and add a parameter for file extension so that we can process all messages externally
-
     /**
      * Create a restart script for the server, if the OS is supported.
      * If the platform is spigot, the restart-script value in spigot.yml will be set to the created script.
@@ -19,6 +19,8 @@ public class ScriptCreator {
      * @throws IOException If there was a failure checking for an existing script, or creating a new one.
      */
     public static void createRestartScript(boolean runLoop) throws IOException {
+        UpdaterLogger logger = UpdaterLogger.getLogger();
+
         File file;
         String extension;
         if (OSUtils.isWindows()) {
@@ -26,7 +28,7 @@ public class ScriptCreator {
         } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
             extension = "sh";
         } else {
-            System.out.println("[GeyserUpdater] Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
+            logger.warn("Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
             return;
         }
         file = new File("ServerRestartScript." + extension);
@@ -60,9 +62,9 @@ public class ScriptCreator {
                     dos.writeBytes("echo \"Server stopped, restarting in 10 seconds!\"; sleep 10; done\n");
                 }
             }
-            System.out.println("[GeyserUpdater] GeyserUpdater has finished creating a restart script.");
+            logger.info("GeyserUpdater has finished creating a restart script.");
             if (runLoop) {
-                System.out.println("[GeyserUpdater] You will need to shut down and start the server again using the newly-generated script in order for the auto-restart functionality to begin working.");
+                logger.warn("You will need to shut down and start the server again using the newly-generated script in order for the auto-restart functionality to begin working.");
             }
         }
     }

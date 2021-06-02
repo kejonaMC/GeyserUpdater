@@ -19,6 +19,8 @@ Auto-Script-Generating=false
 # Configure the message that is sent to all online players warning them that the server will be restarting in 10 seconds.
 Restart-Message-Players='&2This server will be restarting in 10 seconds!'
 
+# Enable debug logging
+Enable-Debug=false
 
 # Please do not change this version value!
 Config-Version=2

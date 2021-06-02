@@ -1,5 +1,7 @@
 package com.projectg.geyserupdater.spigot;
 
+import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.spigot.command.GeyserUpdateCommand;
@@ -19,17 +21,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 public class SpigotUpdater extends JavaPlugin {
     private static SpigotUpdater plugin;
-    private Logger logger;
 
     @Override
     public void onEnable() {
         plugin = this;
-        logger = getLogger();
+        new JavaUtilUpdaterLogger(getLogger());
+        if (getConfig().getBoolean("Enable-Debug", false)) {
+            UpdaterLogger.getLogger().enableDebug();
+        }
         new Metrics(this, 10202);
+
         loadConfig();
         checkConfigVersion();
         // Check our version
@@ -59,7 +63,7 @@ public class SpigotUpdater extends JavaPlugin {
             @Override
             public void run() {
                 if (FileUtils.checkFile("plugins/update/Geyser-Spigot.jar", false)) {
-                    logger.info("A new Geyser build has been downloaded! Please restart the server in order to use the updated build!");
+                    UpdaterLogger.getLogger().info("A new Geyser build has been downloaded! Please restart the server in order to use the updated build!");
                 }
             }
         }.runTaskTimerAsynchronously(this, 30 * 60 * 20, 12 * 60 * 60 * 20);
@@ -88,7 +92,7 @@ public class SpigotUpdater extends JavaPlugin {
     public void checkConfigVersion() {
         //Change version number only when editing config.yml!
         if (!(getConfig().getInt("Config-Version", 0) == 2)) {
-                logger.warning("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
+            UpdaterLogger.getLogger().warn("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
         }
     }
 
@@ -96,13 +100,14 @@ public class SpigotUpdater extends JavaPlugin {
      * Check the version of GeyserUpdater against the spigot resource page
      */
     public void checkUpdaterVersion() {
+        UpdaterLogger logger = UpdaterLogger.getLogger();
         String pluginVersion = plugin.getDescription().getVersion();
         new BukkitRunnable() {
             @Override
             public void run() {
-                String version = SpigotResourceUpdateChecker.getVersion(plugin);
+                String version = SpigotResourceUpdateChecker.getVersion();
                 if (version == null || version.length() == 0) {
-                    logger.severe("Failed to determine the current GeyserUpdater version!");
+                    logger.error("Failed to determine the current GeyserUpdater version!");
                 } else {
                     if (version.equals(pluginVersion)) {
                         logger.info("You are using the latest version of GeyserUpdater!");
@@ -123,14 +128,15 @@ public class SpigotUpdater extends JavaPlugin {
 
             @Override
             public void run() {
+                UpdaterLogger.getLogger().debug("Checking if a new build of Geyser exists.");
                 try {
                     boolean isLatest = GeyserProperties.isLatestBuild();
                     if (!isLatest) {
-                        getLogger().info("A newer build of Geyser is available! Attempting to download the latest build now...");
+                        UpdaterLogger.getLogger().info("A newer build of Geyser is available! Attempting to download the latest build now...");
                         GeyserSpigotDownloader.updateGeyser();
                     }
                 } catch (IOException e) {
-                    getLogger().severe("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
+                    UpdaterLogger.getLogger().error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
                     e.printStackTrace();
                 }
                 // Auto-Update-Interval is in hours. We convert it into ticks

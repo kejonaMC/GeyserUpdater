@@ -1,6 +1,7 @@
 package com.projectg.geyserupdater.bungee.util;
 
 import com.projectg.geyserupdater.bungee.BungeeUpdater;
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 
@@ -10,11 +11,10 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public class GeyserBungeeDownloader {
     private static BungeeUpdater plugin;
-    private static Logger logger;
+    private static UpdaterLogger logger;
 
     /**
      * Download the latest build of Geyser from Jenkins CI for the currently used branch.
@@ -22,7 +22,9 @@ public class GeyserBungeeDownloader {
      */
     public static void updateGeyser() {
         plugin = BungeeUpdater.getPlugin();
-        logger = plugin.getLogger();
+        logger = UpdaterLogger.getLogger();
+
+        UpdaterLogger.getLogger().debug("Attempting to download a new build of Geyser.");
 
         // New task so that we don't block the main thread. All new tasks on bungeecord are async.
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
@@ -60,7 +62,7 @@ public class GeyserBungeeDownloader {
         try {
             fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar";
         } catch (IOException e) {
-            logger.severe("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
+            logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
             e.printStackTrace();
             return false;
         }
@@ -68,13 +70,13 @@ public class GeyserBungeeDownloader {
         try {
             FileUtils.downloadFile(fileUrl, outputPath);
         } catch (IOException e) {
-            logger.severe("Failed to download the newest build of Geyser");
+            logger.error("Failed to download the newest build of Geyser");
             e.printStackTrace();
             return false;
         }
 
         if (!FileUtils.checkFile(outputPath, false)) {
-            logger.severe("Failed to find the downloaded Geyser build!");
+            logger.error("Failed to find the downloaded Geyser build!");
             return false;
         } else {
             return true;
@@ -85,7 +87,7 @@ public class GeyserBungeeDownloader {
      * Attempt to restart the server
      */
     private static void restartServer() {
-        logger.warning("The server will be restarting in 10 seconds!");
+        logger.warn("The server will be restarting in 10 seconds!");
         for (ProxiedPlayer player : plugin.getProxy().getPlayers()) {
             player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players"))));
         }

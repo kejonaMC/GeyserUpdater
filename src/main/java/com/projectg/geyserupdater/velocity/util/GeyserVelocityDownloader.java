@@ -1,5 +1,6 @@
 package com.projectg.geyserupdater.velocity.util;
 
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.velocity.VelocityUpdater;
@@ -10,15 +11,13 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 
-import org.slf4j.Logger;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class GeyserVelocityDownloader {
     private static VelocityUpdater plugin;
     private static ProxyServer server;
-    private static Logger logger;
+    private static UpdaterLogger logger;
 
     /**
      * Download the latest build of Geyser from Jenkins CI for the currently used branch.
@@ -27,7 +26,9 @@ public class GeyserVelocityDownloader {
     public static void updateGeyser() {
         plugin = VelocityUpdater.getPlugin();
         server = plugin.getProxyServer();
-        logger = plugin.getLogger();
+        logger = UpdaterLogger.getLogger();
+
+        UpdaterLogger.getLogger().debug("Attempting to download a new build of Geyser.");
 
         // New task so that we don't block the main thread. All new tasks on velocity are async.
         plugin.getProxyServer().getScheduler().buildTask(plugin, () -> {

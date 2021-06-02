@@ -1,5 +1,7 @@
 package com.projectg.geyserupdater.common.util;
 
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,15 +33,20 @@ public class FileUtils {
      * @return true if the file exists, false if not
      */
     public static boolean checkFile(String path, boolean allowCached) {
+        UpdaterLogger logger = UpdaterLogger.getLogger();
         if (allowCached) {
             long elapsedTime = System.currentTimeMillis() - callTime;
             if (elapsedTime < 30 * 60 * 1000) {
+                logger.debug("Returning a cached result of the last time we checked if a file exists. The cached result is: " + cachedResult);
                 return cachedResult;
+            } else {
+                logger.debug("Not returning a cached result of the last time we checked if a file exists because it has been too long.");
             }
         }
         Path p = Paths.get(path);
         boolean exists = Files.exists(p);
 
+        logger.debug("Checked if a file exists. The result: " + exists);
         callTime = System.currentTimeMillis();
         cachedResult = exists;
         return exists;
@@ -53,6 +60,8 @@ public class FileUtils {
      */
     public static void downloadFile(String fileURL, String outputPath) throws IOException {
         // TODO: better download code?
+
+        UpdaterLogger.getLogger().debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
 
         Path outputDirectory = Paths.get(outputPath).getParent();
         Files.createDirectories(outputDirectory);

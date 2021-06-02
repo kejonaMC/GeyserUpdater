@@ -1,22 +1,21 @@
 package com.projectg.geyserupdater.spigot.util;
 
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.OSUtils;
 import com.projectg.geyserupdater.common.util.ScriptCreator;
-import com.projectg.geyserupdater.spigot.SpigotUpdater;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 public class CheckSpigotRestart {
     /**
      * Run {@link ScriptCreator#createRestartScript(boolean)} if an existing restart script is not defined in spigot.yml
      */
     public static void checkYml() {
-        Logger logger = SpigotUpdater.getPlugin().getLogger();
+        UpdaterLogger logger = UpdaterLogger.getLogger();
         // Do this early just as a check
         String scriptName;
         if (OSUtils.isWindows()) {
@@ -24,7 +23,7 @@ public class CheckSpigotRestart {
         } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
             scriptName = "./ServerRestartScript.sh";
         } else {
-            logger.warning("Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
+            logger.warn("Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
             return;
         }
         FileConfiguration spigotConfigurationYamlFile = YamlConfiguration.loadConfiguration(new File(new File("").getAbsolutePath(), "spigot.yml"));
@@ -48,8 +47,8 @@ public class CheckSpigotRestart {
                 e.printStackTrace();
                 return;
             }
-            logger.warning("The config value 'restart-script' in spigot.yml has been set to " + scriptName);
-            logger.warning("You must restart the server in order for the restart functionality to work!");
+            logger.warn("The config value 'restart-script' in spigot.yml has been set to " + scriptName);
+            logger.warn("You must restart the server in order for the restart functionality to work!");
         }
     }
 }

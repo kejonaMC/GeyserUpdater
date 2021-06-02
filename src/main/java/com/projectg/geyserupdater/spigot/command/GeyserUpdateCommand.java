@@ -1,7 +1,7 @@
 package com.projectg.geyserupdater.spigot.command;
 
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
-import com.projectg.geyserupdater.spigot.SpigotUpdater;
 import com.projectg.geyserupdater.spigot.util.GeyserSpigotDownloader;
 
 import org.bukkit.ChatColor;
@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 public class GeyserUpdateCommand implements CommandExecutor {
 
@@ -26,7 +25,7 @@ public class GeyserUpdateCommand implements CommandExecutor {
         String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
         String failUpdateCheckMsg = "Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.";
 
-        Logger logger = SpigotUpdater.getPlugin().getLogger();
+        UpdaterLogger logger = UpdaterLogger.getLogger();
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -42,7 +41,7 @@ public class GeyserUpdateCommand implements CommandExecutor {
                     }
                 } catch (IOException e) {
                     sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + failUpdateCheckMsg);
-                    logger.severe(failUpdateCheckMsg);
+                    logger.error(failUpdateCheckMsg);
                     e.printStackTrace();
                 }
             }
@@ -57,7 +56,7 @@ public class GeyserUpdateCommand implements CommandExecutor {
                     GeyserSpigotDownloader.updateGeyser();
                 }
             } catch (IOException e) {
-                logger.severe(failUpdateCheckMsg);
+                logger.error(failUpdateCheckMsg);
                 e.printStackTrace();
             }
         } else {

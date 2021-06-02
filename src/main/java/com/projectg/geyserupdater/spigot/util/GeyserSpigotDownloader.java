@@ -1,5 +1,6 @@
 package com.projectg.geyserupdater.spigot.util;
 
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.spigot.SpigotUpdater;
@@ -12,11 +13,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.logging.Logger;
 
 public class GeyserSpigotDownloader {
     private static SpigotUpdater plugin;
-    private static Logger logger;
+    private static UpdaterLogger logger;
 
     /**
      * Download the latest build of Geyser from Jenkins CI for the currently used branch.
@@ -24,7 +24,9 @@ public class GeyserSpigotDownloader {
      */
     public static void updateGeyser() {
         plugin = SpigotUpdater.getPlugin();
-        logger = plugin.getLogger();
+        logger = UpdaterLogger.getLogger();
+
+        UpdaterLogger.getLogger().debug("Attempting to download a new build of Geyser.");
 
         boolean doRestart = plugin.getConfig().getBoolean("Auto-Restart-Server");
 
@@ -52,7 +54,7 @@ public class GeyserSpigotDownloader {
                             }
                         } else {
                             // fail messages are already sent to the logger in downloadGeyser()
-                            String failMsg = "A severe error occurred when download a new build of Geyser. Please check the server console for further information!";
+                            String failMsg = "A error(); error occurred when download a new build of Geyser. Please check the server console for further information!";
                             for (Player player : Bukkit.getOnlinePlayers()) {
                                 if (player.hasPermission("gupdater.geyserupdate")) {
                                     player.sendMessage(ChatColor.RED + failMsg);
@@ -75,7 +77,7 @@ public class GeyserSpigotDownloader {
         try {
             fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar";
         } catch (IOException e) {
-            logger.severe("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
+            logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
             e.printStackTrace();
             return false;
         }
@@ -84,13 +86,13 @@ public class GeyserSpigotDownloader {
         try {
             FileUtils.downloadFile(fileUrl, outputPath);
         } catch (IOException e) {
-            logger.severe("Failed to download the newest build of Geyser");
+            logger.error("Failed to download the newest build of Geyser");
             e.printStackTrace();
             return false;
         }
 
         if (!FileUtils.checkFile(outputPath, false)) {
-            logger.severe("Failed to find the downloaded Geyser build!");
+            logger.error("Failed to find the downloaded Geyser build!");
             return false;
         } else {
             return true;
@@ -101,7 +103,7 @@ public class GeyserSpigotDownloader {
      * Attempt to restart the server
      */
     private static void restartServer() {
-        logger.warning("The server will be restarting in 10 seconds!");
+        logger.warn("The server will be restarting in 10 seconds!");
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players")));
         }
@@ -114,7 +116,7 @@ public class GeyserSpigotDownloader {
                     try {
                         spigotServer = SpigotUpdater.getPlugin().getServer().getClass().getMethod("spigot").invoke(SpigotUpdater.getPlugin().getServer());
                     } catch (NoSuchMethodException e) {
-                        SpigotUpdater.getPlugin().getLogger().severe("You are not running Spigot (or a fork of it, such as Paper)! GeyserUpdater cannot automatically restart your server!");
+                        logger.error("You are not running Spigot (or a fork of it, such as Paper)! GeyserUpdater cannot automatically restart your server!");
                         e.printStackTrace();
                         return;
                     }
@@ -122,10 +124,10 @@ public class GeyserSpigotDownloader {
                     restartMethod.setAccessible(true);
                     restartMethod.invoke(spigotServer);
                 } catch (NoSuchMethodException e) {
-                    logger.severe("Your server version is too old to be able to be automatically restarted!");
+                    logger.error("Your server version is too old to be able to be automatically restarted!");
                     e.printStackTrace();
                 } catch (InvocationTargetException | IllegalAccessException e) {
-                    logger.severe("Failed to restart the server!");
+                    logger.error("Failed to restart the server!");
                     e.printStackTrace();
                 }
             }

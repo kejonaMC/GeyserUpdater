@@ -1,6 +1,6 @@
 package com.projectg.geyserupdater.spigot.util;
 
-import com.projectg.geyserupdater.spigot.SpigotUpdater;
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -15,10 +15,9 @@ public class SpigotResourceUpdateChecker {
 
     /**
      * Get the latest version of GeyserUpdater from the spigot resource page
-     * @param updater plugin instance
      * @return the latest version, if successful. Will return null if there was a failure.
      */
-    public static String getVersion(SpigotUpdater updater) {
+    public static String getVersion() {
         // todo: use the better and easier api
 
         try (InputStream inputStream = new URL("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=88555").openStream(); Scanner scanner = new Scanner(inputStream)) {
@@ -29,7 +28,7 @@ public class SpigotResourceUpdateChecker {
             JsonObject jsonObject = JsonParser.parseString(total.toString()).getAsJsonObject();
             return jsonObject.get("current_version").getAsString();
         } catch (IOException exception) {
-            updater.getLogger().severe("Failed to check for updates: " + exception.getMessage());
+            UpdaterLogger.getLogger().error("Failed to check for updates: " + exception.getMessage());
             return null;
         }
     }
