@@ -14,8 +14,8 @@ waterDir="Waterfall-guDeploy"
 velocityDir="Velocity-guDeploy"
 
 #Links
-guLink="https://ci.alysaa.net/job/GeyserUpdater/job/1.5.0/lastSuccessfulBuild/artifact/target/GeyserUpdater-1.5.0-SNAPSHOT.jar"
-geyserLink="https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/682/artifact/bootstrap/"
+guLink="https://ci.projectg.dev/job/GeyserUpdater/job/1.5.0/lastSuccessfulBuild/artifact/target/GeyserUpdater-1.5.0-SNAPSHOT.jar"
+geyserLink="https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/700/artifact/bootstrap/"
 
 buildToolsLink="https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
 paperLink="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/631/downloads/paper-1.16.5-631.jar"
@@ -71,7 +71,9 @@ getAllPlugins () {
   echo "Auto-Update-Geyser: true
 Auto-Restart-Server: true
 Restart-Message-Players: '&2This server will be restarting in 10 seconds!'
-Auto-Script-Generating: true" > config.yml
+Auto-Script-Generating: true
+Enable-Debug: true
+Config-Version: 2" > config.yml
   cd ../
   echo
   echo "[INFO] Downloading Geyser-Spigot.jar"
@@ -85,7 +87,9 @@ Auto-Script-Generating: true" > config.yml
   echo "Auto-Update-Geyser: true
 Auto-Restart-Server: true
 Restart-Message-Players: '&2This server will be restarting in 10 seconds!'
-Auto-Script-Generating: true" > config.yml
+Auto-Script-Generating: true
+Enable-Debug: true
+Config-Version: 2" > config.yml
   cd ../
   echo
   echo "[INFO] Downloading Geyser-BungeeCord.jar"
@@ -99,7 +103,9 @@ Auto-Script-Generating: true" > config.yml
   echo "Auto-Update-Geyser=true
 Auto-Restart-Server=true
 Restart-Message-Players='&2This server will be restarting in 10 seconds!'
-Auto-Script-Generating=true" > config.toml
+Auto-Script-Generating=true
+Enable-Debug=true
+Config-Version=2" > config.toml
   cd ../
   echo
   echo "[INFO] Downloading Geyser-Velocity"
