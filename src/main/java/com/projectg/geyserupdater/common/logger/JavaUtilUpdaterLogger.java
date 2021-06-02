@@ -10,7 +10,6 @@ public final class JavaUtilUpdaterLogger implements UpdaterLogger {
     public JavaUtilUpdaterLogger(Logger logger) {
         this.logger = logger;
         UpdaterLogger.setLogger(this);
-
     }
 
     @Override
@@ -42,12 +41,14 @@ public final class JavaUtilUpdaterLogger implements UpdaterLogger {
     public void enableDebug() {
         originLevel = logger.getLevel();
         logger.setLevel(Level.ALL);
+        info("Debug logging enabled");
     }
 
     @Override
     public void disableDebug() {
         if (originLevel != null) {
             logger.setLevel(originLevel);
+            info("Debug logging disabled");
         }
     }
 

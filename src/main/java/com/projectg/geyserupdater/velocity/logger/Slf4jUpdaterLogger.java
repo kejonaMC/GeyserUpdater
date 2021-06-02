@@ -43,6 +43,7 @@ public final class Slf4jUpdaterLogger implements UpdaterLogger {
     public void enableDebug() {
         if (!logger.isDebugEnabled()) {
             Configurator.setLevel(logger.getName(), Level.DEBUG);
+            info("Debug logging enabled");
         }
     }
 
@@ -50,6 +51,7 @@ public final class Slf4jUpdaterLogger implements UpdaterLogger {
     public void disableDebug() {
         if (logger.isDebugEnabled()) {
             Configurator.setLevel(logger.getName(), Level.INFO);
+            info("Debug logging disabled");
         }
     }
 

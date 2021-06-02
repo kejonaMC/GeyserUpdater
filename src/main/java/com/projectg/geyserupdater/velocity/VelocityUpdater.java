@@ -61,6 +61,7 @@ public class VelocityUpdater {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         new Slf4jUpdaterLogger(baseLogger);
         if (getConfig().getBoolean("Enable-Debug", false)) {
+            UpdaterLogger.getLogger().info("Trying to enable debug logging.");
             UpdaterLogger.getLogger().enableDebug();
         }
         metricsFactory.make(this, 10673);

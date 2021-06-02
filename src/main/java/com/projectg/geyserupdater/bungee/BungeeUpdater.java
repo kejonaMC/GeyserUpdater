@@ -36,6 +36,7 @@ public final class BungeeUpdater extends Plugin {
         plugin = this;
         logger = new JavaUtilUpdaterLogger(getLogger());
         if (getConfig().getBoolean("Enable-Debug", false)) {
+            UpdaterLogger.getLogger().info("Trying to enable debug logging.");
             UpdaterLogger.getLogger().enableDebug();
         }
         new Metrics(this, 10203);
