@@ -19,7 +19,7 @@ If you'd like, click [here](https://discord.gg/xXzzdAXa2b) to join our Discord s
 
 Please download the plugin from [our Spigot page](https://www.spigotmc.org/resources/geyserupdater.88555/), so we can get an idea of how many people are downloading the plugin.
 
-If you don't want to use the Spigot website, you can download the plugin from [our CI](https://ci.alysaa.net/job/GeyserUpdater/job/main), or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
+If you don't want to use the Spigot website, you can download the plugin from [our CI](https://ci.projectg.dev/job/GeyserUpdater/job/main), or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
 
 ## Installation
 
@@ -123,4 +123,4 @@ The project is owned by:
 
 Special thanks to:
 - [rtm516](https://github.com/rtm516), who helped us with basically everything. Without him, this project wouldn't even have a README.
-- [Karen/あけみ ](https://github.com/akemin-dayo)
+- [Karen/あけみ ](https://github.com/akemin-dayo), for their work in 1.4.0
