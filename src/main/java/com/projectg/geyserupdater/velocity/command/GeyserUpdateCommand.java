@@ -1,7 +1,6 @@
 package com.projectg.geyserupdater.velocity.command;
 
 import com.projectg.geyserupdater.common.util.GeyserProperties;
-import com.projectg.geyserupdater.velocity.VelocityUpdater;
 import com.projectg.geyserupdater.velocity.util.GeyserVelocityDownloader;
 
 import com.velocitypowered.api.command.CommandSource;
@@ -9,12 +8,10 @@ import com.velocitypowered.api.command.RawCommand;
 
 import net.kyori.adventure.text.Component;
 
-import org.slf4j.Logger;
-
 import java.io.IOException;
 
 public class GeyserUpdateCommand implements RawCommand {
-    // TODO make sure command blocks can't run this command
+
     @Override
     public void execute(final Invocation invocation) {
 
@@ -24,7 +21,6 @@ public class GeyserUpdateCommand implements RawCommand {
         String failUpdateCheckMsg = "Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.";
 
         CommandSource source = invocation.source();
-        Logger logger = VelocityUpdater.getPlugin().getLogger();
 
         try {
             source.sendMessage(Component.text(checkMsg));

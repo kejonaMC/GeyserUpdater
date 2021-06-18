@@ -57,7 +57,6 @@ public class VelocityUpdater {
     }
 
     @Subscribe
-    @SuppressWarnings("unused")
     public void onProxyInitialization(ProxyInitializeEvent event) {
         new Slf4jUpdaterLogger(baseLogger);
         if (getConfig().getBoolean("Enable-Debug", false)) {
@@ -98,9 +97,10 @@ public class VelocityUpdater {
     }
 
     @Subscribe(order = PostOrder.LAST)
-    @SuppressWarnings("unused")
     public void onShutdown(ProxyShutdownEvent event) {
-        // todo: do we need to force geyser to shutdown before us?
+        if (server.getPluginManager().isLoaded("geyser")) {
+            throw new UnsupportedOperationException("Cannot shutdown GeyserUpdater before Geyser has shutdown! No updates will be applied.");
+        }
         try {
             moveGeyserJar();
             deleteGeyserJar();
