@@ -1,6 +1,7 @@
 package com.projectg.geyserupdater.bungee.command;
 
 import com.projectg.geyserupdater.bungee.util.GeyserBungeeDownloader;
+import com.projectg.geyserupdater.common.Messages;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 
@@ -20,42 +21,37 @@ public class GeyserUpdateCommand extends Command {
     }
 
     public void execute(CommandSender commandSender, String[] args) {
-
-        String checkMsg = "Checking for updates to Geyser...";
-        String latestMsg = "You are using the latest build of Geyser!";
-        String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
-        String failUpdateCheckMsg = "Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.";
-
         UpdaterLogger logger = UpdaterLogger.getLogger();
 
         if (commandSender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) commandSender;
             try {
-                player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + checkMsg));
+                player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + Messages.Command.CHECK_START));
                 boolean isLatest = GeyserProperties.isLatestBuild();
                 if (isLatest) {
-                    player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + latestMsg));
+                    player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + Messages.Command.LATEST));
                 } else {
-                    player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + outdatedMsg));
+                    player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + Messages.Command.OUTDATED));
                     GeyserBungeeDownloader.updateGeyser();
                 }
             } catch (IOException e) {
-                player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + failUpdateCheckMsg));
+                player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + Messages.Command.FAIL_CHECK));
+                logger.error(Messages.Command.FAIL_CHECK);
                 e.printStackTrace();
             }
         } else {
             // TODO: filter this against command blocks
             try {
-                logger.info(checkMsg);
+                logger.info(Messages.Command.CHECK_START);
                 boolean isLatest = GeyserProperties.isLatestBuild();
                 if (isLatest) {
-                    logger.info(latestMsg);
+                    logger.info(Messages.Command.LATEST);
                 } else {
-                    logger.info(outdatedMsg);
+                    logger.info(Messages.Command.OUTDATED);
                     GeyserBungeeDownloader.updateGeyser();
                 }
             } catch (IOException e) {
-                logger.error(failUpdateCheckMsg);
+                logger.error(Messages.Command.FAIL_CHECK);
                 e.printStackTrace();
             }
         }

@@ -1,5 +1,6 @@
 package com.projectg.geyserupdater.velocity.command;
 
+import com.projectg.geyserupdater.common.Messages;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.velocity.util.GeyserVelocityDownloader;
 
@@ -14,25 +15,19 @@ public class GeyserUpdateCommand implements RawCommand {
 
     @Override
     public void execute(final Invocation invocation) {
-
-        String checkMsg = "Checking for updates to Geyser...";
-        String latestMsg = "You are using the latest build of Geyser!";
-        String outdatedMsg = "A newer build of Geyser is available! Attempting to download the latest build now...";
-        String failUpdateCheckMsg = "Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.";
-
         CommandSource source = invocation.source();
 
         try {
-            source.sendMessage(Component.text(checkMsg));
+            source.sendMessage(Component.text(Messages.Command.CHECK_START));
             boolean isLatest = GeyserProperties.isLatestBuild();
             if (isLatest) {
-                source.sendMessage(Component.text(latestMsg));
+                source.sendMessage(Component.text(Messages.Command.LATEST));
             } else {
-                source.sendMessage(Component.text(outdatedMsg));
+                source.sendMessage(Component.text(Messages.Command.OUTDATED));
                 GeyserVelocityDownloader.updateGeyser();
             }
         } catch (IOException e) {
-            source.sendMessage(Component.text(failUpdateCheckMsg));
+            source.sendMessage(Component.text(Messages.Command.FAIL_CHECK));
             e.printStackTrace();
         }
     }

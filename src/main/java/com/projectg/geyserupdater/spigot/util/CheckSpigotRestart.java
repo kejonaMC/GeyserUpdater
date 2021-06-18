@@ -1,7 +1,7 @@
 package com.projectg.geyserupdater.spigot.util;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
-import com.projectg.geyserupdater.common.util.OSUtils;
+import com.projectg.geyserupdater.common.util.OsUtils;
 import com.projectg.geyserupdater.common.util.ScriptCreator;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,9 +18,9 @@ public class CheckSpigotRestart {
         UpdaterLogger logger = UpdaterLogger.getLogger();
         // Do this early just as a check
         String scriptName;
-        if (OSUtils.isWindows()) {
+        if (OsUtils.isWindows()) {
             scriptName = "ServerRestartScript.bat";
-        } else if (OSUtils.isLinux() || OSUtils.isMacos()) {
+        } else if (OsUtils.isLinux() || OsUtils.isMacos()) {
             scriptName = "./ServerRestartScript.sh";
         } else {
             logger.warn("Your operating system is not supported! GeyserUpdater only supports automatic script creation for Linux, macOS, and Windows.");
