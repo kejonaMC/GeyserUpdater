@@ -15,7 +15,7 @@ velocityDir="Velocity-guDeploy"
 
 #Links
 guLink="https://ci.projectg.dev/job/GeyserUpdater/job/1.5.0/lastSuccessfulBuild/artifact/target/GeyserUpdater-1.5.0-SNAPSHOT.jar"
-geyserLink="https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/700/artifact/bootstrap/"
+geyserLink="https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/720/artifact/bootstrap/"
 
 buildToolsLink="https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
 paperLink="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/750/downloads/paper-1.16.5-750.jar"
@@ -55,19 +55,19 @@ find . -name "*-guDeploy" -exec rm -r {} +
 # Download all plugins and cache them in a folder
 getAllPlugins () {
   mkdir "$pluginCache"
-  cd "$pluginCache"
+  cd "$pluginCache" || exit
 
   mkdir Common
-  cd Common
+  cd Common || exit
   echo
   echo "[INFO] Downloading GeyserUpdater"
   download "$guLink"
   cd ../
 
   mkdir "Spigot"
-  cd "Spigot"
+  cd "Spigot" || exit
   mkdir "GeyserUpdater"
-  cd "GeyserUpdater"
+  cd "GeyserUpdater" || exit
   echo "Auto-Update-Geyser: true
 Auto-Restart-Server: true
 Restart-Message-Players: '&2This server will be restarting in 10 seconds!'
@@ -81,9 +81,9 @@ Config-Version: 2" > config.yml
   cd ../
 
   mkdir BungeeCord
-  cd BungeeCord
+  cd BungeeCord || exit
   mkdir GeyserUpdater
-  cd GeyserUpdater
+  cd GeyserUpdater || exit
   echo "Auto-Update-Geyser: true
 Auto-Restart-Server: true
 Restart-Message-Players: '&2This server will be restarting in 10 seconds!'
@@ -97,9 +97,9 @@ Config-Version: 2" > config.yml
   cd ../
 
   mkdir "Velocity"
-  cd "Velocity"
+  cd "Velocity" || exit
   mkdir "geyserupdater"
-  cd "geyserupdater"
+  cd "geyserupdater" || exit
   echo "Auto-Update-Geyser=true
 Auto-Restart-Server=true
 Restart-Message-Players='&2This server will be restarting in 10 seconds!'
@@ -131,7 +131,7 @@ deploySpigot () {
       rm -r "$buildTools"
     fi
     mkdir "$buildTools"
-    cd "$buildTools"
+    cd "$buildTools" || exit
     echo "[INFO] Downloading BuildTools"
     download "$buildToolsLink"
     # unset core.autocrlf according to BuildTools docs
@@ -147,14 +147,14 @@ deploySpigot () {
 
   mkdir "$spigotDir"
   cp "$buildTools"/spigot*.jar "$spigotDir"
-  cd "$spigotDir"
+  cd "$spigotDir" || exit
   echo "eula=true" >> eula.txt
 
   mkdir "plugins"
   cd ../
   cp -r "$pluginCache"/Common/* "$spigotDir"/plugins
   cp -r "$pluginCache"/Spigot/* "$spigotDir"/plugins
-  cd "$spigotDir"
+  cd "$spigotDir" || exit
 
   java -Xmx2G -jar spigot-*.jar nogui
   cd ../
@@ -164,7 +164,7 @@ deployPaper () {
   echo; echo; echo; echo
   echo "[INFO] Deploying PaperMC..."
   mkdir "$paperDir"
-  cd "$paperDir"
+  cd "$paperDir" || exit
   echo "[INFO] Downloading PaperMC"
   download "$paperLink"
   echo "eula=true" >> eula.txt
@@ -173,7 +173,7 @@ deployPaper () {
   cd ../
   cp -r "$pluginCache"/Common/* "$paperDir"/plugins
   cp -r "$pluginCache"/Spigot/* "$paperDir"/plugins
-  cd "$paperDir"
+  cd "$paperDir" || exit
 
   java -Xmx2G -jar paper*.jar nogui
   cd ../
@@ -183,7 +183,7 @@ deployBungeecord () {
   echo; echo; echo; echo
   echo "[INFO] Deploying BungeeCord"
   mkdir "$bungeeDir"
-  cd "$bungeeDir"
+  cd "$bungeeDir" || exit
   echo "[INFO] Downloading BungeeCord"
   download "$bungeeLink"
 
@@ -191,7 +191,7 @@ deployBungeecord () {
   cd ../
   cp -r "$pluginCache"/Common/* "$bungeeDir"/plugins
   cp -r "$pluginCache"/BungeeCord/* "$bungeeDir"/plugins
-  cd "$bungeeDir"
+  cd "$bungeeDir" || exit
 
   java -Xmx512M -jar BungeeCord.jar nogui
   cd ../
@@ -201,7 +201,7 @@ deployWaterfall () {
   echo; echo; echo; echo
   echo "[INFO] Deploying Waterfall..."
   mkdir "$waterDir"
-  cd "$waterDir"
+  cd "$waterDir" || exit
   echo "[INFO] Downloading Waterfall"
   download "$waterLink"
 
@@ -209,7 +209,7 @@ deployWaterfall () {
   cd ../
   cp -r "$pluginCache"/Common/* "$waterDir"/plugins
   cp -r "$pluginCache"/BungeeCord/* "$waterDir"/plugins
-  cd "$waterDir"
+  cd "$waterDir" || exit
 
   java -Xmx512M -jar waterfall*.jar nogui
   cd ../
@@ -219,7 +219,7 @@ deployVelocity () {
   echo; echo; echo; echo
   echo "[INFO] Deploying Velocity"
   mkdir "$velocityDir"
-  cd "$velocityDir"
+  cd "$velocityDir" || exit
   echo "[INFO] Downloading Velocity"
   download "$velocityLink"
 
@@ -227,14 +227,14 @@ deployVelocity () {
   cd ../
   cp -r "$pluginCache"/Common/* "$velocityDir"/plugins
   cp -r "$pluginCache"/Velocity/* "$velocityDir"/plugins
-  cd "$velocityDir"
+  cd "$velocityDir" || exit
 
   java -Xmx512M -jar ./*.jar nogui
   cd ../
 }
 
 getAllPlugins
-deploySpigot
+# deploySpigot
 deployPaper
 deployBungeecord
 deployWaterfall
