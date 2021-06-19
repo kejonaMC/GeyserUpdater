@@ -2,7 +2,6 @@ package com.projectg.geyserupdater.bungee;
 
 import com.projectg.geyserupdater.bungee.command.GeyserUpdateCommand;
 import com.projectg.geyserupdater.bungee.listeners.BungeeJoinListener;
-import com.projectg.geyserupdater.bungee.util.BungeeResourceUpdateChecker;
 import com.projectg.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.projectg.geyserupdater.bungee.util.bstats.Metrics;
 import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
@@ -11,6 +10,7 @@ import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.common.util.ScriptCreator;
 
+import com.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -113,14 +113,14 @@ public final class BungeeUpdater extends Plugin {
     public void checkUpdaterVersion() {
         getProxy().getScheduler().runAsync(this, () -> {
             String pluginVersion = getDescription().getVersion();
-            String version = BungeeResourceUpdateChecker.getVersion();
-            if (version == null || version.length() == 0) {
-                logger.error("Failed to determine the current GeyserUpdater version!");
+            String latestVersion = SpigotResourceUpdateChecker.getVersion();
+            if (latestVersion == null || latestVersion.length() == 0) {
+                logger.error("Failed to determine the latest GeyserUpdater version!");
             } else {
-                if (version.equals(pluginVersion)) {
+                if (latestVersion.equals(pluginVersion)) {
                     logger.info("You are using the latest version of GeyserUpdater!");
                 } else {
-                    logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+                    logger.info("Your version: " + pluginVersion + ". Latest version: "  + latestVersion + ". Download the newer version at https://www.spigotmc.org/resources/geyserupdater.88555/.");
                 }
             }
 

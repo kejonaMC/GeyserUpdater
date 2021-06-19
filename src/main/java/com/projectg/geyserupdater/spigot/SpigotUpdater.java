@@ -8,7 +8,7 @@ import com.projectg.geyserupdater.spigot.command.GeyserUpdateCommand;
 import com.projectg.geyserupdater.spigot.listeners.SpigotJoinListener;
 import com.projectg.geyserupdater.spigot.util.CheckSpigotRestart;
 import com.projectg.geyserupdater.spigot.util.GeyserSpigotDownloader;
-import com.projectg.geyserupdater.spigot.util.SpigotResourceUpdateChecker;
+import com.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;
 import com.projectg.geyserupdater.spigot.util.bstats.Metrics;
 
 import org.bukkit.Bukkit;
@@ -107,14 +107,14 @@ public class SpigotUpdater extends JavaPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String version = SpigotResourceUpdateChecker.getVersion();
-                if (version == null || version.length() == 0) {
-                    logger.error("Failed to determine the current GeyserUpdater version!");
+                String latestVersion = SpigotResourceUpdateChecker.getVersion();
+                if (latestVersion == null || latestVersion.length() == 0) {
+                    logger.error("Failed to determine the latest GeyserUpdater version!");
                 } else {
-                    if (version.equals(pluginVersion)) {
+                    if (latestVersion.equals(pluginVersion)) {
                         logger.info("You are using the latest version of GeyserUpdater!");
                     } else {
-                        logger.info("There is a new update available for GeyserUpdater! Download it now at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+                        logger.info("Your version: " + pluginVersion + ". Latest version: "  + latestVersion + ". Download the newer version at https://www.spigotmc.org/resources/geyserupdater.88555/.");
                     }
                 }
             }
