@@ -35,13 +35,14 @@ public final class BungeeUpdater extends Plugin {
     public void onEnable() {
         plugin = this;
         logger = new JavaUtilUpdaterLogger(getLogger());
+        new Metrics(this, 10203);
+
+        this.loadConfig();
         if (getConfig().getBoolean("Enable-Debug", false)) {
             UpdaterLogger.getLogger().info("Trying to enable debug logging.");
             UpdaterLogger.getLogger().enableDebug();
         }
-        new Metrics(this, 10203);
 
-        this.loadConfig();
         this.checkConfigVersion();
         // Check GeyserUpdater version
         this.checkUpdaterVersion();

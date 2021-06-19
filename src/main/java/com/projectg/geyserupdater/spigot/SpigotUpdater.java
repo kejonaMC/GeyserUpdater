@@ -29,13 +29,14 @@ public class SpigotUpdater extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         new JavaUtilUpdaterLogger(getLogger());
+        new Metrics(this, 10202);
+
+        loadConfig();
         if (getConfig().getBoolean("Enable-Debug", false)) {
             UpdaterLogger.getLogger().info("Trying to enable debug logging.");
             UpdaterLogger.getLogger().enableDebug();
         }
-        new Metrics(this, 10202);
 
-        loadConfig();
         checkConfigVersion();
         // Check our version
         checkUpdaterVersion();
