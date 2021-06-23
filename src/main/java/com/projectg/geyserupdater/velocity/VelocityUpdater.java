@@ -120,11 +120,11 @@ public class VelocityUpdater {
     private Toml loadConfig(Path path) {
         File folder = path.toFile();
         File file = new File(folder, "config.toml");
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
-        }
 
         if (!file.exists()) {
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
             try (InputStream input = getClass().getResourceAsStream("/" + file.getName())) {
                 if (input != null) {
                     Files.copy(input, file.toPath());
@@ -144,7 +144,7 @@ public class VelocityUpdater {
      */
     public void checkConfigVersion() {
         //Change version number only when editing config.yml!
-        if (getConfig().getDouble("Config-Version", 0D) != 2) {
+        if (getConfig().getLong("Config-Version", 0L).compareTo(2L) != 0) {
             UpdaterLogger.getLogger().warn("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
         }
     }
