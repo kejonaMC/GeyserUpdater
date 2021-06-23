@@ -101,7 +101,7 @@ public class VelocityUpdater {
     @Subscribe(order = PostOrder.LAST)
     public void onShutdown(ProxyShutdownEvent event) {
         // This test isn't ideal but it'll work for now
-        if (GeyserConnector.getInstance() != null) {
+        if (!GeyserConnector.getInstance().getBedrockServer().isClosed()) {
             throw new UnsupportedOperationException("Cannot shutdown GeyserUpdater before Geyser has shutdown! No updates will be applied.");
         }
         try {

@@ -73,6 +73,7 @@ public final class BungeeUpdater extends Plugin {
 
     }
 
+    @Override
     public void onDisable() {
         // Force Geyser to disable so we can modify the jar in the plugins folder without issue
         logger.debug("Forcing Geyser to disable first...");
