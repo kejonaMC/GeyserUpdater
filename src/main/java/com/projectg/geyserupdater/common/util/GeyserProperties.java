@@ -1,5 +1,6 @@
 package com.projectg.geyserupdater.common.util;
 
+import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import org.geysermc.connector.utils.FileUtils;
 import org.geysermc.connector.utils.WebUtils;
 
@@ -21,6 +22,7 @@ public class GeyserProperties {
      * @throws IOException if it fails to fetch either build number
      */
     public static boolean isLatestBuild() throws IOException {
+        UpdaterLogger.getLogger().debug("Running isLatestBuild()");
         int jenkinsBuildNumber = getLatestGeyserBuildNumberFromJenkins(getGeyserGitPropertiesValue("git.branch"));
         int localBuildNumber = Integer.parseInt(getGeyserGitPropertiesValue("git.build.number"));
         // Compare build numbers.
@@ -36,6 +38,7 @@ public class GeyserProperties {
      * @throws IOException if failed to load the Geyser git properties
      */
     public static String getGeyserGitPropertiesValue(String propertyKey) throws IOException {
+        UpdaterLogger.getLogger().debug("Running getGeyserGitPropertiesValue()");
         Properties gitProperties = new Properties();
         gitProperties.load(FileUtils.getResource("git.properties"));
         return gitProperties.getProperty(propertyKey);
@@ -48,6 +51,7 @@ public class GeyserProperties {
      * @throws UnsupportedEncodingException if failed to encode the given gitBranch
      */
     public static int getLatestGeyserBuildNumberFromJenkins(String gitBranch) throws UnsupportedEncodingException {
+        UpdaterLogger.getLogger().debug("Running getLatestGeyserBuildNumberFromJenkins()");
         String buildXMLContents = WebUtils.getBody("https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitBranch, StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
         return Integer.parseInt(buildXMLContents.replaceAll("<(\\\\)?(/)?buildNumber>", "").trim());
     }

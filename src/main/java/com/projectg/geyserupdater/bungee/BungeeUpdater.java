@@ -132,6 +132,7 @@ public final class BungeeUpdater extends Plugin {
      * Check for a newer version of Geyser every 24hrs
      */
     public void scheduleAutoUpdate() {
+        UpdaterLogger.getLogger().debug("Scheduling auto updater");
         // todo: build this in different way so that we don't repeat it if the Auto-Update-Interval is zero or -1 or something
         getProxy().getScheduler().schedule(this, () -> {
             logger.debug("Checking if a new build of Geyser exists.");
