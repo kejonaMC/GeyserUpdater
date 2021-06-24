@@ -80,9 +80,23 @@ public final class BungeeUpdater extends Plugin {
         getProxy().getPluginManager().getPlugin("Geyser-BungeeCord").onDisable();
         try {
             moveGeyserJar();
-            deleteGeyserJar();
+            for (int i = 0; i <= 2; i++) {
+                try {
+                    deleteGeyserJar();
+                    break;
+                } catch (IOException ioException) {
+                    logger.warn("An I/O error occurred while attempting to delete an unnecessary Geyser jar! Trying again " + (2 - i) + " more times.");
+                    ioException.printStackTrace();
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException interruptException) {
+                        logger.error("Failed to delay an additional attempt!");
+                        interruptException.printStackTrace();
+                    }
+                }
+            }
         } catch (IOException e) {
-            logger.error("An I/O error occurred while attempting to update Geyser!");
+            logger.error("An I/O error occurred while attempting to replace the current Geyser jar with the new one!");
             e.printStackTrace();
         }
     }
