@@ -1,8 +1,8 @@
 ### If you want to contribute to GeyserUpdater, please ask in our [Discord](https://discord.gg/xXzzdAXa2b) to find out which branch would be best to make changes to.
 
-- To clone the repo, run `git clone https://github.com/YHDiamond/GeyserUpdater.git` in your command line or terminal.
+- To clone the repo, run `git clone https://github.com/ProjectG-Plugins/GeyserUpdater.git` in your command line or terminal.
 
-- You can build locally and install dependencies using maven. Use `mvn clean install` to install all required dependencies, and `mvn clean package` to build. The built jar will be located in the target folder.
+- You can build locally and install dependencies using maven. Use `mvn clean install` to install all required dependencies and compile the jar. The built jar will be located in the target folder.
 
 Please follow the guidelines below for any code you wish to contribute, we are always open for PRs!
 

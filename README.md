@@ -3,7 +3,7 @@
 [![bStats Spigot](https://img.shields.io/bstats/servers/10202?color=yellow&label=Spigot%20servers)](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
 [![bStats Bungee](https://img.shields.io/bstats/servers/10203?label=Bungee%20servers)](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
 [![bStats Velocity](https://img.shields.io/bstats/servers/10673?color=purple&label=Velocity%20servers)](https://bstats.org/plugin/velocity/GeyserUpdater/10673)
-[![Discord](https://img.shields.io/discord/806179549498966058?color=7289da&label=discord&logo=discord&logoColor=white)](https://discord.gg/xXzzdAXa2b)
+[![Discord](https://img.shields.io/discord/806179549498966058?color=7289da&label=discord&logo=discord&logoColor=white)](https://discord.gg/gkU5AwGpJg)
 [![Spigot page downloads](https://img.shields.io/spiget/downloads/88555?color=yellow&label=Spigot%20page%20downloads)](https://www.spigotmc.org/resources/geyserupdater.88555/)
 [![Spigot reviews](https://img.shields.io/spiget/stars/88555?color=yellow&label=Spigot%20rating)](https://www.spigotmc.org/resources/geyserupdater.88555/)
 
@@ -42,10 +42,14 @@ Please note that for BungeeCord and Velocity, if the server is not shut down cle
 ### `Auto-Update-Geyser`:
 *Default:* `false`  
 
-If enabled, GeyserUpdater will check for a newer version of Geyser on server startup and every 24 hours thereafter. If a newer build exists, it will be downloaded.  
+If enabled, GeyserUpdater will check for new Geyser builds on server start, and on the interval specified by `Auto-Update-Interval`. If a new build exists, it will be downloaded.
+
+### `Auto-Update-Interval`:
+*Default:* `24`
+
+The interval in hours between each auto update check.
 
 ### `Auto-Restart-Server`:
-
 *Default:* `false`  
 
 If enabled, GeyserUpdater will attempt to restart the server 10 seconds after a new version of Geyser has been successfully downloaded. 
@@ -55,7 +59,6 @@ If enabled, GeyserUpdater will attempt to restart the server 10 seconds after a 
 - **BungeeCord/Velocity:** The server will simply stop. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a `systemd` unit (or similar) to run the server, your proxy should automatically restart. If not, you can use a script to *start* the proxy that will make it start again once it has stopped. 
 
 ### `Auto-Script-Generating`:
-
 *Default:* `false`  
 
 Do not use this if you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a `systemd` unit (or similar) to run your server.
@@ -67,7 +70,6 @@ When enabled, a restart script named `ServerRestartScript.sh` (macOS, Linux) or 
 - **BungeeCord/Velocity:** You must use the generated script to start the proxy. This will make the server restart after it has stopped. 
 
 ### `Restart-Message-Players`:
-
 *Default:* `'&2This server will be restarting in 10 seconds!'`  
 
 This is the message that is sent to all players when `Auto-Restart-Server` is going to restart the server in 10 seconds. 
@@ -80,6 +82,14 @@ This is the message that is sent to all players when `Auto-Restart-Server` is go
 [Velocity stats](https://bstats.org/plugin/velocity/GeyserUpdater/10673)
 
 ## Release History
+* 1.5.0
+    * This update breaks existing configurations. Please rename or delete the old one to generate a new configuration.
+    * Add option to automatically check for updates on a custom interval.
+* 1.4.0
+    * Any branch of Geyser that is available on their Jenkins CI can now be updated.
+    * Added support for CraftBukkit.
+    * Added support for non-default Bukkit/Spigot world-containers
+    * Important bugfixes, general increase in quality and better documentation.
 * 1.3.0
     * Added Velocity support.
 * 1.2.0
@@ -108,10 +118,9 @@ This is the message that is sent to all players when `Auto-Restart-Server` is go
 ## Meta
 
 The project is owned by:
-- [Jens](https://github.com/Jens-Co)
-- [YHDiamond](https://github.com/YHDiamond)
+- [ProjectG](https://github.com/ProjectG-Plugins)
 </br>
 
 Special thanks to:
-- [rtm516](https://github.com/rtm516), who helped us with basically everything. Without him, this project wouldn't even have a README.  
-- [Konica](https://github.com/Konicai), who did a lot of work on the updater code.
+- [rtm516](https://github.com/rtm516), who helped us with basically everything. Without him, this project wouldn't even have a README.
+- [Karen/あけみ ](https://github.com/akemin-dayo), for their work in 1.4.0
