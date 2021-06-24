@@ -85,6 +85,8 @@ This is the message that is sent to all players when `Auto-Restart-Server` is go
 * 1.5.0
     * This update breaks existing configurations. Please rename or delete the old one to generate a new configuration.
     * Add option to automatically check for updates on a custom interval.
+    * Add debug logger config option.
+    * All warn and error log messages are now coloured correctly (if the platform supports it).
 * 1.4.0
     * Any branch of Geyser that is available on their Jenkins CI can now be updated.
     * Added support for CraftBukkit.
