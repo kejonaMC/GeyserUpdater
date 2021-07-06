@@ -128,7 +128,7 @@ public final class BungeeUpdater extends Plugin {
     public void checkUpdaterVersion() {
         getProxy().getScheduler().runAsync(this, () -> {
             String pluginVersion = getDescription().getVersion();
-            String latestVersion = SpigotResourceUpdateChecker.getVersion();
+            String latestVersion = SpigotResourceUpdateChecker.getVersion(88555);
             if (latestVersion == null || latestVersion.length() == 0) {
                 logger.error("Failed to determine the latest GeyserUpdater version!");
             } else {

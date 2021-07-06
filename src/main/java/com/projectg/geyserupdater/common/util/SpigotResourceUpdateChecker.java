@@ -9,15 +9,15 @@ import java.util.Scanner;
 
 public class SpigotResourceUpdateChecker {
 
-    private static final String VERSION_REGEX = "(\\d+.){1,2}\\d+";
+    private static final String VERSION_REGEX = "(\\d+.){1,2}\\d+(-SNAPSHOT){0,1}";
 
     /**
      * Get the latest version of GeyserUpdater from the spigot resource page
      * @return the latest version, null if there was an error.
      */
-    public static String getVersion() {
+    public static String getVersion(int resourceId) {
 
-        try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=88555").openStream(); Scanner scanner = new Scanner(inputStream)) {
+        try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
             StringBuilder builder = new StringBuilder();
             while (scanner.hasNext()) {
                 builder.append(scanner.next());
