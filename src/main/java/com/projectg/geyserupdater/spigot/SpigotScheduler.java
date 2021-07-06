@@ -1,6 +1,6 @@
 package com.projectg.geyserupdater.spigot;
 
-import com.projectg.geyserupdater.common.UpdaterScheduler;
+import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 

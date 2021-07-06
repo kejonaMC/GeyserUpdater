@@ -1,6 +1,6 @@
 package com.projectg.geyserupdater.bungee;
 
-import com.projectg.geyserupdater.common.UpdaterScheduler;
+import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 

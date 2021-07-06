@@ -1,6 +1,6 @@
 package com.projectg.geyserupdater.velocity;
 
-import com.projectg.geyserupdater.common.UpdaterScheduler;
+import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;

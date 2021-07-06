@@ -1,4 +1,4 @@
-package com.projectg.geyserupdater.common;
+package com.projectg.geyserupdater.common.scheduler;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
