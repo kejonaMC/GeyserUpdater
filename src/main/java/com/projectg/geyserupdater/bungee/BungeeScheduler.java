@@ -18,8 +18,8 @@ public class BungeeScheduler implements UpdaterScheduler {
     }
 
     @Override
-    public void schedule(@NotNull Runnable runnable, boolean async, long delay, long repeat) {
+    public void schedule(@NotNull Runnable runnable, boolean async, long delay, long repeat, TimeUnit unit) {
         Objects.requireNonNull(runnable);
-        plugin.getProxy().getScheduler().schedule(plugin, runnable, delay, repeat, TimeUnit.MILLISECONDS);
+        plugin.getProxy().getScheduler().schedule(plugin, runnable, delay, repeat, unit);
     }
 }

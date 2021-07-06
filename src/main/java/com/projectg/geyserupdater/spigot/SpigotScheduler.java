@@ -2,10 +2,12 @@ package com.projectg.geyserupdater.spigot;
 
 import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class SpigotScheduler implements UpdaterScheduler {
 
@@ -17,12 +19,22 @@ public class SpigotScheduler implements UpdaterScheduler {
     }
 
     @Override
-    public void schedule(@NotNull Runnable runnable, boolean async, long delay, long repeat) {
+    public void schedule(@NotNull Runnable runnable, boolean async, long delay, long repeat, TimeUnit unit) {
         Objects.requireNonNull(runnable);
-        if (async) {
-            plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, runnable, delay * 50, repeat * 50); // multiply by 50 for milliseconds -> ticks
+
+        BukkitScheduler scheduler = plugin.getServer().getScheduler();
+        if (repeat <= 0) {
+            if (async) {
+                scheduler.runTaskLaterAsynchronously(plugin, runnable, unit.toSeconds(delay) * 20); // 20 ticks in a second
+            } else {
+                scheduler.runTaskLater(plugin, runnable, unit.toSeconds(delay) * 20);
+            }
         } else {
-            plugin.getServer().getScheduler().runTaskTimer(plugin, runnable, delay * 50, repeat * 50);
+            if (async) {
+                scheduler.runTaskTimerAsynchronously(plugin, runnable, unit.toSeconds(delay) * 20, unit.toSeconds(repeat) * 20);
+            } else {
+                scheduler.runTaskTimer(plugin, runnable, unit.toSeconds(delay) * 20, unit.toSeconds(repeat) * 20);
+            }
         }
     }
 }

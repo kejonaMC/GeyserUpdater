@@ -17,11 +17,11 @@ public class VelocityScheduler implements UpdaterScheduler {
     }
 
     @Override
-    public void schedule(@NotNull Runnable runnable, boolean async, long delay, long repeat) {
+    public void schedule(@NotNull Runnable runnable, boolean async, long delay, long repeat, TimeUnit unit) {
         Objects.requireNonNull(runnable);
         this.plugin.getProxyServer().getScheduler().buildTask(plugin, runnable)
-                .delay(delay, TimeUnit.MILLISECONDS)
-                .repeat(repeat, TimeUnit.MILLISECONDS)
+                .delay(delay, unit)
+                .repeat(repeat, unit)
                 .schedule();
     }
 }
