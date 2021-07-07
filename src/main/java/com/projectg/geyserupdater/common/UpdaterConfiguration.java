@@ -49,4 +49,8 @@ public class UpdaterConfiguration {
     public int getConfigVersion() {
         return configVersion;
     }
+
+    public boolean isIncorrectVersion() {
+        return getConfigVersion() != DEFAULT_CONFIG_VERSION;
+    }
 }

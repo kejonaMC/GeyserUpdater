@@ -42,7 +42,7 @@ public class GeyserVelocityDownloader {
                         player.sendMessage(Component.text(successMsg).color(TextColor.fromHexString("55FF55")));
                     }
                 }
-                if (plugin.getConfig().getBoolean("Auto-Restart-Server")) {
+                if (plugin.getConfig().isRestartServer()) {
                     restartServer();
                 }
             } else {
@@ -93,7 +93,7 @@ public class GeyserVelocityDownloader {
     private static void restartServer() {
         logger.warn("The server will be restarting in 10 seconds!");
         for (Player player : server.getAllPlayers()) {
-            player.sendMessage(Component.text(plugin.getConfig().getString("Restart-Message-Players")));
+            player.sendMessage(Component.text(plugin.getConfig().getRestartMessage()));
         }
         server.getScheduler()
                 .buildTask(plugin, server::shutdown)

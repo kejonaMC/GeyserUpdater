@@ -1,5 +1,8 @@
 package com.projectg.geyserupdater.common.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.projectg.geyserupdater.common.UpdaterConfiguration;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 
 import java.io.FileOutputStream;
@@ -11,6 +14,7 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 public class FileUtils {
     // TODO: this whole cached thing only works if you're using checkFile for one file...
@@ -85,6 +89,17 @@ public class FileUtils {
         // close streams
         is.close();
         os.close();
+    }
+
+    public static UpdaterConfiguration getConfig(Path userConfig, InputStream defaultConfig) throws IOException {
+        if (!Files.exists(userConfig)) {
+            //Files.createDirectories(userConfig.getParent()); todo: necessary?
+            Objects.requireNonNull(defaultConfig);
+            Files.copy(defaultConfig, userConfig);
+        }
+
+        ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+        return yamlMapper.readValue(userConfig.toFile(), UpdaterConfiguration.class);
     }
 }
 
