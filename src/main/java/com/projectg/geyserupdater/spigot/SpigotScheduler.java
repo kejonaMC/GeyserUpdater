@@ -20,6 +20,9 @@ public class SpigotScheduler implements UpdaterScheduler {
 
     @Override
     public void schedule(@NotNull Runnable runnable, boolean async, long delay, long repeat, TimeUnit unit) {
+        // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/browse/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
+        // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/browse/src/main/java/org/bukkit/craftbukkit/scheduler/CraftTask.java
+
         Objects.requireNonNull(runnable);
 
         BukkitScheduler scheduler = plugin.getServer().getScheduler();

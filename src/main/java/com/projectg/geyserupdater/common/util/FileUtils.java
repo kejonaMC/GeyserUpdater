@@ -2,13 +2,10 @@ package com.projectg.geyserupdater.common.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.projectg.geyserupdater.common.UpdaterConfiguration;
+import com.projectg.geyserupdater.common.config.UpdaterConfiguration;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -91,11 +88,13 @@ public class FileUtils {
         os.close();
     }
 
-    public static UpdaterConfiguration getConfig(Path userConfig, InputStream defaultConfig) throws IOException {
+    public static UpdaterConfiguration loadConfig(Path userConfig) throws IOException {
         if (!Files.exists(userConfig)) {
             //Files.createDirectories(userConfig.getParent()); todo: necessary?
-            Objects.requireNonNull(defaultConfig);
-            Files.copy(defaultConfig, userConfig);
+            try (InputStream inputStream = FileUtils.class.getResourceAsStream("/config.yml")) {
+                Objects.requireNonNull(inputStream);
+                Files.copy(inputStream, userConfig);
+            }
         }
 
         ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());

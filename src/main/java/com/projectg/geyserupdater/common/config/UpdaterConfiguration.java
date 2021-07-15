@@ -1,4 +1,4 @@
-package com.projectg.geyserupdater.common;
+package com.projectg.geyserupdater.common.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,6 +30,9 @@ public class UpdaterConfiguration {
     private boolean generateRestartScript = false;
     public boolean isGenerateRestartScript() {
         return generateRestartScript;
+    }
+    public void setGenerateRestartScript(boolean generate) {
+        generateRestartScript = generate;
     }
 
     @JsonProperty(value = "Restart-Message-Players", required = true)

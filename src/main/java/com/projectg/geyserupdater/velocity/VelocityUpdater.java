@@ -1,18 +1,15 @@
 package com.projectg.geyserupdater.velocity;
 
-import com.projectg.geyserupdater.common.UpdaterConfiguration;
+import com.projectg.geyserupdater.common.GeyserUpdater;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
-import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
-import com.projectg.geyserupdater.common.util.ScriptCreator;
 import com.projectg.geyserupdater.velocity.command.GeyserUpdateCommand;
 import com.projectg.geyserupdater.velocity.listeners.VelocityJoinListener;
 import com.projectg.geyserupdater.velocity.logger.Slf4jUpdaterLogger;
-import com.projectg.geyserupdater.velocity.util.GeyserVelocityDownloader;
 import com.projectg.geyserupdater.velocity.util.bstats.Metrics;
 
 import com.google.inject.Inject;
 
+import com.velocitypowered.api.plugin.PluginContainer;
 import org.geysermc.connector.GeyserConnector;
 import org.slf4j.Logger;
 
@@ -32,7 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.TimeUnit;
+import java.util.Optional;
 
 @Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.5.0", description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
@@ -41,7 +38,6 @@ public class VelocityUpdater {
     private static VelocityUpdater plugin;
     private final ProxyServer server;
     private final Path dataDirectory;
-    private final UpdaterConfiguration config;
     private final Metrics.Factory metricsFactory;
 
     @Inject
@@ -51,50 +47,34 @@ public class VelocityUpdater {
         this.dataDirectory = folder;
         this.metricsFactory = metricsFactory;
 
-        new Slf4jUpdaterLogger(baseLogger);
-
-        config = FileUtils.getConfig(dataDirectory.resolve("config.yml"), this.getClass().getResourceAsStream("/config.yml"));
-        if (config.isIncorrectVersion()) {
-            throw new RuntimeException("Your copy of config.yml is outdated! Please delete it and let a fresh copy of config.yml be regenerated!");
+        String version = null;
+        Optional<PluginContainer> geyserUpdater = server.getPluginManager().getPlugin("geyserupdater");
+        if (geyserUpdater.isPresent()) {
+            if (geyserUpdater.get().getDescription().getVersion().isPresent()) {
+                version = geyserUpdater.get().getDescription().getVersion().get();
+            }
         }
 
-        if (getConfig().isEnableDebug()) {
-            UpdaterLogger.getLogger().enableDebug();
-        }
+        new GeyserUpdater(
+                dataDirectory,
+                new Slf4jUpdaterLogger(baseLogger),
+                new VelocityScheduler(this),
+                new VelocityPlayerHandler(server),
+                false,
+                true,
+                version
+        );
     }
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         metricsFactory.make(this, 10673);
 
-        // todo: meta version checking
-
         // Register our only command
         server.getCommandManager().register("geyserupdate", new GeyserUpdateCommand());
         // Player alert if a restart is required when they join
         server.getEventManager().register(this, new VelocityJoinListener());
 
-        // Make startup script if enabled
-        if (config.isGenerateRestartScript()) {
-            try {
-                ScriptCreator.createRestartScript(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        // Auto update Geyser if enabled in the config
-        if (config.isAutoUpdate()) {
-            scheduleAutoUpdate();
-        }
-        // Check if downloaded Geyser file exists periodically
-        server.getScheduler()
-                .buildTask(this, () -> {
-                    FileUtils.checkFile("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar", true);
-                    UpdaterLogger.getLogger().info("A new Geyser build has been downloaded! Please restart Velocity in order to use the updated build!");
-                })
-                .delay(30L, TimeUnit.MINUTES)
-                .repeat(12L, TimeUnit.HOURS)
-                .schedule();
     }
 
     @Subscribe(order = PostOrder.LAST)
@@ -127,32 +107,6 @@ public class VelocityUpdater {
     }
 
     /**
-     * Check for a newer version of Geyser every 24hrs
-     */
-    public void scheduleAutoUpdate() {
-        UpdaterLogger.getLogger().debug("Scheduling auto updater");
-        // Checking for the build numbers of current build.
-        // todo: build this in different way so that we don't repeat it if the Auto-Update-Interval is zero or -1 or something
-        server.getScheduler()
-                .buildTask(this, () -> {
-                    UpdaterLogger.getLogger().debug("Checking if a new build of Geyser exists.");
-                    try {
-                        boolean isLatest = GeyserProperties.isLatestBuild();
-                        if (!isLatest) {
-                            UpdaterLogger.getLogger().info("A newer build of Geyser is available! Attempting to download the latest build now...");
-                            GeyserVelocityDownloader.updateGeyser();
-                        }
-                    } catch (IOException e) {
-                        UpdaterLogger.getLogger().error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
-                        e.printStackTrace();
-                    }
-                })
-                .delay(1L, TimeUnit.MINUTES)
-                .repeat(getConfig().getAutoUpdateInterval(), TimeUnit.HOURS)
-                .schedule();
-    }
-
-    /**
      * Replace the Geyser jar in the plugin folder with the one in GeyserUpdater/BuildUpdate
      * Should only be called once Geyser has been disabled
      *
@@ -160,11 +114,11 @@ public class VelocityUpdater {
      */
     public void moveGeyserJar() throws IOException {
         // Moving Geyser Jar to Plugins folder "Overwriting".
-        File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar");
+        File fileToCopy = new File("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar"); //todo: improve
         if (fileToCopy.exists()) {
             UpdaterLogger.getLogger().debug("Moving the new Geyser jar to the plugins folder.");
             FileInputStream input = new FileInputStream(fileToCopy);
-            File newFile = new File("plugins/Geyser-Velocity.jar");
+            File newFile = new File("plugins/Geyser-Velocity.jar"); //todo: improve
             FileOutputStream output = new FileOutputStream(newFile);
             byte[] buf = new byte[1024];
             int bytesRead;
@@ -185,7 +139,7 @@ public class VelocityUpdater {
      */
     private void deleteGeyserJar() throws IOException {
         UpdaterLogger.getLogger().debug("Deleting the Geyser jar in the BuildUpdate folder if it exists");
-        Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar");
+        Path file = Paths.get("plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar"); //todo: improve
         Files.deleteIfExists(file);
     }
 
@@ -194,12 +148,6 @@ public class VelocityUpdater {
     }
     public ProxyServer getProxyServer() {
         return server;
-    }
-    public Path getDataDirectory() {
-        return dataDirectory;
-    }
-    public UpdaterConfiguration getConfig() {
-        return config;
     }
 }
 
