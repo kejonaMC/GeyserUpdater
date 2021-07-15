@@ -3,6 +3,7 @@ main: com.projectg.geyserupdater.spigot.SpigotUpdater
 version: ${project.version}
 depend: [Geyser-Spigot]
 description: Automatically or manually downloads new builds of Geyser and applies them on server restart.
+api-version: 1.13
 
 commands:
   geyserupdate:
