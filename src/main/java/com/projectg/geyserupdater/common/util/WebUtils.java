@@ -105,9 +105,9 @@ public class WebUtils {
      * @return the latest build number
      * @throws UnsupportedEncodingException if failed to encode the given gitBranch
      */
-    public static int getLatestGeyserBuildNumberFromJenkins(String gitBranch) throws UnsupportedEncodingException {
+    public static int getLatestGeyserBuildNumberFromJenkins(String branchLink) throws UnsupportedEncodingException {
         // todo use json
-        String buildXMLContents = WebUtils.getBody("https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + URLEncoder.encode(gitBranch, StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
+        String buildXMLContents = WebUtils.getBody(URLEncoder.encode(branchLink, StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
         return Integer.parseInt(buildXMLContents.replaceAll("<(\\\\)?(/)?buildNumber>", "").trim());
     }
 }

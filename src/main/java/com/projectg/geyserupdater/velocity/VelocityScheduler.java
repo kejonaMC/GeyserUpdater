@@ -1,7 +1,6 @@
 package com.projectg.geyserupdater.velocity;
 
 import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -17,10 +16,11 @@ public class VelocityScheduler implements UpdaterScheduler {
     }
 
     @Override
-    public void schedule(@NotNull Runnable runnable, boolean async, long delay, long repeat, TimeUnit unit) {
+    public void schedule(@Nonnull Runnable runnable, boolean async, long delay, long repeat, @Nonnull TimeUnit unit) {
         // https://github.com/VelocityPowered/Velocity/blob/dev/3.0.0/proxy/src/main/java/com/velocitypowered/proxy/scheduler/VelocityScheduler.java
 
         Objects.requireNonNull(runnable);
+        Objects.requireNonNull(unit);
 
         this.plugin.getProxyServer().getScheduler().buildTask(plugin, runnable)
                 .delay(delay, unit)

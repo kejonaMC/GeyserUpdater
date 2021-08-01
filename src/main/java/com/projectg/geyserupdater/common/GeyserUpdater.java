@@ -3,6 +3,8 @@ package com.projectg.geyserupdater.common;
 import com.projectg.geyserupdater.common.config.UpdaterConfiguration;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
+import com.projectg.geyserupdater.common.update.PluginId;
+import com.projectg.geyserupdater.common.update.UpdateManager;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.ScriptCreator;
 import com.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;
@@ -22,8 +24,15 @@ public class GeyserUpdater {
 
     private UpdaterConfiguration config;
 
-    public GeyserUpdater(Path dataFolder, UpdaterLogger logger, UpdaterScheduler scheduler, PlayerHandler playerHandler,
-                         boolean ignoreRestartScriptOption, boolean loopRestartScript, String version) throws IOException {
+    public GeyserUpdater(Path dataFolder,
+                         UpdaterLogger logger,
+                         UpdaterScheduler scheduler,
+                         PlayerHandler playerHandler,
+                         boolean ignoreRestartScriptOption,
+                         boolean loopRestartScript,
+                         String version,
+                         String geyserArtifact,
+                         String floodgateArtifact) throws IOException {
         this.logger = logger;
         this.scheduler  = scheduler;
         this.playerHandler = playerHandler;
@@ -64,17 +73,11 @@ public class GeyserUpdater {
         if (config.isGenerateRestartScript()) {
             try {
                 logger.debug("Attempting to create restart script");
-                ScriptCreator.createRestartScript(true);
+                ScriptCreator.createRestartScript(loopRestartScript);
             } catch (IOException e) {
                 logger.error("Error while creating restart script:");
                 e.printStackTrace();
             }
-        }
-
-        // Load all the data what we are updating
-        UpdateManager updateManager = new UpdateManager();
-        for (PluginId pluginId : PluginId.values()) {
-            updateManager.add(pluginId);
         }
     }
 

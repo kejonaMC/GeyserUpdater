@@ -6,6 +6,8 @@
 
 # If enabled, GeyserUpdater will check for new Geyser builds on server start, and on the interval specified by Auto-Update-Interval. If a new build exists, it will be downloaded.
 Auto-Update-Geyser: false
+Auto-Update-Floodgate: false
+
 # The interval in hours between each auto update check.
 Auto-Update-Interval: 24
 

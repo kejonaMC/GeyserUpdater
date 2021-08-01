@@ -9,9 +9,15 @@ public class UpdaterConfiguration {
     public static int DEFAULT_CONFIG_VERSION = 2;
 
     @JsonProperty(value = "Auto-Update-Geyser", required = true)
-    private boolean autoUpdate = false;
-    public boolean isAutoUpdate() {
-        return autoUpdate;
+    private boolean autoUpdateGeyser = false;
+    public boolean isAutoUpdateGeyser() {
+        return autoUpdateGeyser;
+    }
+
+    @JsonProperty(value = "Auto-Update-Floodgate", required = true)
+    private boolean autoUpdateFloodgate = false;
+    public boolean isAutoUpdateFloodgate() {
+        return autoUpdateFloodgate;
     }
 
     @JsonProperty(value = "Auto-Update-Interval", required = true)

@@ -1,18 +1,12 @@
 package com.projectg.geyserupdater.velocity;
 
+import com.google.inject.Inject;
 import com.projectg.geyserupdater.common.GeyserUpdater;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.velocity.command.GeyserUpdateCommand;
 import com.projectg.geyserupdater.velocity.listeners.VelocityJoinListener;
 import com.projectg.geyserupdater.velocity.logger.Slf4jUpdaterLogger;
 import com.projectg.geyserupdater.velocity.util.bstats.Metrics;
-
-import com.google.inject.Inject;
-
-import com.velocitypowered.api.plugin.PluginContainer;
-import org.geysermc.connector.GeyserConnector;
-import org.slf4j.Logger;
-
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -21,6 +15,8 @@ import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import org.geysermc.connector.GeyserConnector;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,31 +25,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.5.0", description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = VelocityUpdater.VERSION, description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
 
-    private static VelocityUpdater plugin;
+    public static final String VERSION = "1.6.0";
+    private static VelocityUpdater PLUGIN;
+
     private final ProxyServer server;
     private final Path dataDirectory;
     private final Metrics.Factory metricsFactory;
 
     @Inject
     public VelocityUpdater(ProxyServer server, Logger baseLogger, @DataDirectory final Path folder, Metrics.Factory metricsFactory) throws IOException {
-        VelocityUpdater.plugin = this;
+        VelocityUpdater.PLUGIN = this;
         this.server  = server;
         this.dataDirectory = folder;
         this.metricsFactory = metricsFactory;
-
-        String version = null;
-        Optional<PluginContainer> geyserUpdater = server.getPluginManager().getPlugin("geyserupdater");
-        if (geyserUpdater.isPresent()) {
-            if (geyserUpdater.get().getDescription().getVersion().isPresent()) {
-                version = geyserUpdater.get().getDescription().getVersion().get();
-            }
-        }
 
         new GeyserUpdater(
                 dataDirectory,
@@ -62,7 +51,9 @@ public class VelocityUpdater {
                 new VelocityPlayerHandler(server),
                 false,
                 true,
-                version
+                VERSION,
+                "/artifact/bootstrap/velocity/target/Geyser-Velocity.jar",
+                "/artifact/velocity/target/floodgate-velocity.jar"
         );
     }
 
@@ -144,7 +135,7 @@ public class VelocityUpdater {
     }
 
     public static VelocityUpdater getPlugin() {
-        return plugin;
+        return PLUGIN;
     }
     public ProxyServer getProxyServer() {
         return server;
