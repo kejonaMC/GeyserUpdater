@@ -46,6 +46,7 @@ public class VelocityUpdater {
 
         new GeyserUpdater(
                 dataDirectory,
+                dataDirectory.resolve("BuildUpdate"),
                 new Slf4jUpdaterLogger(baseLogger),
                 new VelocityScheduler(this),
                 new VelocityPlayerHandler(server),

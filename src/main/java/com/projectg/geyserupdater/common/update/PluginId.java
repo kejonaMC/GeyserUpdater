@@ -9,18 +9,45 @@ public enum PluginId {
     /**
      * https://ci.opencollab.dev/job/GeyserMC/job/{PLUGIN_PAGE}/job/
      */
-    public final String link;
+    private final String projectLink;
+
+    private String branch;
+    private String artifactLink;
 
     /**
      * A class from the given plugin
      */
-    public final String pluginClassName;
+    private final String pluginClassName;
 
     PluginId(String link, String pluginClassName) {
-        this.link = link;
+        this.projectLink = link;
         this.pluginClassName = pluginClassName;
     }
 
+    /**
+     * @return The download link. Not usable if {@link PluginId#setArtifact(String)} has not been called.
+     */
+    public String getLatestFileLink() {
+        return projectLink + branch + "/lastSuccessfulBuild/" + artifactLink;
+    }
+
+    /**
+     * @param branch The branch to be used for {@link PluginId#getLatestFileLink()}
+     */
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    /**
+     * @param artifactLink The artifact link. `artifact/bootstrap/spigot/target/Geyser-Spigot.jar` for example.
+     */
+    public void setArtifact(String artifactLink) {
+        this.artifactLink = artifactLink;
+    }
+
+    /**
+     * @return A class from the plugin. Will throw an {@link AssertionError} if the class is not available, i.e. the plugin is not loaded.
+     */
     public Class<?> getPluginClass() {
         try {
             return Class.forName(pluginClassName);
@@ -29,6 +56,9 @@ public enum PluginId {
         }
     }
 
+    /**
+     * @return True if the plugin is enabled in {@link com.projectg.geyserupdater.common.config.UpdaterConfiguration}
+     */
     public boolean isEnabled() {
         if (this == GEYSER) {
             return GeyserUpdater.getInstance().getConfig().isAutoUpdateGeyser();

@@ -10,7 +10,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 // Full credit to GeyserMC
@@ -55,13 +55,14 @@ public class WebUtils {
      * @param reqURL File to fetch
      * @param fileLocation Location to save on disk
      */
-    public static void downloadFile(String reqURL, String fileLocation) {
+    public static void downloadFile(String reqURL, Path fileLocation) {
         try {
             HttpURLConnection con = (HttpURLConnection) new URL(reqURL).openConnection();
             con.setRequestProperty("User-Agent", "GeyserUpdater-" + GeyserUpdater.getInstance().version);
             InputStream in = con.getInputStream();
-            Files.copy(in, Paths.get(fileLocation), StandardCopyOption.REPLACE_EXISTING);
-            // todo: need to close stuff?
+            Files.copy(in, fileLocation, StandardCopyOption.REPLACE_EXISTING);
+            // todo: need to close the inputstream or not?
+            in.close();
         } catch (Exception e) {
             throw new AssertionError("Unable to download and save file: " + fileLocation + " (" + reqURL + ")", e);
         }
@@ -101,7 +102,7 @@ public class WebUtils {
 
     /** Get the latest build number of a given branch of Geyser from jenkins CI
      *
-     * @param gitBranch the branch to query
+     * @param branchLink Example: https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master
      * @return the latest build number
      * @throws UnsupportedEncodingException if failed to encode the given gitBranch
      */

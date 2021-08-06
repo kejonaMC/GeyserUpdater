@@ -1,6 +1,5 @@
 package com.projectg.geyserupdater.common.update;
 
-import com.projectg.geyserupdater.common.GeyserUpdater;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.update.age.AgeComparer;
 import com.projectg.geyserupdater.common.update.age.provider.JenkinsBuildProvider;
@@ -8,15 +7,27 @@ import com.projectg.geyserupdater.common.update.age.type.BuildNumber;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class UpdateManager {
 
-    private final List<Updatable> updatables = new ArrayList<>();
+    /**
+     * The {@link DownloadManager} to use for downloading new versions of plugins.
+     */
+    private final DownloadManager downloadManager;
 
-    public UpdateManager(GeyserUpdater geyserUpdater) {
+    /**
+     * All tracked plugins
+     */
+    private final Set<Updatable> updatables = new HashSet<>();
+
+    /**
+     * Plugins that are outdated and must be updated
+     */
+    private Set<Updatable> outdatedPlugins = new HashSet<>();
+
+    public UpdateManager(DownloadManager downloadManager) {
+        this.downloadManager = downloadManager;
         UpdaterLogger logger = UpdaterLogger.getLogger();
 
         for (PluginId pluginId : PluginId.values()) {
@@ -44,7 +55,11 @@ public class UpdateManager {
 
                 BuildNumber buildNumber = new BuildNumber(Integer.parseInt(buildNumberString));
                 JenkinsBuildProvider jenkins = new JenkinsBuildProvider();
-                register(new Updatable(new AgeComparer<>(buildNumber, jenkins)));
+                register(new Updatable(
+                        pluginId.name(),
+                        new AgeComparer<>(buildNumber, jenkins),
+                        pluginId.getLatestFileLink(),
+                        null));
             }
         }
 
@@ -54,9 +69,26 @@ public class UpdateManager {
     /**
      * Register an {@link Updatable} to be updated
      * @param updatable The {@link Updatable} to be updated
-     * @return true, if it was registered.
      */
-    public boolean register(Updatable updatable) {
-        return updatables.add(updatable);
+    public void register(Updatable updatable) {
+        updatables.add(updatable);
+    }
+
+    public void checkAll() {
+        outdatedPlugins = new HashSet<>();
+        for (Updatable updatable : updatables) {
+            // todo: make sure we don't run this sync... maybe instantiate GeyserUpdater.class async?
+            if (!updatable.ageComparer.checkIfEquals()) {
+                outdatedPlugins.add(updatable);
+            }
+        }
+
+        UpdaterLogger.getLogger().info("Updates required for plugins: " + outdatedPlugins);
+    }
+
+    public void updateAll() {
+        for (Updatable updatable : outdatedPlugins) {
+            downloadManager.queue(updatable);
+        }
     }
 }
