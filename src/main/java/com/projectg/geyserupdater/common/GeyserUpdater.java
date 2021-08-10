@@ -87,7 +87,7 @@ public class GeyserUpdater {
         PluginId.FLOODGATE.setArtifact(floodgateArtifact);
 
         // Manager for updating plugins
-        UpdateManager updateManager = new UpdateManager(new DownloadManager(downloadFolder));
+        UpdateManager updateManager = new UpdateManager(new DownloadManager(this, downloadFolder));
     }
 
     public static GeyserUpdater getInstance() {
