@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class DownloadManager {
+public class RecursiveDownloadManager {
 
     private final GeyserUpdater updater;
     private final Path outputDirectory;
@@ -30,7 +30,9 @@ public class DownloadManager {
     // Used by the hang checker to cancel the download if necessary
     @Nullable private Task downloader = null;
 
-    public DownloadManager(GeyserUpdater updater, Path outputDirectory) {
+    // todo: maybe refactor this to use a for loop instead of being recursive? i dunno
+
+    public RecursiveDownloadManager(GeyserUpdater updater, Path outputDirectory) {
         //todo: move outputDirectory to Updatable
         this.updater = updater;
         this.outputDirectory = outputDirectory;
@@ -38,44 +40,41 @@ public class DownloadManager {
 
     public void queue(Updatable updatable) {
         queue.add(updatable);
-        if (!isDownloading) {
-            downloadAll();
-        }
+        downloadIfPossible();
     }
 
-    private void downloadAll() {
+    private void download(Updatable updatable) {
         isDownloading = true;
+        currentUpdate = updatable;
 
         UpdaterScheduler scheduler = updater.getScheduler();
 
         // Run the download on a new thread
         this.downloader = scheduler.run(() -> {
 
-            for (int i = 0; ; i++) {
-                Updatable updatable = queue.get(i);
-                if (updatable == null) {
-                    break;
-                }
-                currentUpdate = updatable;
+            // Create a timer to stop this download from running too long. Either the hang checker is cancelled or the hang checker cancels this.
+            Task hangChecker = scheduleHangChecker(updater, updatable);
 
-                // Create a timer to stop this download from running too long. Either the hang checker is cancelled or the hang checker cancels this.
-                Task hangChecker = scheduleHangChecker(updater, updatable);
+            WebUtils.downloadFile(updatable.downloadUrl, outputDirectory.resolve(updatable.outputFileName));
+            hangChecker.cancel();
 
-                WebUtils.downloadFile(updatable.downloadUrl, outputDirectory.resolve(updatable.outputFileName));
-                hangChecker.cancel();
-            }
-
-            // Revert everything while having it locked so that the state is always correctly read by a different thread
+            // Revert everything while having it locked so that the state is always correctly read by original thread
             synchronized (this) {
-                queue.clear();
-                isDownloading = false;
-                currentUpdate = null;
-                downloader = null;
+                this.queue.remove(updatable);
+                this.isDownloading = false;
+                this.currentUpdate = null;
+                this.downloader = null;
             }
 
-            // Everything should be downloaded now unless the queue was added to after the above for loop was finished
-            // But the synchronized block was not entered
+            // Initiate another download if necessary
+            downloadIfPossible();
         }, true);
+    }
+
+    private void downloadIfPossible() {
+        if (!queue.isEmpty() && !isDownloading) {
+            download(queue.get(0));
+        }
     }
 
     private Task scheduleHangChecker(GeyserUpdater updater, Updatable updatable) {
