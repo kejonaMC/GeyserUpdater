@@ -1,13 +1,18 @@
 package com.projectg.geyserupdater.common.update;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
-import com.projectg.geyserupdater.common.update.age.AgeComparer;
+import com.projectg.geyserupdater.common.update.age.IdentityComparer;
+import com.projectg.geyserupdater.common.update.age.provider.FileHashProvider;
 import com.projectg.geyserupdater.common.update.age.provider.JenkinsBuildProvider;
+import com.projectg.geyserupdater.common.update.age.provider.JenkinsHashProvider;
 import com.projectg.geyserupdater.common.update.age.type.BuildNumber;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
 
 public class UpdateManager {
 
@@ -26,7 +31,7 @@ public class UpdateManager {
      */
     private Set<Updatable> outdatedPlugins = new HashSet<>();
 
-    public UpdateManager(DownloadManager downloadManager) {
+    public UpdateManager(Path defaultDownloadLocation, DownloadManager downloadManager) {
         this.downloadManager = downloadManager;
         UpdaterLogger logger = UpdaterLogger.getLogger();
 
@@ -53,13 +58,20 @@ public class UpdateManager {
                     throw new AssertionError("Failed to find build number or branch in Git Properties '" + gitProperties + "' of plugin '" + pluginId.name() + "'");
                 }
 
+                // For age comparer
                 BuildNumber buildNumber = new BuildNumber(Integer.parseInt(buildNumberString));
-                JenkinsBuildProvider jenkins = new JenkinsBuildProvider();
+                JenkinsBuildProvider buildProvider = new JenkinsBuildProvider();
+
+                // For file hash provider
+                FileHashProvider localHashProvider = new FileHashProvider();
+                JenkinsHashProvider jenkinsHashProvider = new JenkinsHashProvider();
+
                 register(new Updatable(
                         pluginId.name(),
-                        new AgeComparer<>(buildNumber, jenkins),
+                        new IdentityComparer<>(buildNumber, buildProvider),
+                        new IdentityComparer<>(localHashProvider, jenkinsHashProvider),
                         pluginId.getLatestFileLink(),
-                        null));
+                        defaultDownloadLocation));
             }
         }
 
@@ -74,7 +86,7 @@ public class UpdateManager {
         updatables.add(updatable);
     }
 
-    public void checkAll() {
+    public void setOutdatedPlugins() {
         outdatedPlugins = new HashSet<>();
         for (Updatable updatable : updatables) {
             // todo: make sure we don't run this sync... maybe instantiate GeyserUpdater.class async?
@@ -86,9 +98,29 @@ public class UpdateManager {
         UpdaterLogger.getLogger().info("Updates required for plugins: " + outdatedPlugins);
     }
 
+    public Set<Updatable> getOutdatedPlugins() {
+        return outdatedPlugins;
+    }
+
+    /**
+     * Update an outdated Updatable
+     * @return true if the download was queued, false if the Updatable is not outdated.
+     */
+    public boolean update(Updatable updatable) {
+        if (outdatedPlugins.contains(updatable)) {
+            downloadManager.queue(updatable);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Update all outdated Updatables tracked.
+     */
     public void updateAll() {
         for (Updatable updatable : outdatedPlugins) {
-            downloadManager.queue(updatable);
+            update(updatable);
         }
     }
 }

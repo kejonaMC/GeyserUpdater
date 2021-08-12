@@ -1,6 +1,6 @@
 package com.projectg.geyserupdater.common.update.age.type;
 
-public class Md5FileHash implements Age<String> {
+public class Md5FileHash implements Identity<String> {
 
     private final String hash;
 

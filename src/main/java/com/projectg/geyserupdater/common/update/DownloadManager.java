@@ -29,7 +29,6 @@ public class DownloadManager {
     @Nullable private Task downloader = null;
 
     public DownloadManager(GeyserUpdater updater) {
-        //todo: move outputDirectory to Updatable
         this.updater = updater;
     }
 

@@ -1,6 +1,6 @@
 package com.projectg.geyserupdater.common.update.age.type;
 
-public class BuildNumber implements Age<Integer> {
+public class BuildNumber implements Identity<Integer> {
 
     private final int buildNumber;
 

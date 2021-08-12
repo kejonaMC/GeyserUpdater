@@ -9,15 +9,14 @@ import com.projectg.geyserupdater.common.util.WebUtils;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("unused") // Keeping this to compare to DownloadManager
 public class RecursiveDownloadManager {
 
     private final GeyserUpdater updater;
-    private final Path outputDirectory;
 
     private final List<Updatable> queue = new LinkedList<>();
 
@@ -32,10 +31,9 @@ public class RecursiveDownloadManager {
 
     // todo: maybe refactor this to use a for loop instead of being recursive? i dunno
 
-    public RecursiveDownloadManager(GeyserUpdater updater, Path outputDirectory) {
+    public RecursiveDownloadManager(GeyserUpdater updater) {
         //todo: move outputDirectory to Updatable
         this.updater = updater;
-        this.outputDirectory = outputDirectory;
     }
 
     public void queue(Updatable updatable) {
@@ -55,7 +53,7 @@ public class RecursiveDownloadManager {
             // Create a timer to stop this download from running too long. Either the hang checker is cancelled or the hang checker cancels this.
             Task hangChecker = scheduleHangChecker(updater, updatable);
 
-            WebUtils.downloadFile(updatable.downloadUrl, outputDirectory.resolve(updatable.outputFileName));
+            WebUtils.downloadFile(updatable.downloadUrl, updatable.outputFile);
             hangChecker.cancel();
 
             // Revert everything while having it locked so that the state is always correctly read by original thread
@@ -102,7 +100,7 @@ public class RecursiveDownloadManager {
                         " seconds. Increase the download-time-limit in the config if you have a slow internet connection.");
 
                 try {
-                    boolean deletedFailedFile = Files.deleteIfExists(outputDirectory.resolve(updatable.outputFileName));
+                    boolean deletedFailedFile = Files.deleteIfExists(updatable.outputFile);
                     logger.debug("Failed download for " + updatable + " had a file?: " + deletedFailedFile);
                 } catch (IOException e) {
                     logger.error("Failed to delete failed download file of " + updatable);
