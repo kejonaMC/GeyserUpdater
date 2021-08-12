@@ -9,7 +9,6 @@ import com.projectg.geyserupdater.common.util.WebUtils;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 public class DownloadManager {
 
     private final GeyserUpdater updater;
-    private final Path outputDirectory;
 
     private final List<Updatable> queue = new LinkedList<>();
 
@@ -30,10 +28,9 @@ public class DownloadManager {
     // Used by the hang checker to cancel the download if necessary
     @Nullable private Task downloader = null;
 
-    public DownloadManager(GeyserUpdater updater, Path outputDirectory) {
+    public DownloadManager(GeyserUpdater updater) {
         //todo: move outputDirectory to Updatable
         this.updater = updater;
-        this.outputDirectory = outputDirectory;
     }
 
     public void queue(Updatable updatable) {
@@ -61,7 +58,7 @@ public class DownloadManager {
                 // Create a timer to stop this download from running too long. Either the hang checker is cancelled or the hang checker cancels this.
                 Task hangChecker = scheduleHangChecker(updater, updatable);
 
-                WebUtils.downloadFile(updatable.downloadUrl, outputDirectory.resolve(updatable.outputFileName));
+                WebUtils.downloadFile(updatable.downloadUrl, updatable.outputFile);
                 hangChecker.cancel();
             }
 
@@ -103,7 +100,7 @@ public class DownloadManager {
                         " seconds. Increase the download-time-limit in the config if you have a slow internet connection.");
 
                 try {
-                    boolean deletedFailedFile = Files.deleteIfExists(outputDirectory.resolve(updatable.outputFileName));
+                    boolean deletedFailedFile = Files.deleteIfExists(updatable.outputFile);
                     logger.debug("Failed download for " + updatable + " had a file?: " + deletedFailedFile);
                 } catch (IOException e) {
                     logger.error("Failed to delete failed download file of " + updatable);

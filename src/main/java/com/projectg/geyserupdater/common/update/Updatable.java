@@ -3,7 +3,8 @@ package com.projectg.geyserupdater.common.update;
 import com.projectg.geyserupdater.common.update.age.AgeComparer;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class Updatable {
@@ -11,18 +12,19 @@ public class Updatable {
     @Nonnull public final String pluginIdentity;
     @Nonnull public final AgeComparer<?, ?> ageComparer;
     @Nonnull public final String downloadUrl;
-    @Nonnull public final String outputFileName;
+    @Nonnull public final Path outputFile;
 
     /**
      * @param pluginIdentity The plugin name, which can be used to identify the plugin.
      * @param ageComparer The age comparer to check if the plugin is outdated
      * @param downloadUrl The complete download link of the plugin
-     * @param outputFileName The output file name. May be null to attempt to use the file name that the downloadUrl provides.
+     * @param file If the Path is a file, the download will be written to that file. If the Path is a directory, the file will be written to that directory, and the filename will deduced from the link provided.
      */
-    public Updatable(@Nonnull String pluginIdentity, @Nonnull AgeComparer<?, ?> ageComparer, @Nonnull String downloadUrl, @Nullable String outputFileName) {
+    public Updatable(@Nonnull String pluginIdentity, @Nonnull AgeComparer<?, ?> ageComparer, @Nonnull String downloadUrl, @Nonnull Path file) {
         Objects.requireNonNull(pluginIdentity);
         Objects.requireNonNull(ageComparer);
         Objects.requireNonNull(downloadUrl);
+        Objects.requireNonNull(file);
 
         this.pluginIdentity = pluginIdentity;
         this.ageComparer = ageComparer;
@@ -40,10 +42,10 @@ public class Updatable {
         }
 
         // Figure out the output file name if necessary
-        if (outputFileName == null) {
-            this.outputFileName = downloadUrl.substring(downloadUrl.lastIndexOf("/") + 1);
+        if (Files.isDirectory(file)) {
+            this.outputFile = file.resolve(downloadUrl.substring(downloadUrl.lastIndexOf("/") + 1));
         } else {
-            this.outputFileName = outputFileName;
+            this.outputFile = file;
         }
     }
 
