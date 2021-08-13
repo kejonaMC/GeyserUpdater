@@ -7,7 +7,6 @@ import com.projectg.geyserupdater.bungee.util.bstats.Metrics;
 import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.common.util.ScriptCreator;
 
 import com.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;

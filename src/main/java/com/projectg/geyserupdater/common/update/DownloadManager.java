@@ -1,6 +1,5 @@
 package com.projectg.geyserupdater.common.update;
 
-import com.projectg.geyserupdater.common.GeyserUpdater;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.scheduler.Task;
 import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
@@ -15,7 +14,9 @@ import java.util.concurrent.TimeUnit;
 
 public class DownloadManager {
 
-    private final GeyserUpdater updater;
+    private final UpdateManager updateManager;
+    private final UpdaterScheduler scheduler;
+    private final int downloadTimeLimit;
 
     private final List<Updatable> queue = new LinkedList<>();
 
@@ -28,8 +29,10 @@ public class DownloadManager {
     // Used by the hang checker to cancel the download if necessary
     @Nullable private Task downloader = null;
 
-    public DownloadManager(GeyserUpdater updater) {
-        this.updater = updater;
+    public DownloadManager(UpdateManager updateManager, UpdaterScheduler scheduler, int downloadTimeLimit) {
+        this.updateManager = updateManager;
+        this.scheduler = scheduler;
+        this.downloadTimeLimit = downloadTimeLimit;
     }
 
     public void queue(Updatable updatable) {
@@ -42,8 +45,6 @@ public class DownloadManager {
     private void downloadAll() {
         isDownloading = true;
 
-        UpdaterScheduler scheduler = updater.getScheduler();
-
         // Run the download on a new thread
         this.downloader = scheduler.run(() -> {
 
@@ -55,14 +56,22 @@ public class DownloadManager {
                 currentUpdate = updatable;
 
                 // Create a timer to stop this download from running too long. Either the hang checker is cancelled or the hang checker cancels this.
-                Task hangChecker = scheduleHangChecker(updater, updatable);
+                Task hangChecker = scheduleHangChecker(updatable);
 
                 WebUtils.downloadFile(updatable.downloadUrl, updatable.outputFile);
                 hangChecker.cancel();
+
+                synchronized (this) {
+                    updateManager.outdatedPlugins.remove(updatable);
+                    updateManager.updatablesInQueue.remove(updatable);
+                }
+
+                // todo: hash checker & tell audience the result of the download attempt
             }
 
             // Revert everything while having it locked so that the state is always correctly read by a different thread
             synchronized (this) {
+                // Clear the queue here so that the for loop above doesn't get messed up
                 queue.clear();
                 isDownloading = false;
                 currentUpdate = null;
@@ -74,11 +83,10 @@ public class DownloadManager {
         }, true);
     }
 
-    private Task scheduleHangChecker(GeyserUpdater updater, Updatable updatable) {
+    private Task scheduleHangChecker(Updatable updatable) {
         // The time to allow the download to take, in seconds
-        int downloadTimeLimit = updater.getConfig().getDownloadTimeLimit();
 
-        return updater.getScheduler().runDelayed(() -> {
+        return scheduler.runDelayed(() -> {
             if (!isDownloading || downloader == null) {
                 throw new AssertionError("HangChecker should not execute while nothing is downloading.");
             }

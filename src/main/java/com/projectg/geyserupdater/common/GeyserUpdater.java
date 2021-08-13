@@ -3,7 +3,6 @@ package com.projectg.geyserupdater.common;
 import com.projectg.geyserupdater.common.config.UpdaterConfiguration;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
-import com.projectg.geyserupdater.common.update.DownloadManager;
 import com.projectg.geyserupdater.common.update.PluginId;
 import com.projectg.geyserupdater.common.update.UpdateManager;
 import com.projectg.geyserupdater.common.util.FileUtils;
@@ -18,10 +17,12 @@ public class GeyserUpdater {
 
     private static GeyserUpdater INSTANCE = null;
 
+    public final String version;
+
     private final UpdaterLogger logger;
     private final UpdaterScheduler scheduler;
     private final PlayerHandler playerHandler;
-    public final String version;
+    private final UpdateManager updateManager;
 
     private final UpdaterConfiguration config;
 
@@ -60,8 +61,7 @@ public class GeyserUpdater {
         logger.debug("Loading config");
         config = FileUtils.loadConfig(dataFolder.resolve("config.yml"));
         if (config.isIncorrectVersion()) {
-            logger.error("Your copy of config.yml is outdated (your version: " + config.getConfigVersion() + ", latest version: " + UpdaterConfiguration.DEFAULT_CONFIG_VERSION + "). Please delete it and let a fresh copy of config.yml be regenerated!");
-            return;
+            throw new IllegalStateException("Your copy of config.yml is outdated (your version: " + config.getConfigVersion() + ", latest version: " + UpdaterConfiguration.DEFAULT_CONFIG_VERSION + "). Please delete it and let a fresh copy of config.yml be regenerated!");
         }
         if (config.isEnableDebug()) {
             logger.enableDebug();
@@ -87,7 +87,7 @@ public class GeyserUpdater {
         PluginId.FLOODGATE.setArtifact(floodgateArtifact);
 
         // Manager for updating plugins
-        UpdateManager updateManager = new UpdateManager(downloadFolder, new DownloadManager(this));
+        this.updateManager = new UpdateManager(downloadFolder, scheduler, config.getDownloadTimeLimit());
     }
 
     public static GeyserUpdater getInstance() {
@@ -101,8 +101,5 @@ public class GeyserUpdater {
     }
     public UpdaterScheduler getScheduler() {
         return scheduler;
-    }
-    public PlayerHandler getPlayerHandler() {
-        return playerHandler;
     }
 }

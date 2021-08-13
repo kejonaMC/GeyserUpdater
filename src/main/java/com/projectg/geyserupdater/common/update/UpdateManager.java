@@ -1,6 +1,7 @@
 package com.projectg.geyserupdater.common.update;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
 import com.projectg.geyserupdater.common.update.age.IdentityComparer;
 import com.projectg.geyserupdater.common.update.age.provider.FileHashProvider;
 import com.projectg.geyserupdater.common.update.age.provider.JenkinsBuildProvider;
@@ -29,10 +30,16 @@ public class UpdateManager {
     /**
      * Plugins that are outdated and must be updated
      */
-    private Set<Updatable> outdatedPlugins = new HashSet<>();
+    protected Set<Updatable> outdatedPlugins = new HashSet<>();
 
-    public UpdateManager(Path defaultDownloadLocation, DownloadManager downloadManager) {
-        this.downloadManager = downloadManager;
+    /**
+     * Plugins that are in the queue for download or are being downloaded
+     */
+    protected final Set<Updatable> updatablesInQueue = new HashSet<>();
+
+
+    public UpdateManager(Path defaultDownloadLocation, UpdaterScheduler scheduler, int downloadTimeLimit) {
+        this.downloadManager = new DownloadManager(this, scheduler, downloadTimeLimit);
         UpdaterLogger logger = UpdaterLogger.getLogger();
 
         for (PluginId pluginId : PluginId.values()) {
