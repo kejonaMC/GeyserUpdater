@@ -55,17 +55,13 @@ public class WebUtils {
      * @param reqURL File to fetch
      * @param fileLocation Location to save on disk
      */
-    public static void downloadFile(String reqURL, Path fileLocation) {
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL(reqURL).openConnection();
-            con.setRequestProperty("User-Agent", "GeyserUpdater-" + GeyserUpdater.getInstance().version);
-            InputStream in = con.getInputStream();
-            Files.copy(in, fileLocation, StandardCopyOption.REPLACE_EXISTING);
-            // todo: need to close the inputstream or not?
-            in.close();
-        } catch (Exception e) {
-            throw new AssertionError("Unable to download and save file: " + fileLocation + " (" + reqURL + ")", e);
-        }
+    public static void downloadFile(String reqURL, Path fileLocation) throws IOException {
+        HttpURLConnection con = (HttpURLConnection) new URL(reqURL).openConnection();
+        con.setRequestProperty("User-Agent", "GeyserUpdater-" + GeyserUpdater.getInstance().version);
+        InputStream in = con.getInputStream();
+        Files.copy(in, fileLocation, StandardCopyOption.REPLACE_EXISTING);
+        // todo: need to close the inputstream or not?
+        in.close();
     }
 
 

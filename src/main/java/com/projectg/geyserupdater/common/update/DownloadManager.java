@@ -3,6 +3,7 @@ package com.projectg.geyserupdater.common.update;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.scheduler.Task;
 import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
+import com.projectg.geyserupdater.common.update.age.DownloadResult;
 import com.projectg.geyserupdater.common.util.WebUtils;
 
 import javax.annotation.Nullable;
@@ -58,15 +59,19 @@ public class DownloadManager {
                 // Create a timer to stop this download from running too long. Either the hang checker is cancelled or the hang checker cancels this.
                 Task hangChecker = scheduleHangChecker(updatable);
 
-                WebUtils.downloadFile(updatable.downloadUrl, updatable.outputFile);
-                hangChecker.cancel();
-
-                synchronized (this) {
-                    updateManager.outdatedPlugins.remove(updatable);
-                    updateManager.updatablesInQueue.remove(updatable);
+                try {
+                    WebUtils.downloadFile(updatable.downloadUrl, updatable.outputFile);
+                } catch (IOException e) {
+                    UpdaterLogger.getLogger().error("Failed to download file at location " + updatable.outputFile + " with URL: " + updatable.downloadUrl);
+                    e.printStackTrace();
+                    updateManager.finish(updatable, DownloadResult.UNKNOWN_FAIL);
+                    continue;
                 }
 
-                // todo: hash checker & tell audience the result of the download attempt
+                hangChecker.cancel();
+                updateManager.finish(updatable, DownloadResult.SUCCESS);
+
+                // todo: hash checker
             }
 
             // Revert everything while having it locked so that the state is always correctly read by a different thread
@@ -101,8 +106,9 @@ public class DownloadManager {
                     downloader = null;
                 }
 
-                UpdaterLogger logger = UpdaterLogger.getLogger();
+                updateManager.finish(updatable, DownloadResult.TIMEOUT);
 
+                UpdaterLogger logger = UpdaterLogger.getLogger();
                 logger.error("The download queue has been stopped and cleared because the download for " + updatable + " took longer than " + downloadTimeLimit +
                         " seconds. Increase the download-time-limit in the config if you have a slow internet connection.");
 

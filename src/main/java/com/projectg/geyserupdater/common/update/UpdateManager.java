@@ -2,6 +2,7 @@ package com.projectg.geyserupdater.common.update;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
+import com.projectg.geyserupdater.common.update.age.DownloadResult;
 import com.projectg.geyserupdater.common.update.age.IdentityComparer;
 import com.projectg.geyserupdater.common.update.age.provider.FileHashProvider;
 import com.projectg.geyserupdater.common.update.age.provider.JenkinsBuildProvider;
@@ -129,5 +130,11 @@ public class UpdateManager {
         for (Updatable updatable : outdatedPlugins) {
             update(updatable);
         }
+    }
+
+    protected void finish(Updatable updatable, DownloadResult result) {
+        outdatedPlugins.remove(updatable);
+        updatablesInQueue.remove(updatable);
+        UpdaterLogger.getLogger().info("Finished download for " + updatable + " with result: " + result);
     }
 }
