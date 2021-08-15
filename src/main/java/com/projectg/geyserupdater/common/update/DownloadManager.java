@@ -70,8 +70,6 @@ public class DownloadManager {
 
                 hangChecker.cancel();
                 updateManager.finish(updatable, DownloadResult.SUCCESS);
-
-                // todo: hash checker
             }
 
             // Revert everything while having it locked so that the state is always correctly read by a different thread

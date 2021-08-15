@@ -4,7 +4,7 @@ public class Md5FileHash implements Identity<String> {
 
     private final String hash;
 
-    private Md5FileHash(String md5Hash) {
+    public Md5FileHash(String md5Hash) {
         hash = md5Hash;
     }
 

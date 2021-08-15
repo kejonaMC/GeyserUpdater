@@ -8,9 +8,12 @@ import com.projectg.geyserupdater.common.update.age.provider.FileHashProvider;
 import com.projectg.geyserupdater.common.update.age.provider.JenkinsBuildProvider;
 import com.projectg.geyserupdater.common.update.age.provider.JenkinsHashProvider;
 import com.projectg.geyserupdater.common.update.age.type.BuildNumber;
+import com.projectg.geyserupdater.common.util.FileUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Properties;
@@ -63,21 +66,29 @@ public class UpdateManager {
                 String buildNumberString = gitProperties.getProperty("git.build.number");
                 String branch = gitProperties.getProperty("git.branch");
                 if (buildNumberString == null || branch == null) {
-                    throw new AssertionError("Failed to find build number or branch in Git Properties '" + gitProperties + "' of plugin '" + pluginId.name() + "'");
+                    UpdaterLogger.getLogger().error("Failed to find build number or branch in git Properties '" + gitProperties + "' of plugin '" + pluginId.name() + "'. Not updating.");
+                    continue;
                 }
 
                 // For age comparer
                 BuildNumber buildNumber = new BuildNumber(Integer.parseInt(buildNumberString));
                 JenkinsBuildProvider buildProvider = new JenkinsBuildProvider();
 
-                // For file hash provider
-                FileHashProvider localHashProvider = new FileHashProvider();
-                JenkinsHashProvider jenkinsHashProvider = new JenkinsHashProvider();
+                // File hash comparer
+                IdentityComparer<?, ?> hashComparer = null;
+                try {
+                    FileHashProvider localHashProvider = new FileHashProvider(FileUtils.getCodeSourceLocation(pluginId.getClass()));
+                    JenkinsHashProvider jenkinsHashProvider = new JenkinsHashProvider(pluginId.getLatestFileLink() + "/*fingerprint*/");
+                    hashComparer = new IdentityComparer<>(localHashProvider, jenkinsHashProvider);
+                } catch (URISyntaxException | MalformedURLException e) {
+                    UpdaterLogger.getLogger().error("Failure while getting location of file for " + pluginId.name() + ". It will be possible to update it, but not to compare file hashes.");
+                    e.printStackTrace();
+                }
 
                 register(new Updatable(
                         pluginId.name(),
                         new IdentityComparer<>(buildNumber, buildProvider),
-                        new IdentityComparer<>(localHashProvider, jenkinsHashProvider),
+                        hashComparer,
                         pluginId.getLatestFileLink(),
                         defaultDownloadLocation));
             }
@@ -98,7 +109,7 @@ public class UpdateManager {
         outdatedPlugins = new HashSet<>();
         for (Updatable updatable : updatables) {
             // todo: make sure we don't run this sync... maybe instantiate GeyserUpdater.class async?
-            if (!updatable.ageComparer.checkIfEquals()) {
+            if (!updatable.identityComparer.checkIfEquals()) {
                 outdatedPlugins.add(updatable);
             }
         }
@@ -135,6 +146,15 @@ public class UpdateManager {
     protected void finish(Updatable updatable, DownloadResult result) {
         outdatedPlugins.remove(updatable);
         updatablesInQueue.remove(updatable);
-        UpdaterLogger.getLogger().info("Finished download for " + updatable + " with result: " + result);
+
+        DownloadResult finalResult = result;
+        if (updatable.hashComparer != null) {
+            if (!updatable.hashComparer.checkIfEquals()) {
+                UpdaterLogger.getLogger().warn("The file hash of the downloaded file did not match the hash provided online for " + updatable);
+                finalResult = DownloadResult.HASH_FAIl;
+            }
+        }
+
+        UpdaterLogger.getLogger().info("Finished download for " + updatable + " with result: " + finalResult);
     }
 }

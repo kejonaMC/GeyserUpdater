@@ -22,19 +22,15 @@ public class WebUtils {
      * Makes a web request to the given URL and returns the body as a string
      *
      * @param reqURL URL to fetch
-     * @return Body contents or error message if the request fails
+     * @return Body contents
      */
-    public static String getBody(String reqURL) {
-        try {
-            URL url = new URL(reqURL);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("User-Agent", "GeyserUpdater-" + GeyserUpdater.getInstance().version); // Otherwise Java 8 fails on checking updates
+    public static String getBody(String reqURL) throws IOException {
+        URL url = new URL(reqURL);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", "GeyserUpdater-" + GeyserUpdater.getInstance().version); // Otherwise Java 8 fails on checking updates
 
-            return connectionToString(con);
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+        return connectionToString(con);
     }
 
     /**
@@ -62,6 +58,7 @@ public class WebUtils {
         Files.copy(in, fileLocation, StandardCopyOption.REPLACE_EXISTING);
         // todo: need to close the inputstream or not?
         in.close();
+        con.disconnect();
     }
 
 
@@ -100,9 +97,9 @@ public class WebUtils {
      *
      * @param branchLink Example: https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master
      * @return the latest build number
-     * @throws UnsupportedEncodingException if failed to encode the given gitBranch
+     * @throws IOException if an exception occurred parsing the branchLink or there was a failure in the web request
      */
-    public static int getLatestGeyserBuildNumberFromJenkins(String branchLink) throws UnsupportedEncodingException {
+    public static int getLatestGeyserBuildNumberFromJenkins(String branchLink) throws IOException {
         // todo use json
         String buildXMLContents = WebUtils.getBody(URLEncoder.encode(branchLink, StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
         return Integer.parseInt(buildXMLContents.replaceAll("<(\\\\)?(/)?buildNumber>", "").trim());
