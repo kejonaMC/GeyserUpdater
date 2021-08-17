@@ -6,11 +6,13 @@ import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
 import com.projectg.geyserupdater.common.update.PluginId;
 import com.projectg.geyserupdater.common.update.UpdateManager;
 import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.ScriptCreator;
 import com.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;
+import org.geysermc.connector.GeyserConnector;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 
 public class GeyserUpdater {
@@ -19,23 +21,26 @@ public class GeyserUpdater {
 
     public final String version;
 
+    private final Path downloadFolder;
+    private final Path installFolder;
     private final UpdaterLogger logger;
     private final UpdaterScheduler scheduler;
     private final PlayerHandler playerHandler;
     private final UpdateManager updateManager;
-
     private final UpdaterConfiguration config;
 
     public GeyserUpdater(Path dataFolder,
                          Path downloadFolder,
+                         Path installFolder,
+                         UpdaterBootstrap bootstrap,
                          UpdaterLogger logger,
                          UpdaterScheduler scheduler,
                          PlayerHandler playerHandler,
-                         boolean ignoreRestartScriptOption,
-                         boolean loopRestartScript,
                          String version,
                          String geyserArtifact,
                          String floodgateArtifact) throws IOException {
+        this.downloadFolder = downloadFolder;
+        this.installFolder = installFolder;
         this.logger = logger;
         this.scheduler  = scheduler;
         this.playerHandler = playerHandler;
@@ -66,16 +71,12 @@ public class GeyserUpdater {
         if (config.isEnableDebug()) {
             logger.enableDebug();
         }
-        if (ignoreRestartScriptOption) {
-            // This is basically just for spigot, so that we don't generate a script if the one defined in spigot.yml exists.
-            config.setGenerateRestartScript(false);
-        }
 
         // Make startup script if enabled
         if (config.isGenerateRestartScript()) {
             try {
                 logger.debug("Attempting to create restart script");
-                ScriptCreator.createRestartScript(loopRestartScript);
+                bootstrap.createRestartScript();
             } catch (IOException e) {
                 logger.error("Error while creating restart script:");
                 e.printStackTrace();
@@ -88,6 +89,42 @@ public class GeyserUpdater {
 
         // Manager for updating plugins
         this.updateManager = new UpdateManager(downloadFolder, scheduler, config.getDownloadTimeLimit());
+
+        // todo: schedule auto updater
+
+    }
+
+    /**
+     * Installs all updates to the correct folder, if necessary. Will do nothing if the downloadFolder is the same file as the installFolder.
+     * @throws IOException If there was a failure moving ALL updates.
+     */
+    public void shutdown() throws IOException {
+        try {
+            if (Files.isSameFile(installFolder, downloadFolder)) {
+                // We don't need to copy anything around
+                return;
+            }
+        } catch (IOException e) {
+            logger.error("Failed to check if the installFolder is the same as the downloadFolder. Attempting to move files from the downloadFolder to the installFolder anyway...");
+            e.printStackTrace();
+        }
+
+        // todo: find a way to make sure we are shutdown last
+
+        // This test isn't ideal but it'll work for now
+        if (!GeyserConnector.getInstance().getBedrockServer().isClosed()) {
+            throw new UnsupportedOperationException("Cannot replace Geyser before Geyser has shutdown! No updates will be applied.");
+        }
+
+        UpdaterLogger.getLogger().debug("Installing plugins from the cache.");
+        Files.walk(downloadFolder, 1).forEach((file) -> {
+            try {
+                Files.move(file, installFolder, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                UpdaterLogger.getLogger().error("Failed to copy update " + file + " to the plugins folder.");
+                e.printStackTrace();
+            }
+        });
     }
 
     public static GeyserUpdater getInstance() {

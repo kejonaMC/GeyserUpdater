@@ -24,13 +24,16 @@ public class WebUtils {
      * @param reqURL URL to fetch
      * @return Body contents
      */
-    public static String getBody(String reqURL) throws IOException {
-        URL url = new URL(reqURL);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    public static String getBody(URL reqURL) throws IOException {
+        HttpURLConnection con = (HttpURLConnection) reqURL.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("User-Agent", "GeyserUpdater-" + GeyserUpdater.getInstance().version); // Otherwise Java 8 fails on checking updates
 
         return connectionToString(con);
+    }
+
+    public static String getBody(String reqURL) throws IOException {
+        return getBody(new URL(reqURL));
     }
 
     /**

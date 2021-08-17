@@ -34,7 +34,7 @@ public class UpdateManager {
     /**
      * Plugins that are outdated and must be updated
      */
-    protected Set<Updatable> outdatedPlugins = new HashSet<>();
+    protected Set<Updatable> outdatedUpdatables = new HashSet<>();
 
     /**
      * Plugins that are in the queue for download or are being downloaded
@@ -72,7 +72,14 @@ public class UpdateManager {
 
                 // For age comparer
                 BuildNumber buildNumber = new BuildNumber(Integer.parseInt(buildNumberString));
-                JenkinsBuildProvider buildProvider = new JenkinsBuildProvider();
+                JenkinsBuildProvider buildProvider = null;
+                try {
+                    buildProvider = new JenkinsBuildProvider(pluginId.getLatestBuildNumber());
+                } catch (MalformedURLException e) {
+                    UpdaterLogger.getLogger().error("Failed to create build number checker for " + pluginId + ". Not updating.");
+                    e.printStackTrace();
+                    continue;
+                }
 
                 // File hash comparer
                 IdentityComparer<?, ?> hashComparer = null;
@@ -105,20 +112,31 @@ public class UpdateManager {
         updatables.add(updatable);
     }
 
-    public void setOutdatedPlugins() {
-        outdatedPlugins = new HashSet<>();
+    /**
+     * Set the list of {@link Updatable}s which are known to be outdated. Use {@link UpdateManager#getOutdatedUpdatables()} for the result of this check.
+     *
+     * @return true if there is at least one {@link Updatable} that is outdated.
+     */
+    public boolean setOutdatedUpdatables() {
+        boolean outdatedExists = false;
+        outdatedUpdatables = new HashSet<>();
         for (Updatable updatable : updatables) {
             // todo: make sure we don't run this sync... maybe instantiate GeyserUpdater.class async?
             if (!updatable.identityComparer.checkIfEquals()) {
-                outdatedPlugins.add(updatable);
+                outdatedUpdatables.add(updatable);
+                outdatedExists = true;
             }
         }
 
-        UpdaterLogger.getLogger().info("Updates required for plugins: " + outdatedPlugins);
+        return true;
     }
 
-    public Set<Updatable> getOutdatedPlugins() {
-        return outdatedPlugins;
+    /**
+     * Get the list of {@link Updatable}s which are known to be outdated. Use {@link UpdateManager#setOutdatedUpdatables()} to set the list of outdated Updatables.
+     * @return The list of {@link Updatable}s
+     */
+    public Set<Updatable> getOutdatedUpdatables() {
+        return outdatedUpdatables;
     }
 
     /**
@@ -126,7 +144,7 @@ public class UpdateManager {
      * @return true if the download was queued, false if the Updatable is not outdated.
      */
     public boolean update(Updatable updatable) {
-        if (outdatedPlugins.contains(updatable)) {
+        if (outdatedUpdatables.contains(updatable)) {
             downloadManager.queue(updatable);
             return true;
         } else {
@@ -138,13 +156,13 @@ public class UpdateManager {
      * Update all outdated Updatables tracked.
      */
     public void updateAll() {
-        for (Updatable updatable : outdatedPlugins) {
+        for (Updatable updatable : outdatedUpdatables) {
             update(updatable);
         }
     }
 
     protected void finish(Updatable updatable, DownloadResult result) {
-        outdatedPlugins.remove(updatable);
+        outdatedUpdatables.remove(updatable);
         updatablesInQueue.remove(updatable);
 
         DownloadResult finalResult = result;

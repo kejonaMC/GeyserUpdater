@@ -29,10 +29,9 @@ public class RecursiveDownloadManager {
     // Used by the hang checker to cancel the download if necessary
     @Nullable private Task downloader = null;
 
-    // todo: maybe refactor this to use a for loop instead of being recursive? i dunno
+    // maybe refactor this to use a for loop instead of being recursive? i dunno
 
     public RecursiveDownloadManager(GeyserUpdater updater) {
-        //todo: move outputDirectory to Updatable
         this.updater = updater;
     }
 
@@ -53,7 +52,12 @@ public class RecursiveDownloadManager {
             // Create a timer to stop this download from running too long. Either the hang checker is cancelled or the hang checker cancels this.
             Task hangChecker = scheduleHangChecker(updater, updatable);
 
-            WebUtils.downloadFile(updatable.downloadUrl, updatable.outputFile);
+            try {
+                WebUtils.downloadFile(updatable.downloadUrl, updatable.outputFile);
+            } catch (IOException ioException) {
+                UpdaterLogger.getLogger().error("Failed to download file: " + updatable.downloadUrl + " for " + updatable);
+                ioException.printStackTrace();
+            }
             hangChecker.cancel();
 
             // Revert everything while having it locked so that the state is always correctly read by original thread

@@ -31,6 +31,10 @@ public enum PluginId {
         return projectLink + branch + "/lastSuccessfulBuild/" + artifactLink;
     }
 
+    public String getLatestBuildNumber() {
+        return projectLink + branch + "/lastSuccessfulBuild/buildNumber";
+    }
+
     /**
      * @param branch The branch to be used for {@link PluginId#getLatestFileLink()}
      */
