@@ -2,7 +2,6 @@ package com.projectg.geyserupdater.velocity.util;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.velocity.VelocityUpdater;
 
 import com.velocitypowered.api.proxy.Player;

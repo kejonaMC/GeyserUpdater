@@ -7,9 +7,9 @@ import java.util.concurrent.TimeUnit;
 public interface UpdaterScheduler {
 
     /**
-     * Schedule a Runnable to be run.
+     * Schedule a Runnable to be run on a new thread.
      * @param runnable The Runnable
-     * @param async True to run the task async (Disregarded for BungeeCord, Velocity)
+     * @param async true to run the Runnable off the main server thread, false to run it on the main server thread. Disregarded for BungeeCord and Velocity.
      */
     default Task run(@Nonnull Runnable runnable, boolean async) {
         Objects.requireNonNull(runnable);
@@ -17,9 +17,9 @@ public interface UpdaterScheduler {
     }
 
     /**
-     * Schedule a Runnable to be run.
+     * Schedule a Runnable to be run on a new thread.
      * @param runnable The Runnable
-     * @param async True to run the task async (Disregarded for BungeeCord, Velocity)
+     * @param async true to run the Runnable off the main server thread, false to run it on the main server thread. Disregarded for BungeeCord and Velocity.
      * @param delay The delay in milliseconds. A value less than zero should be considered unsafe.
      */
     default Task runDelayed(@Nonnull Runnable runnable, boolean async, long delay, TimeUnit unit) {
@@ -30,7 +30,7 @@ public interface UpdaterScheduler {
     /**
      * Schedule a Runnable to be run.
      * @param runnable The Runnable
-     * @param async True to run the task async (Disregarded for BungeeCord, Velocity)
+     * @param async true to run the Runnable off the main server thread, false to run it on the main server thread. Disregarded for BungeeCord and Velocity.
      * @param repeat The repeat period, in milliseconds. A value of 0 or less will only run the Runnable once. A value less than zero should be considered unsafe.
      */
     default Task runTimer(@Nonnull Runnable runnable, boolean async, long repeat, TimeUnit unit) {
@@ -39,9 +39,9 @@ public interface UpdaterScheduler {
     }
 
     /**
-     * Schedule a Runnable to be run.
+     * Schedule a Runnable to be run on a new thread.
      * @param runnable The Runnable
-     * @param async True to run the task async (Disregarded for BungeeCord, Velocity)
+     * @param async true to run the Runnable off the main server thread, false to run it on the main server thread. Disregarded for BungeeCord and Velocity.
      * @param delay The delay in milliseconds. A value less than zero should be considered unsafe.
      * @param repeat The repeat period, in milliseconds. A value of 0 or less will only run the Runnable once. A value less than zero should be considered unsafe.
      */

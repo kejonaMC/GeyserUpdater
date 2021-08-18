@@ -50,7 +50,7 @@ public class VelocityUpdater implements UpdaterBootstrap {
                 new VelocityPlayerHandler(server),
                 VERSION,
                 "/artifact/bootstrap/velocity/target/Geyser-Velocity.jar",
-                "/artifact/velocity/target/floodgate-velocity.jar"
+                "/artifact/bootstrap/velocity/target/floodgate-velocity.jar"
         );
     }
 

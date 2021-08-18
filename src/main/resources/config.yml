@@ -8,12 +8,26 @@
 auto-update-geyser: false
 auto-update-floodgate: false
 
+default-updates:
+  geyser:
+    enable: true
+    auto-check: true
+    auto-update: false
+  floodgate:
+    enable: false
+    auto-check: true
+    auto-update: false
+
 # The interval in hours between each auto update check.
 auto-update-interval: 24
+
+# The maximum amount of seconds that a download is allowed to run for. Increase if you are running into issues on a slow internet connection.
+download-time-limit: 180
 
 # If enabled, GeyserUpdater will attempt to restart the server 10 seconds after a new version of Geyser has been successfully downloaded.
 # If you aren't using a hosting provider or a server wrapper, you will need a restart script.
 auto-restart-server: false
+
 # When enabled, GeyserUpdater will automatically generate a restart script for you. If you are using CraftBukkit or a proxy
 # you will need to use the generated script to start your server! If you are using a hosting provider or a server wrapper you probably don't need this.
 auto-script-generating: false
@@ -21,11 +35,8 @@ auto-script-generating: false
 # Configure the message that is sent to all online players warning them that the server will be restarting in 10 seconds.
 restart-message-players: "§2This server will be restarting in 10 seconds!"
 
-# The maximum amount of seconds that a download is allowed to run for. Increase if you are running into issues on a slow internet connection.
-download-time-limit: 180
-
 # Enable debug logging
 enable-debug: false
 
 # Please do not change this version value!
-config-version: 2
+config-version: 3

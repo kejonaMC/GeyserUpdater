@@ -95,16 +95,4 @@ public class WebUtils {
 
         return content.toString();
     }
-
-    /** Get the latest build number of a given branch of Geyser from jenkins CI
-     *
-     * @param branchLink Example: https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master
-     * @return the latest build number
-     * @throws IOException if an exception occurred parsing the branchLink or there was a failure in the web request
-     */
-    public static int getLatestGeyserBuildNumberFromJenkins(String branchLink) throws IOException {
-        // todo use json
-        String buildXMLContents = WebUtils.getBody(URLEncoder.encode(branchLink, StandardCharsets.UTF_8.toString()) + "/lastSuccessfulBuild/api/xml?xpath=//buildNumber");
-        return Integer.parseInt(buildXMLContents.replaceAll("<(\\\\)?(/)?buildNumber>", "").trim());
-    }
 }
