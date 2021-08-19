@@ -4,10 +4,6 @@
 # NOTICE: Please read the README on our github page for full information regarding these options!
 # https://github.com/ProjectG-Plugins/GeyserUpdater
 
-# If enabled, GeyserUpdater will check for new Geyser builds on server start, and on the interval specified by Auto-Update-Interval. If a new build exists, it will be downloaded.
-auto-update-geyser: false
-auto-update-floodgate: false
-
 default-updates:
   geyser:
     enable: true
@@ -20,23 +16,22 @@ default-updates:
 
 # The interval in hours between each auto update check.
 auto-update-interval: 24
-
 # The maximum amount of seconds that a download is allowed to run for. Increase if you are running into issues on a slow internet connection.
-download-time-limit: 180
+download-time-limit: 300
+# Delete the downloaded file if the file hash of the downloaded file did not match what the download server provided.
+# If the file hash is not correct the downloaded file is likely corrupt or unfinished.
+delete-on-fail: true
 
 # If enabled, GeyserUpdater will attempt to restart the server 10 seconds after a new version of Geyser has been successfully downloaded.
 # If you aren't using a hosting provider or a server wrapper, you will need a restart script.
 auto-restart-server: false
-
 # When enabled, GeyserUpdater will automatically generate a restart script for you. If you are using CraftBukkit or a proxy
 # you will need to use the generated script to start your server! If you are using a hosting provider or a server wrapper you probably don't need this.
 auto-script-generating: false
-
 # Configure the message that is sent to all online players warning them that the server will be restarting in 10 seconds.
 restart-message-players: "§2This server will be restarting in 10 seconds!"
 
 # Enable debug logging
 enable-debug: false
-
 # Please do not change this version value!
 config-version: 3

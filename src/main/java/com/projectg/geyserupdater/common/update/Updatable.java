@@ -15,24 +15,33 @@ public class Updatable {
     @Nullable public final IdentityComparer<?, ?> hashComparer;
     @Nonnull public final String downloadUrl;
     @Nonnull public final Path outputFile;
+    public final boolean autoCheck;
+    public final boolean autoUpdate;
 
     /**
      * Immutable container for information regarding how to update something
-     * @param pluginIdentity The plugin name, which can be used to identify the plugin.
+     * @param name The name
      * @param identityComparer The {@link IdentityComparer} to check if the plugin is outdated
      * @param hashComparer The {@link IdentityComparer} to check if the hash of the downloaded file is acceptable.
      * @param downloadUrl The complete download link of the plugin
      * @param file If the Path is a file, the download will be written to that file. If the Path is a directory, the file will be written to that directory, and the filename will deduced from the link provided.
      */
-    public Updatable(@Nonnull String pluginIdentity, @Nonnull IdentityComparer<?, ?> identityComparer, @Nullable IdentityComparer<?, ?> hashComparer, @Nonnull String downloadUrl, @Nonnull Path file) {
-        Objects.requireNonNull(pluginIdentity);
-        Objects.requireNonNull(identityComparer);
+    public Updatable(@Nonnull String name,
+                     @Nonnull IdentityComparer<?, ?> identityComparer,
+                     @Nullable IdentityComparer<?, ?> hashComparer,
+                     @Nonnull String downloadUrl,
+                     @Nonnull Path file,
+                     boolean autoCheck,
+                     boolean autoUpdate) {
+
+        this.pluginIdentity = Objects.requireNonNull(name);
+        this.identityComparer = Objects.requireNonNull(identityComparer);
+        this.hashComparer = hashComparer;
         Objects.requireNonNull(downloadUrl);
         Objects.requireNonNull(file);
+        this.autoCheck = autoCheck;
+        this.autoUpdate = autoUpdate;
 
-        this.pluginIdentity = pluginIdentity;
-        this.identityComparer = identityComparer;
-        this.hashComparer = hashComparer;
 
         // Remove / from the end of the link if necessary
         if (downloadUrl.endsWith("/")) {
@@ -43,7 +52,7 @@ public class Updatable {
 
         // Make sure the file linked is a jar
         if (!downloadUrl.endsWith(".jar")) {
-            throw new IllegalArgumentException("Download URL provided for plugin '" + pluginIdentity + "' must direct to a file that ends in '.jar'");
+            throw new IllegalArgumentException("Download URL provided for plugin '" + name + "' must direct to a file that ends in '.jar'");
         }
 
         // Figure out the output file name if necessary

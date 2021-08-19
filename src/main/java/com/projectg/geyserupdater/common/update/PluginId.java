@@ -1,6 +1,6 @@
 package com.projectg.geyserupdater.common.update;
 
-import com.projectg.geyserupdater.common.GeyserUpdater;
+import com.projectg.geyserupdater.common.config.UpdaterConfiguration;
 
 public enum PluginId {
     GEYSER("https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/", "org.geysermc.connector.GeyserConnector"),
@@ -11,17 +11,30 @@ public enum PluginId {
      */
     private final String projectLink;
 
-    private String branch;
-    private String artifactLink;
-
     /**
      * A class from the given plugin
      */
     private final String pluginClassName;
+    private String branch;
+    private String artifactLink;
+
+    private boolean enable = false;
+    private boolean autoCheck = false;
+    private boolean autoUpdate = false;
 
     PluginId(String link, String pluginClassName) {
         this.projectLink = link;
         this.pluginClassName = pluginClassName;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+    public boolean isAutoCheck() {
+        return autoCheck;
+    }
+    public boolean isAutoUpdate() {
+        return autoUpdate;
     }
 
     /**
@@ -43,10 +56,10 @@ public enum PluginId {
     }
 
     /**
-     * @param artifactLink The artifact link. `artifact/bootstrap/spigot/target/Geyser-Spigot.jar` for example.
+     * @param artifactLink The artifact link. `bootstrap/spigot/target/Geyser-Spigot.jar` for example.
      */
     public void setArtifact(String artifactLink) {
-        this.artifactLink = artifactLink;
+        this.artifactLink = "artifact/" + artifactLink;
     }
 
     /**
@@ -61,16 +74,18 @@ public enum PluginId {
     }
 
     /**
-     * @return True if the plugin is enabled in {@link com.projectg.geyserupdater.common.config.UpdaterConfiguration}
+     * Load the enable, autoCheck, and autoUpdate configuration settings into the enum values.
+     * {@link UpdaterConfiguration#getDefaultUpdates()} should contain entries whose keys are equal an enum value's name in lowercase
+     * @param config The config to load from
      */
-    public boolean isEnabled() {
-        if (this == GEYSER) {
-            return GeyserUpdater.getInstance().getConfig().isAutoUpdateGeyser();
-        } else if (this == FLOODGATE) {
-            return GeyserUpdater.getInstance().getConfig().isAutoUpdateFloodgate();
-        } else {
-            //todo fix this bs
-            return false;
+    public static void loadSettings(UpdaterConfiguration config) {
+        for (PluginId plugin : PluginId.values()) {
+            UpdaterConfiguration.DefaultUpdate settings = config.getDefaultUpdates().get(plugin.name().toLowerCase());
+            if (settings != null) {
+                plugin.enable = settings.isEnable();
+                plugin.autoCheck = settings.isAutoCheck();
+                plugin.autoUpdate = settings.isAutoUpdate();
+            }
         }
     }
 }

@@ -83,15 +83,15 @@ public class GeyserUpdater {
             }
         }
 
+        // Set the enable/autoCheck/autoUpdate values
+        PluginId.loadSettings(config);
+
         // Set the correct download links for geyser and floodgate
         PluginId.GEYSER.setArtifact(geyserArtifact);
         PluginId.FLOODGATE.setArtifact(floodgateArtifact);
 
         // Manager for updating plugins
-        this.updateManager = new UpdateManager(downloadFolder, scheduler, config.getDownloadTimeLimit());
-
-        // todo: schedule auto updater
-
+        this.updateManager = new UpdateManager(downloadFolder, scheduler, config);
     }
 
     /**

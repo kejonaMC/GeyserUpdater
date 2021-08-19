@@ -42,7 +42,7 @@ public class IdentityComparer<T extends IdentityProvider<S>, S extends Identity<
     }
 
     /**
-     * Request the {@link Identity} from the external {@link IdentityProvider} and compare it to the stored local {@link Identity}.
+     * Request the {@link Identity} from the external {@link IdentityProvider} and compare it to the stored local {@link Identity}. Should be regarded as a blocking operation.
      * @return True if the local identity {@link Object#equals(Object)} the external identity
      */
     public boolean checkIfEquals() {

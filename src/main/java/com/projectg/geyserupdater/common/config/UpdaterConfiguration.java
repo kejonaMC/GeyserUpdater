@@ -25,6 +25,12 @@ public class UpdaterConfiguration {
         return autoUpdateInterval;
     }
 
+    @JsonProperty(value = "delete-on-fail")
+    private boolean deleteOnFail = true;
+    public boolean isDeleteOnFail() {
+        return deleteOnFail;
+    }
+
     @JsonProperty(value = "Auto-Restart-Server")
     private boolean restartServer = false;
     public boolean isRestartServer() {
@@ -44,7 +50,7 @@ public class UpdaterConfiguration {
     }
 
     @JsonProperty(value = "download-time-limit")
-    private int downloadTimeLimit = 180;
+    private int downloadTimeLimit = 300;
     public int getDownloadTimeLimit() {
         return downloadTimeLimit;
     }

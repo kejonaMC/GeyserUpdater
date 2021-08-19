@@ -1,8 +1,7 @@
-package com.projectg.geyserupdater.common.update.age;
+package com.projectg.geyserupdater.common.update;
 
 public enum DownloadResult {
     SUCCESS,
     TIMEOUT,
-    HASH_FAIl,
     UNKNOWN_FAIL;
 }
