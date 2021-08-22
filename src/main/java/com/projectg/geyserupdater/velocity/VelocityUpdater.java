@@ -7,12 +7,11 @@ import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.ScriptCreator;
 import com.projectg.geyserupdater.velocity.command.GeyserUpdateCommand;
 import com.projectg.geyserupdater.velocity.logger.Slf4jUpdaterLogger;
-import com.projectg.geyserupdater.velocity.util.bstats.Metrics;
+import com.projectg.geyserupdater.velocity.bstats.Metrics;
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
-import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -21,23 +20,20 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.nio.file.Path;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = VelocityUpdater.VERSION, description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
-        dependencies = {@Dependency(id = "geyser")})
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = VelocityUpdater.VERSION,
+        description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.",
+        authors = {"Jens", "Konicai"})
 public class VelocityUpdater implements UpdaterBootstrap {
 
     public static final String VERSION = "1.6.0";
-    private static VelocityUpdater PLUGIN;
 
     private final GeyserUpdater updater;
     private final ProxyServer server;
-    private final Path dataDirectory;
     private final Metrics.Factory metricsFactory;
 
     @Inject
-    public VelocityUpdater(ProxyServer server, Logger baseLogger, @DataDirectory final Path folder, Metrics.Factory metricsFactory) throws IOException {
-        VelocityUpdater.PLUGIN = this;
+    public VelocityUpdater(ProxyServer server, Logger baseLogger, @DataDirectory final Path dataDirectory, Metrics.Factory metricsFactory) throws IOException {
         this.server  = server;
-        this.dataDirectory = folder;
         this.metricsFactory = metricsFactory;
 
         updater = new GeyserUpdater(
@@ -82,9 +78,6 @@ public class VelocityUpdater implements UpdaterBootstrap {
         ScriptCreator.createRestartScript(true);
     }
 
-    public static VelocityUpdater getPlugin() {
-        return PLUGIN;
-    }
     public ProxyServer getProxyServer() {
         return server;
     }

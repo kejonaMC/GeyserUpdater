@@ -1,4 +1,4 @@
-package com.projectg.geyserupdater.bungee.util.bstats;
+package com.projectg.geyserupdater.bungee.bstats;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

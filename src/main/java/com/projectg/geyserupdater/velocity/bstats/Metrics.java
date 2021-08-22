@@ -1,4 +1,4 @@
-package com.projectg.geyserupdater.velocity.util.bstats;
+package com.projectg.geyserupdater.velocity.bstats;
 
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.PluginDescription;

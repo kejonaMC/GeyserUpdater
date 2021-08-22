@@ -1,9 +1,7 @@
 package com.projectg.geyserupdater.bungee.command;
 
-import com.projectg.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.projectg.geyserupdater.common.Messages;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -23,6 +21,10 @@ public class GeyserUpdateCommand extends Command {
     public void execute(CommandSender commandSender, String[] args) {
         UpdaterLogger logger = UpdaterLogger.getLogger();
 
+        //todo: bungee command
+
+        /*
+
         if (commandSender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) commandSender;
             try {
@@ -40,7 +42,6 @@ public class GeyserUpdateCommand extends Command {
                 e.printStackTrace();
             }
         } else {
-            // TODO: filter this against command blocks
             try {
                 logger.info(Messages.Command.CHECK_START);
                 boolean isLatest = GeyserProperties.isLatestBuild();
@@ -55,5 +56,7 @@ public class GeyserUpdateCommand extends Command {
                 e.printStackTrace();
             }
         }
+
+         */
     }
 }

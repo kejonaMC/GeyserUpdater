@@ -1,8 +1,6 @@
 package com.projectg.geyserupdater.velocity.command;
 
 import com.projectg.geyserupdater.common.Messages;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
-import com.projectg.geyserupdater.velocity.util.GeyserVelocityDownloader;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.RawCommand;
@@ -15,6 +13,7 @@ public class GeyserUpdateCommand implements RawCommand {
 
     @Override
     public void execute(final Invocation invocation) {
+        /*
         CommandSource source = invocation.source();
 
         try {
@@ -30,6 +29,7 @@ public class GeyserUpdateCommand implements RawCommand {
             source.sendMessage(Component.text(Messages.Command.FAIL_CHECK));
             e.printStackTrace();
         }
+         */
     }
     @Override
     public boolean hasPermission(final Invocation invocation) {

@@ -2,7 +2,7 @@ package com.projectg.geyserupdater.spigot;
 
 import com.projectg.geyserupdater.common.scheduler.Task;
 import com.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
 
 public class SpigotScheduler implements UpdaterScheduler {
 
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
 
-    public SpigotScheduler(@Nonnull JavaPlugin plugin) {
+    public SpigotScheduler(@Nonnull Plugin plugin) {
         Objects.requireNonNull(plugin);
         this.plugin = plugin;
     }

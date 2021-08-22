@@ -63,7 +63,6 @@ public class GeyserUpdater {
         }, true);
 
         // Load the config
-        logger.debug("Loading config");
         config = FileUtils.loadConfig(dataFolder.resolve("config.yml"));
         if (config.isIncorrectVersion()) {
             throw new IllegalStateException("Your copy of config.yml is outdated (your version: " + config.getConfigVersion() + ", latest version: " + UpdaterConfiguration.DEFAULT_CONFIG_VERSION + "). Please delete it and let a fresh copy of config.yml be regenerated!");

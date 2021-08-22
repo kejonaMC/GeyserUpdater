@@ -2,8 +2,6 @@ package com.projectg.geyserupdater.spigot.command;
 
 import com.projectg.geyserupdater.common.Messages;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
-import com.projectg.geyserupdater.spigot.util.GeyserSpigotDownloader;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -21,6 +19,10 @@ public class GeyserUpdateCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         UpdaterLogger logger = UpdaterLogger.getLogger();
+
+        //todo: spigot command
+
+        /*
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -57,6 +59,7 @@ public class GeyserUpdateCommand implements CommandExecutor {
         } else {
             return false;
         }
+         */
         return true;
     }
 }

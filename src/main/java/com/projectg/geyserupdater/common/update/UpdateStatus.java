@@ -1,10 +1,10 @@
 package com.projectg.geyserupdater.common.update;
 
-public enum Status {
+public enum UpdateStatus {
     /**
      * The Updatable has not been checked, or the last time it was checked it was not outdated. Another check may find that it is outdated.
      */
-    CURRENT,
+    UNKNOWN,
     /**
      * The Updatable is outdated but is not being downloaded.
      */
@@ -16,5 +16,5 @@ public enum Status {
     /**
      * The Updatable is outdated but it has been downloaded.
      */
-    DOWNLOADED;
+    DOWNLOADED
 }
