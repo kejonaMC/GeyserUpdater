@@ -3,7 +3,8 @@ package com.projectg.geyserupdater.common.logger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class JavaUtilUpdaterLogger implements UpdaterLogger {
+public class JavaUtilUpdaterLogger implements UpdaterLogger {
+
     private final Logger logger;
     private Level originLevel;
 

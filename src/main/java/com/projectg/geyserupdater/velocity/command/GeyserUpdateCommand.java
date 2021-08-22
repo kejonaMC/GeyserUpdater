@@ -1,18 +1,14 @@
 package com.projectg.geyserupdater.velocity.command;
 
-import com.projectg.geyserupdater.common.Messages;
-
-import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.RawCommand;
-
-import net.kyori.adventure.text.Component;
-
-import java.io.IOException;
 
 public class GeyserUpdateCommand implements RawCommand {
 
     @Override
     public void execute(final Invocation invocation) {
+
+        //todo: velocity command
+
         /*
         CommandSource source = invocation.source();
 

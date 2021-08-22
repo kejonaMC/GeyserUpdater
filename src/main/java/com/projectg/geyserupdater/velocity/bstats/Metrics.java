@@ -1,36 +1,18 @@
 package com.projectg.geyserupdater.velocity.bstats;
 
+import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-
-import com.google.inject.Inject;
-
 import org.slf4j.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -955,7 +937,7 @@ public class Metrics {
                     "# There is no performance penalty associated with having metrics enabled, and data sent to");
             configContent.add("# bStats is fully anonymous.");
             configContent.add("enabled=" + defaultEnabled);
-            configContent.add("server-uuid=" + UUID.randomUUID().toString());
+            configContent.add("server-uuid=" + UUID.randomUUID());
             configContent.add("log-errors=false");
             configContent.add("log-sent-data=false");
             configContent.add("log-response-status-text=false");

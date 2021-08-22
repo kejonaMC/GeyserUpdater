@@ -7,9 +7,8 @@ import com.projectg.geyserupdater.common.update.PluginId;
 import com.projectg.geyserupdater.common.update.UpdateManager;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;
-import org.geysermc.connector.GeyserConnector;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -91,6 +90,9 @@ public class GeyserUpdater {
 
         // Manager for updating plugins
         this.updateManager = new UpdateManager(downloadFolder, scheduler, config);
+
+        // todo: restart after updates
+        // todo: better message sending, to players too
     }
 
     /**
@@ -108,12 +110,7 @@ public class GeyserUpdater {
             e.printStackTrace();
         }
 
-        // todo: find a way to make sure we are shutdown last
-
-        // This test isn't ideal but it'll work for now
-        if (!GeyserConnector.getInstance().getBedrockServer().isClosed()) {
-            throw new UnsupportedOperationException("Cannot replace Geyser before Geyser has shutdown! No updates will be applied.");
-        }
+        // todo: find a way to make sure we are shutdown last (to not modify files still being used)
 
         UpdaterLogger.getLogger().debug("Installing plugins from the cache.");
         Files.walk(downloadFolder, 1).forEach((file) -> {
