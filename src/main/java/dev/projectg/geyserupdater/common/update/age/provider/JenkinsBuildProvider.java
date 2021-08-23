@@ -26,20 +26,22 @@ public class JenkinsBuildProvider implements IdentityProvider<BuildNumber> {
 
     @Override
     public BuildNumber getValue() {
+        BuildNumber buildNumber = null;
         try {
             String body = WebUtils.getBody(url);
+            String number = body.substring(0, body.length() - 1); //fixme: getBody() adds a newline char at the end
             try {
-                return new BuildNumber(Integer.parseInt(body));
+                buildNumber = new BuildNumber(Integer.parseInt(number));
             } catch (NumberFormatException e) {
                 UpdaterLogger.getLogger().error("Failed to get a build number from a Jenkins server because an integer was not returned.");
-                UpdaterLogger.getLogger().error("Body returned: " + body);
+                UpdaterLogger.getLogger().error("Body returned: <" + number + "> (excluding the angle brackets)");
                 e.printStackTrace();
-                return null;
             }
         } catch (IOException e) {
             UpdaterLogger.getLogger().error("Failed to get a build number from a Jenkins server:");
             e.printStackTrace();
-            return null;
         }
+
+        return buildNumber;
     }
 }

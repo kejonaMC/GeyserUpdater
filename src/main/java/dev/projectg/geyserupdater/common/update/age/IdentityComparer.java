@@ -46,10 +46,15 @@ public class IdentityComparer<T extends IdentityProvider<S>, S extends Identity<
      * @return True if the local identity {@link Object#equals(Object)} the external identity
      */
     public boolean checkIfEquals() {
+        // todo: return an enum
         if (localIdentity == null) {
-            return false;
+            return true;
+        }
+        S externalIdentity = externalIdentityProvider.getValue();
+        if (externalIdentity == null) {
+            return true;
         }
 
-        return localIdentity.value().equals(externalIdentityProvider.getValue());
+        return localIdentity.value().equals(externalIdentity.value());
     }
 }
