@@ -34,8 +34,8 @@ public class SpigotUpdater extends JavaPlugin implements UpdaterBootstrap {
                     new SpigotScheduler(this),
                     new SpigotPlayerHandler(server),
                     this.getDescription().getVersion(),
-                    "/artifact/bootstrap/spigot/target/Geyser-Spigot.jar",
-                    "/artifact/bootstrap/spigot/target/floodgate-spigot.jar"
+                    "bootstrap/spigot/target/Geyser-Spigot.jar",
+                    "bootstrap/spigot/target/floodgate-spigot.jar"
                     );
         } catch (IOException e) {
             getLogger().severe("Failed to start GeyserUpdater! Disabling...");

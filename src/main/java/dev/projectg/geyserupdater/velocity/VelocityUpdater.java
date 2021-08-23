@@ -53,8 +53,8 @@ public class VelocityUpdater implements UpdaterBootstrap {
                 new VelocityScheduler(this),
                 new VelocityPlayerHandler(server),
                 VERSION,
-                "/artifact/bootstrap/velocity/target/Geyser-Velocity.jar",
-                "/artifact/bootstrap/velocity/target/floodgate-velocity.jar"
+                "bootstrap/velocity/target/Geyser-Velocity.jar",
+                "bootstrap/velocity/target/floodgate-velocity.jar"
         );
 
         // Register our only command

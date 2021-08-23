@@ -30,8 +30,8 @@ public class BungeeUpdater extends Plugin implements UpdaterBootstrap {
                     new BungeeScheduler(this),
                     new BungeePlayerHandler(),
                     this.getDescription().getVersion(),
-                    "/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar",
-                    "/artifact/bootstrap/bungee/target/floodgate-bungee.jar"
+                    "bootstrap/bungeecord/target/Geyser-BungeeCord.jar",
+                    "bootstrap/bungee/target/floodgate-bungee.jar"
             );
         } catch (IOException e) {
             getLogger().severe("Failed to start GeyserUpdater! Disabling...");
