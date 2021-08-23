@@ -14,14 +14,14 @@ waterDir="Waterfall-guDeploy"
 velocityDir="Velocity-guDeploy"
 
 #Links
-guLink="https://ci.projectg.dev/job/GeyserUpdater/job/1.5.0/lastSuccessfulBuild/artifact/target/GeyserUpdater-1.5.0.jar"
-geyserLink="https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/720/artifact/bootstrap/"
+guLink="https://ci.projectg.dev/job/GeyserUpdater/job/1.6.0/lastSuccessfulBuild/artifact/target/GeyserUpdater-1.6.0.jar"
+geyserLink="https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/821/artifact/bootstrap/"
 
 buildToolsLink="https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
-paperLink="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/750/downloads/paper-1.16.5-750.jar"
+paperLink="https://papermc.io/api/v2/projects/paper/versions/1.17.1/builds/209/downloads/paper-1.17.1-209.jar"
 bungeeLink="https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/bootstrap/target/BungeeCord.jar"
-waterLink="https://papermc.io/api/v2/projects/waterfall/versions/1.16/builds/425/downloads/waterfall-1.16-425.jar"
-velocityLink="https://versions.velocitypowered.com/download/1.1.5.jar"
+waterLink="https://papermc.io/api/v2/projects/waterfall/versions/1.17/builds/448/downloads/waterfall-1.17-448.jar"
+velocityLink="https://versions.velocitypowered.com/download/3.0.0.jar"
 
 
 echo "[WARN] This script can generate up to 500MB of data!"
@@ -40,12 +40,20 @@ else
 fi
 
 # Download file for a given link
+# first arg is link, second arg is output file name (optional)
 download () {
-  jarURL="$1"
   if [[ "$downloadCmd" == "curl" ]]; then
-    curl "$jarURL" -O
+    if [[ -z "$2" ]]; then
+      curl "$1" -O
+    else
+      curl "$1" --output "$2"
+    fi
   else
-    wget "$jarURL"
+    if [[ -z "$2" ]]; then
+      wget "$1"
+    else
+      curl "$1" --output-document "$2"
+    fi
   fi
 }
 
@@ -57,8 +65,14 @@ getAllPlugins () {
   mkdir "$pluginCache"
   cd "$pluginCache" || exit
 
-  mkdir Common
-  cd Common || exit
+  mkdir "Common"
+  cd "Common" || exit
+  mkdir "GeyserUpdater"
+  cd "GeyserUpdater" || exit
+  echo
+  echo "[INFO] Downloading GeyserUpdater config"
+  download "https://raw.githubusercontent.com/ProjectG-Plugins/GeyserUpdater/1.6.0/devconfig.yml" "config.yml"
+  cd ../
   echo
   echo "[INFO] Downloading GeyserUpdater"
   download "$guLink"
@@ -66,31 +80,13 @@ getAllPlugins () {
 
   mkdir "Spigot"
   cd "Spigot" || exit
-  mkdir "GeyserUpdater"
-  cd "GeyserUpdater" || exit
-  echo "Auto-Update-Geyser: true
-Auto-Restart-Server: true
-Restart-Message-Players: '&2This server will be restarting in 10 seconds!'
-Auto-Script-Generating: true
-Enable-Debug: true
-Config-Version: 2" > config.yml
-  cd ../
   echo
   echo "[INFO] Downloading Geyser-Spigot.jar"
   download "$geyserLink"spigot/target/Geyser-Spigot.jar
   cd ../
 
-  mkdir BungeeCord
-  cd BungeeCord || exit
-  mkdir GeyserUpdater
-  cd GeyserUpdater || exit
-  echo "Auto-Update-Geyser: true
-Auto-Restart-Server: true
-Restart-Message-Players: '&2This server will be restarting in 10 seconds!'
-Auto-Script-Generating: true
-Enable-Debug: true
-Config-Version: 2" > config.yml
-  cd ../
+  mkdir "BungeeCord"
+  cd "BungeeCord" || exit
   echo
   echo "[INFO] Downloading Geyser-BungeeCord.jar"
   download "$geyserLink"bungeecord/target/Geyser-BungeeCord.jar
@@ -98,15 +94,6 @@ Config-Version: 2" > config.yml
 
   mkdir "Velocity"
   cd "Velocity" || exit
-  mkdir "geyserupdater"
-  cd "geyserupdater" || exit
-  echo "Auto-Update-Geyser=true
-Auto-Restart-Server=true
-Restart-Message-Players='&2This server will be restarting in 10 seconds!'
-Auto-Script-Generating=true
-Enable-Debug=true
-Config-Version=2" > config.toml
-  cd ../
   echo
   echo "[INFO] Downloading Geyser-Velocity"
   download "$geyserLink"velocity/target/Geyser-Velocity.jar
