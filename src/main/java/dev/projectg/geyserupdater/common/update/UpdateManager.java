@@ -194,6 +194,7 @@ public class UpdateManager {
                         registry.put(updatable, UpdateStatus.OUTDATED);
                         outdatedOnes.add(updatable.toString());
                         if (updatable.autoUpdate) {
+                            registry.put(updatable, UpdateStatus.DOWNLOADING);
                             downloadManager.queue(updatable);
                             autoDownloads.add(updatable.toString());
                         }
@@ -204,9 +205,9 @@ public class UpdateManager {
             // todo: also send messages to players with the permission
             if (!outdatedOnes.isEmpty()) {
                 UpdaterLogger logger = UpdaterLogger.getLogger();
-                logger.info("The following updatables are outdated: " + outdatedOnes.toString().substring(0, outdatedOnes.size()));
+                logger.info("The following updatables are outdated: " + outdatedOnes);
                 if (!autoDownloads.isEmpty()) {
-                    logger.info("The following updatables are set to download automatically and have been queued for download: " + autoDownloads.toString().substring(0, autoDownloads.size()));
+                    logger.info("The following updatables are set to download automatically and have been queued for download: " + autoDownloads);
                 }
             }
 
