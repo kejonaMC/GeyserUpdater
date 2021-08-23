@@ -43,7 +43,7 @@ public class UpdateManager {
         for (PluginId pluginId : PluginId.values()) {
             if (pluginId.isEnable()) {
                 // Get the git.properties
-                InputStream is = pluginId.getPluginClass().getResourceAsStream("git.properties");
+                InputStream is = pluginId.getPluginClass().getClassLoader().getResourceAsStream("git.properties");
                 if (is == null) {
                     throw new AssertionError("Unable to find resource 'git.properties' for plugin: " + pluginId.name());
                 }
