@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class DownloadManager {
@@ -47,28 +48,24 @@ public class DownloadManager {
         // Run the download on a new thread
         this.downloader = scheduler.run(() -> {
 
-            while (true) {
-                Updatable updatable = queue.get(0);
-                if (updatable == null) {
-                    break;
-                }
-                currentUpdate = updatable;
+            while (!queue.isEmpty()) {
+                currentUpdate = Objects.requireNonNull(queue.get(0));
 
                 // Create a timer to stop this download from running too long. Either the hang checker is cancelled or the hang checker cancels this.
-                Task hangChecker = scheduleHangChecker(updatable);
+                Task hangChecker = scheduleHangChecker(currentUpdate);
 
                 try {
-                    WebUtils.downloadFile(updatable.downloadUrl, updatable.outputFile);
+                    WebUtils.downloadFile(currentUpdate.downloadUrl, currentUpdate.outputFile);
                 } catch (IOException e) {
-                    UpdaterLogger.getLogger().error("Caught exception while downloading file " + updatable.outputFile + " with URL: " + updatable.downloadUrl);
+                    UpdaterLogger.getLogger().error("Caught exception while downloading file " + currentUpdate.outputFile + " with URL: " + currentUpdate.downloadUrl);
                     e.printStackTrace();
-                    updateManager.finish(updatable, DownloadResult.UNKNOWN_FAIL);
+                    updateManager.finish(currentUpdate, DownloadResult.UNKNOWN_FAIL);
                     continue;
                 }
 
                 hangChecker.cancel();
                 queue.remove(0);
-                updateManager.finish(updatable, DownloadResult.SUCCESS);
+                updateManager.finish(currentUpdate, DownloadResult.SUCCESS);
             }
 
             // Revert everything while having it locked so that the state is always correctly read by a different thread
