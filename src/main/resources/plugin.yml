@@ -1,5 +1,5 @@
 name: ${project.name}
-main: com.projectg.geyserupdater.spigot.SpigotUpdater
+main: dev.projectg.geyserupdater.spigot.SpigotUpdater
 version: ${project.version}
 api-version: 1.13
 description: Automatically or manually downloads new builds of Geyser and applies them on server restart.
