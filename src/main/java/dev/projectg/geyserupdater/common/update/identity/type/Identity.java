@@ -1,4 +1,6 @@
-package dev.projectg.geyserupdater.common.update.age.type;
+package dev.projectg.geyserupdater.common.update.identity.type;
+
+import javax.annotation.Nonnull;
 
 /**
  * Provides implementation for something that can be quantified as an age of something.
@@ -6,5 +8,6 @@ package dev.projectg.geyserupdater.common.update.age.type;
  */
 public interface Identity<T> {
 
+    @Nonnull
     T value();
 }

@@ -93,4 +93,12 @@ public class WebUtils {
 
         return content.toString();
     }
+
+    /**
+     * Get the filename at the end of a url
+     * @param url The url to get the filename at the end from. Should not end with a /
+     */
+    public static String getFileName(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
 }

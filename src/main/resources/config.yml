@@ -17,7 +17,7 @@ default-updates:
 # The interval in hours between each auto update check.
 auto-update-interval: 24
 # The maximum amount of seconds that a download is allowed to run for. Increase if you are running into issues on a slow internet connection.
-download-time-limit: 300
+download-time-limit: 180
 # Delete the downloaded file if the file hash of the downloaded file did not match what the download server provided.
 # Or if the file hash was not checked and the download time limit was reached, or an exception occurred.
 # If the file hash is not correct the downloaded file is likely corrupt or unfinished.

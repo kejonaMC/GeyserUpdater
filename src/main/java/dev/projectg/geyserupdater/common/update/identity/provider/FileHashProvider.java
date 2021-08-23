@@ -1,10 +1,10 @@
-package dev.projectg.geyserupdater.common.update.age.provider;
+package dev.projectg.geyserupdater.common.update.identity.provider;
 
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
 import dev.projectg.geyserupdater.common.logger.UpdaterLogger;
-import dev.projectg.geyserupdater.common.update.age.type.Md5FileHash;
+import dev.projectg.geyserupdater.common.update.identity.type.Md5FileHash;
 
 import java.io.IOException;
 import java.nio.file.Path;

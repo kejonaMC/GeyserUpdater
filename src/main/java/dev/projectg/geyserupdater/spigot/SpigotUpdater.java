@@ -40,6 +40,7 @@ public class SpigotUpdater extends JavaPlugin implements UpdaterBootstrap {
         } catch (IOException e) {
             getLogger().severe("Failed to start GeyserUpdater! Disabling...");
             e.printStackTrace();
+            return;
         }
 
         Objects.requireNonNull(getCommand("geyserupdate")).setExecutor(new GeyserUpdateCommand());

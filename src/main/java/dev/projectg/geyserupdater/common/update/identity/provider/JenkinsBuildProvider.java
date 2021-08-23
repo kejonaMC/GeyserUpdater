@@ -1,7 +1,7 @@
-package dev.projectg.geyserupdater.common.update.age.provider;
+package dev.projectg.geyserupdater.common.update.identity.provider;
 
 import dev.projectg.geyserupdater.common.logger.UpdaterLogger;
-import dev.projectg.geyserupdater.common.update.age.type.BuildNumber;
+import dev.projectg.geyserupdater.common.update.identity.type.BuildNumber;
 import dev.projectg.geyserupdater.common.util.WebUtils;
 
 import java.io.IOException;

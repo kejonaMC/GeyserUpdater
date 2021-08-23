@@ -1,7 +1,7 @@
-package dev.projectg.geyserupdater.common.update.age.provider;
+package dev.projectg.geyserupdater.common.update.identity.provider;
 
 import dev.projectg.geyserupdater.common.logger.UpdaterLogger;
-import dev.projectg.geyserupdater.common.update.age.type.Md5FileHash;
+import dev.projectg.geyserupdater.common.update.identity.type.Md5FileHash;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class JenkinsHashProvider implements IdentityProvider<Md5FileHash> {
                 while ((inputLine = in.readLine()) != null) {
                     if (inputLine.contains("MD5")) {
                         con.disconnect();
-                        return new Md5FileHash(inputLine.substring(inputLine.indexOf("MD5: ") + 4, inputLine.indexOf("</div>")));
+                        return new Md5FileHash(inputLine.substring(inputLine.indexOf("MD5: ") + 5, inputLine.indexOf("</div>")));
                     }
                 }
                 con.disconnect();

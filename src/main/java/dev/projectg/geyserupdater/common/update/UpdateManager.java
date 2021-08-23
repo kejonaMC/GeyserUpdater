@@ -1,21 +1,22 @@
 package dev.projectg.geyserupdater.common.update;
 
+import com.google.common.collect.ImmutableMap;
 import dev.projectg.geyserupdater.common.config.UpdaterConfiguration;
 import dev.projectg.geyserupdater.common.logger.UpdaterLogger;
 import dev.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
-import dev.projectg.geyserupdater.common.update.age.IdentityComparer;
-import dev.projectg.geyserupdater.common.update.age.provider.FileHashProvider;
-import dev.projectg.geyserupdater.common.update.age.provider.JenkinsBuildProvider;
-import dev.projectg.geyserupdater.common.update.age.provider.JenkinsHashProvider;
-import dev.projectg.geyserupdater.common.update.age.type.BuildNumber;
-import dev.projectg.geyserupdater.common.util.FileUtils;
+import dev.projectg.geyserupdater.common.update.identity.IdentityComparer;
+import dev.projectg.geyserupdater.common.update.identity.provider.FileHashProvider;
+import dev.projectg.geyserupdater.common.update.identity.provider.JenkinsBuildProvider;
+import dev.projectg.geyserupdater.common.update.identity.provider.JenkinsHashProvider;
+import dev.projectg.geyserupdater.common.update.identity.type.BuildNumber;
+import dev.projectg.geyserupdater.common.util.WebUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -38,8 +39,6 @@ public class UpdateManager {
         this.downloadManager = new DownloadManager(this, scheduler, config.getDownloadTimeLimit());
         UpdaterLogger logger = UpdaterLogger.getLogger();
 
-        // If we must schedule a checker to check for updates on an interval
-        boolean updateCheckerRequired = false;
         for (PluginId pluginId : PluginId.values()) {
             if (pluginId.isEnable()) {
                 // Get the git.properties
@@ -66,6 +65,9 @@ public class UpdateManager {
 
                 pluginId.setBranch(branch);
 
+                // The download location, used for both downloading and hash checking
+                Path downloadLocation = defaultDownloadLocation.resolve(Paths.get(WebUtils.getFileName(pluginId.getLatestFileLink())));
+
                 // For age comparer
                 BuildNumber buildNumber = new BuildNumber(Integer.parseInt(buildNumberString));
                 JenkinsBuildProvider buildProvider;
@@ -78,19 +80,14 @@ public class UpdateManager {
                 }
 
                 // File hash comparer
-                IdentityComparer<?, ?> hashComparer = null;
+                IdentityComparer<?, ?, ?> hashComparer = null;
                 try {
-                    FileHashProvider localHashProvider = new FileHashProvider(FileUtils.getCodeSourceLocation(pluginId.getClass()));
+                    FileHashProvider localHashProvider = new FileHashProvider(downloadLocation);
                     JenkinsHashProvider jenkinsHashProvider = new JenkinsHashProvider(pluginId.getLatestFileLink() + "/*fingerprint*/");
                     hashComparer = new IdentityComparer<>(localHashProvider, jenkinsHashProvider);
-                } catch (URISyntaxException | MalformedURLException e) {
+                } catch (MalformedURLException e) {
                     UpdaterLogger.getLogger().error("Failure while getting location of file for " + pluginId.name() + ". It will be possible to update it, but not to compare file hashes.");
                     e.printStackTrace();
-                }
-
-                boolean autoCheck = pluginId.isAutoCheck();
-                if (autoCheck) {
-                    updateCheckerRequired = true;
                 }
 
                 register(new Updatable(
@@ -98,18 +95,13 @@ public class UpdateManager {
                         new IdentityComparer<>(buildNumber, buildProvider),
                         hashComparer,
                         pluginId.getLatestFileLink(),
-                        defaultDownloadLocation,
-                        autoCheck,
+                        downloadLocation,
+                        pluginId.isAutoCheck(),
                         pluginId.isAutoUpdate()));
             }
         }
 
         // Load extra stuff from the config if we wanted, I guess
-
-        // Check for updates on a schedule, if at least one updatable requires it
-        if (updateCheckerRequired) {
-            scheduleUpdateChecker(scheduler, config.getAutoUpdateInterval());
-        }
     }
 
     /**
@@ -159,18 +151,32 @@ public class UpdateManager {
         if (updatable.hashComparer == null) {
             if (result == DownloadResult.SUCCESS) {
                 // cant check hash, but the download result is success
+                logger.info("Successfully downloaded update for: " + updatable);
                 registry.put(updatable, UpdateStatus.DOWNLOADED);
                 return;
             }
-        } else if (updatable.hashComparer.checkIfEquals()) {
-            // hash is correct
-            registry.put(updatable, UpdateStatus.DOWNLOADED);
-            return;
+        } else {
+            Object downloadHash = updatable.hashComparer.callLocalValue();
+            Object anticipatedHash = updatable.hashComparer.callExternalValue();
+            if (downloadHash == null) {
+                logger.error("Failed to find hash for downloaded update of: " + updatable);
+            } else if (anticipatedHash == null) {
+                logger.error("Failed to find anticipated hash for downloaded update of: " + updatable);
+            } else if (downloadHash.equals(anticipatedHash)) {
+                // hash is "correct"
+                logger.info("Successfully downloaded update for: " + updatable);
+                logger.debug("Downloaded file hash: <" + downloadHash + ">. Anticipated hash: <" + anticipatedHash + ">");
+                registry.put(updatable, UpdateStatus.DOWNLOADED);
+                return;
+            } else {
+                logger.warn("The file hash of the downloaded file did not match the hash provided online for " + updatable);
+                logger.warn("Downloaded file hash: <" + downloadHash + ">. Anticipated hash: <" + anticipatedHash + ">");
+            }
         }
 
         // Hash is not correct, or cannot check hash and there was a fail
         if (config.isDeleteOnFail()) {
-            UpdaterLogger.getLogger().warn("The file hash of the downloaded file did not match the hash provided online for " + updatable + ". Deleting file.");
+            logger.warn("Deleting failed download.");
             try {
                 Files.deleteIfExists(updatable.outputFile);
             } catch (IOException e) {
@@ -214,5 +220,12 @@ public class UpdateManager {
         }, true, 0L, interval, TimeUnit.HOURS);
 
         isAutoChecking = true;
+    }
+
+    /**
+     * @return a {@link Map#keySet()} of the tracked Updatable registry
+     */
+    public Set<Updatable> getTrackedUpdatables() {
+        return registry.keySet();
     }
 }

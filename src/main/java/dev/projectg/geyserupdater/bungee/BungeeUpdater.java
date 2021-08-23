@@ -36,6 +36,7 @@ public class BungeeUpdater extends Plugin implements UpdaterBootstrap {
         } catch (IOException e) {
             getLogger().severe("Failed to start GeyserUpdater! Disabling...");
             e.printStackTrace();
+            return;
         }
 
         this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());

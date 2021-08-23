@@ -1,18 +1,20 @@
 package dev.projectg.geyserupdater.common.update;
 
-import dev.projectg.geyserupdater.common.update.age.IdentityComparer;
+import dev.projectg.geyserupdater.common.update.identity.IdentityComparer;
+import dev.projectg.geyserupdater.common.util.WebUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 public class Updatable {
 
     @Nonnull public final String pluginIdentity;
-    @Nonnull public final IdentityComparer<?, ?> identityComparer;
-    @Nullable public final IdentityComparer<?, ?> hashComparer;
+    @Nonnull public final IdentityComparer<?, ?, ?> identityComparer;
+    @Nullable public final IdentityComparer<?, ?, ?> hashComparer;
     @Nonnull public final String downloadUrl;
     @Nonnull public final Path outputFile;
     public final boolean autoCheck;
@@ -27,8 +29,8 @@ public class Updatable {
      * @param file If the Path is a file, the download will be written to that file. If the Path is a directory, the file will be written to that directory, and the filename will deduced from the link provided.
      */
     public Updatable(@Nonnull String name,
-                     @Nonnull IdentityComparer<?, ?> identityComparer,
-                     @Nullable IdentityComparer<?, ?> hashComparer,
+                     @Nonnull IdentityComparer<?, ?, ?> identityComparer,
+                     @Nullable IdentityComparer<?, ?, ?> hashComparer,
                      @Nonnull String downloadUrl,
                      @Nonnull Path file,
                      boolean autoCheck,
@@ -42,7 +44,6 @@ public class Updatable {
         this.autoCheck = autoCheck;
         this.autoUpdate = autoUpdate;
 
-
         // Remove / from the end of the link if necessary
         if (downloadUrl.endsWith("/")) {
             this.downloadUrl = downloadUrl.substring(0, downloadUrl.length() - 1);
@@ -50,14 +51,9 @@ public class Updatable {
             this.downloadUrl = downloadUrl;
         }
 
-        // Make sure the file linked is a jar
-        if (!downloadUrl.endsWith(".jar")) {
-            throw new IllegalArgumentException("Download URL provided for plugin '" + name + "' must direct to a file that ends in '.jar'");
-        }
-
         // Figure out the output file name if necessary
         if (Files.isDirectory(file)) {
-            this.outputFile = file.resolve(downloadUrl.substring(downloadUrl.lastIndexOf("/") + 1));
+            this.outputFile = Paths.get(WebUtils.getFileName(downloadUrl));
         } else {
             this.outputFile = file;
         }

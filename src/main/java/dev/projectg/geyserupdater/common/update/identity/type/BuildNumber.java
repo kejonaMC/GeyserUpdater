@@ -1,4 +1,6 @@
-package dev.projectg.geyserupdater.common.update.age.type;
+package dev.projectg.geyserupdater.common.update.identity.type;
+
+import org.jetbrains.annotations.NotNull;
 
 public class BuildNumber implements Identity<Integer> {
 
@@ -9,7 +11,7 @@ public class BuildNumber implements Identity<Integer> {
     }
 
     @Override
-    public Integer value() {
+    public @NotNull Integer value() {
         return buildNumber;
     }
 }

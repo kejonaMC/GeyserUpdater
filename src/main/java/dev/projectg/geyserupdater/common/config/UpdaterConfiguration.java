@@ -50,7 +50,7 @@ public class UpdaterConfiguration {
     }
 
     @JsonProperty(value = "download-time-limit")
-    private int downloadTimeLimit = 300;
+    private int downloadTimeLimit = 180;
     public int getDownloadTimeLimit() {
         return downloadTimeLimit;
     }

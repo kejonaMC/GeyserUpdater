@@ -4,6 +4,7 @@ import dev.projectg.geyserupdater.common.config.UpdaterConfiguration;
 import dev.projectg.geyserupdater.common.logger.UpdaterLogger;
 import dev.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
 import dev.projectg.geyserupdater.common.update.PluginId;
+import dev.projectg.geyserupdater.common.update.Updatable;
 import dev.projectg.geyserupdater.common.update.UpdateManager;
 import dev.projectg.geyserupdater.common.util.FileUtils;
 import dev.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;
@@ -56,7 +57,7 @@ public class GeyserUpdater {
                 if (latestVersion.equals(version)) {
                     logger.info("You are using the latest version of GeyserUpdater!");
                 } else {
-                    logger.info("Your version: " + version + ". Latest version: "  + latestVersion + ". Download the newer version at https://www.spigotmc.org/resources/geyserupdater.88555/.");
+                    logger.info("Your version: " + version + ". Latest version: "  + latestVersion + ". Download the newer version at https://www.spigotmc.org/resources/geyserupdater.88555/");
                 }
             }
         }, true);
@@ -100,27 +101,36 @@ public class GeyserUpdater {
      * @throws IOException If there was a failure moving ALL updates.
      */
     public void shutdown() throws IOException {
-        try {
-            if (Files.isSameFile(installFolder, downloadFolder)) {
-                // We don't need to copy anything around
-                return;
-            }
-        } catch (IOException e) {
-            logger.error("Failed to check if the installFolder is the same as the downloadFolder. Attempting to move files from the downloadFolder to the installFolder anyway...");
-            e.printStackTrace();
-        }
+        UpdaterLogger.getLogger().debug("Installing plugins from the cache.");
+        Files.createDirectories(installFolder);
 
         // todo: find a way to make sure we are shutdown last (to not modify files still being used)
 
-        UpdaterLogger.getLogger().debug("Installing plugins from the cache.");
-        Files.walk(downloadFolder, 1).forEach((file) -> {
-            try {
-                Files.move(file, installFolder, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                UpdaterLogger.getLogger().error("Failed to copy update " + file + " to the plugins folder.");
-                e.printStackTrace();
+        // Only move files that we have tracked
+        for (Updatable updatable : updateManager.getTrackedUpdatables()) {
+            Path update = updatable.outputFile;
+            if (Files.exists(update)) {
+                try {
+                    if (Files.isSameFile(update.getParent(), installFolder)) {
+                        // it is already where it should be, don't move it
+                        continue;
+                    }
+                } catch (IOException e) {
+                    logger.warn("Failed to check if the install folder is the same as the download folder for " + updatable + ". Attempting to move files from the downloadFolder to the installFolder anyway...");
+                    if (logger.isDebug()) {
+                        e.printStackTrace();
+                    }
+                }
+
+                try {
+                    Files.move(update, installFolder.resolve(update.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                    logger.debug("Moved " + updatable.outputFile + " to " + installFolder);
+                } catch (IOException e) {
+                    UpdaterLogger.getLogger().error("Failed to copy update file " + updatable + " to directory " + installFolder);
+                    e.printStackTrace();
+                }
             }
-        });
+        }
     }
 
     public static GeyserUpdater getInstance() {

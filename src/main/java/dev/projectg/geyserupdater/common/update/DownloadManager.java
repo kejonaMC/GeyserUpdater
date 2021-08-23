@@ -7,6 +7,7 @@ import dev.projectg.geyserupdater.common.util.WebUtils;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +56,7 @@ public class DownloadManager {
                 Task hangChecker = scheduleHangChecker(currentUpdate);
 
                 try {
+                    Files.createDirectories(currentUpdate.outputFile.getParent());
                     WebUtils.downloadFile(currentUpdate.downloadUrl, currentUpdate.outputFile);
                 } catch (IOException e) {
                     UpdaterLogger.getLogger().error("Caught exception while downloading file " + currentUpdate.outputFile + " with URL: " + currentUpdate.downloadUrl);
@@ -104,5 +106,9 @@ public class DownloadManager {
                 updateManager.finish(updatable, DownloadResult.TIMEOUT);
             }
         }, true, downloadTimeLimit, TimeUnit.SECONDS);
+    }
+
+    private void shutdown() {
+        //todo finish this
     }
 }
