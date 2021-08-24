@@ -10,6 +10,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.stream.Collectors;
 
 // Full credit to GeyserMC
 // https://github.com/GeyserMC/Geyser/blob/master/connector/src/main/java/org/geysermc/connector/utils/WebUtils.java
@@ -79,19 +80,11 @@ public class WebUtils {
             inputStream = con.getInputStream();
         }
 
-        StringBuilder content = new StringBuilder();
         try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-                content.append("\n");
-            }
-
+            String content = in.lines().collect(Collectors.joining("\n"));
             con.disconnect();
+            return content;
         }
-
-        return content.toString();
     }
 
     /**
