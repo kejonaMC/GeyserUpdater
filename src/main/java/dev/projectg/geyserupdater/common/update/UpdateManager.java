@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class UpdateManager {
 
@@ -227,5 +228,12 @@ public class UpdateManager {
      */
     public Set<Updatable> getTrackedUpdatables() {
         return registry.keySet();
+    }
+
+    public void shutdown() {
+        List<Updatable> cancelled = downloadManager.shutdown();
+        if (!cancelled.isEmpty()) {
+            UpdaterLogger.getLogger().info("Cancelled the following downloads because of a shutdown: " + cancelled.stream().map(Updatable::toString).collect(Collectors.joining(", ")));
+        }
     }
 }

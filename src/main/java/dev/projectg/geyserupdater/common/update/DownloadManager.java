@@ -8,6 +8,7 @@ import dev.projectg.geyserupdater.common.util.WebUtils;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -20,9 +21,6 @@ public class DownloadManager {
     private final int downloadTimeLimit;
 
     private final List<Updatable> queue = new LinkedList<>();
-
-    // Used for making sure one download is ever running
-    private boolean isDownloading = false;
 
     // Used by the hang checker to check if the current download is the same as when it was scheduled
     @Nullable private Updatable currentUpdate = null;
@@ -38,14 +36,12 @@ public class DownloadManager {
 
     public void queue(Updatable updatable) {
         queue.add(updatable);
-        if (!isDownloading) {
+        if (downloader == null) {
             downloadAll();
         }
     }
 
     private void downloadAll() {
-        isDownloading = true;
-
         // Run the download on a new thread
         this.downloader = scheduler.run(() -> {
 
@@ -72,7 +68,6 @@ public class DownloadManager {
 
             // Revert everything while having it locked so that the state is always correctly read by a different thread
             synchronized (this) {
-                isDownloading = false;
                 currentUpdate = null;
                 downloader = null;
             }
@@ -86,7 +81,7 @@ public class DownloadManager {
         // The time to allow the download to take, in seconds
 
         return scheduler.runDelayed(() -> {
-            if (!isDownloading || downloader == null) {
+            if (downloader == null) {
                 throw new AssertionError("HangChecker should not execute while nothing is downloading.");
             }
 
@@ -94,7 +89,6 @@ public class DownloadManager {
                 // Revert everything while having it locked so that the state is always correctly read by a different thread
                 synchronized (this) {
                     queue.clear();
-                    isDownloading = false;
                     currentUpdate = null;
                     downloader.cancel();
                     downloader = null;
@@ -108,7 +102,18 @@ public class DownloadManager {
         }, true, downloadTimeLimit, TimeUnit.SECONDS);
     }
 
-    private void shutdown() {
-        //todo finish this
+    /**
+     * Shuts down any running download queues. The queue will be cleared, however the current download will be allowed to finish.
+     * @return A list of {@link Updatable} that had their download cancelled.
+     */
+    public List<Updatable> shutdown() {
+        List<Updatable> cancelled = new ArrayList<>();
+
+        // Allow the current download to finish and cancel everything else
+        while (queue.size() > 1) {
+            cancelled.add(queue.remove(1));
+        }
+
+        return cancelled;
     }
 }

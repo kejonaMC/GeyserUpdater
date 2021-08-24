@@ -101,6 +101,8 @@ public class GeyserUpdater {
      * @throws IOException If there was a failure moving ALL updates.
      */
     public void shutdown() throws IOException {
+        updateManager.shutdown(); //fixme: wait for the last download to finish, or cancel it and delete the unfinished file before copying files
+
         UpdaterLogger.getLogger().debug("Installing plugins from the cache.");
         Files.createDirectories(installFolder);
 
