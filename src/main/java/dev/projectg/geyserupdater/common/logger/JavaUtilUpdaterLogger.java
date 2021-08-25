@@ -30,12 +30,12 @@ public class JavaUtilUpdaterLogger implements UpdaterLogger {
 
     @Override
     public void debug(String message) {
-        logger.fine(message);
+        logger.info(message);
     }
 
     @Override
     public void trace(String message) {
-        logger.finer(message);
+        logger.info(message);
     }
 
     @Override

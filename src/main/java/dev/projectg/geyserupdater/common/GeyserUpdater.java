@@ -70,7 +70,7 @@ public class GeyserUpdater {
                 if (latestVersion.equals(version)) {
                     logger.info("You are using the latest version of GeyserUpdater!");
                 } else {
-                    logger.info("Your version: " + version + ". Latest version: "  + latestVersion + ". Download the newer version at https://www.spigotmc.org/resources/geyserupdater.88555/");
+                    logger.warn("Your version: " + version + ". Latest version: "  + latestVersion + ". Download the newer version at https://www.spigotmc.org/resources/geyserupdater.88555/");
                 }
             }
         }, true);
