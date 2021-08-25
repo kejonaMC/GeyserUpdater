@@ -19,36 +19,16 @@
 
     <repositories>
         <repository>
-            <id>bungeecord-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <id>velocity</id>
-            <url>https://nexus.velocitypowered.com/repository/maven-public/</url>
-        </repository>
-        <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>opencollab-release-repo</id>
-            <url>https://repo.opencollab.dev/maven-releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>opencollab-snapshot-repo</id>
-            <url>https://repo.opencollab.dev/maven-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>velocity</id>
+            <url>https://nexus.velocitypowered.com/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -60,10 +40,16 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.md-5</groupId>
+            <groupId>com.github.SpigotMC.BungeeCord</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.16-R0.5-SNAPSHOT</version>
-            <type>jar</type>
+            <version>bda1605627</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.SpigotMC.BungeeCord</groupId>
+            <artifactId>bungeecord-proxy</artifactId>
+            <!-- Provides easier access to BungeeCord class unavailable in the api -->
+            <version>a7c6ede</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -72,10 +58,10 @@
             <version>3.0.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- for logging on velocity -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
+            <!-- for logging on velocity -->
             <version>2.13.2</version>
             <scope>provided</scope>
         </dependency>

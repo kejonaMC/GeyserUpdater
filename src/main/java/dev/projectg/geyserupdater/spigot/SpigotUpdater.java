@@ -50,11 +50,14 @@ public class SpigotUpdater extends JavaPlugin implements UpdaterBootstrap {
 
     @Override
     public void onDisable() {
-        try {
-            updater.shutdown();
-        } catch (IOException e) {
-            UpdaterLogger.getLogger().error("Failed to install ALL updates:");
-            e.printStackTrace();
+        // bukkit has the native update folder to update jars on startup, which means we don't need to worry about modifying jars in use and when we shutdown
+        if (updater != null) {
+            try {
+                updater.shutdown();
+            } catch (IOException e) {
+                UpdaterLogger.getLogger().error("Failed to install ALL updates:");
+                e.printStackTrace();
+            }
         }
     }
 

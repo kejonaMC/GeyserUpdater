@@ -64,16 +64,21 @@ public class VelocityUpdater implements UpdaterBootstrap {
 
     @Subscribe(order = PostOrder.LAST)
     public void onShutdown(ProxyShutdownEvent event) {
+        // PostOrder.LAST ensures that we don't modify plugin jars while they are being used.
+        // Hopefully plugins that are being updated don't also use PostOrder.LAST
         onDisable();
     }
 
     @Override
     public void onDisable() {
-        try {
-            updater.shutdown();
-        } catch (IOException e) {
-            UpdaterLogger.getLogger().error("Failed to install ALL updates:");
-            e.printStackTrace();
+
+        if (updater != null) {
+            try {
+                updater.shutdown();
+            } catch (IOException e) {
+                UpdaterLogger.getLogger().error("Failed to install ALL updates:");
+                e.printStackTrace();
+            }
         }
     }
 

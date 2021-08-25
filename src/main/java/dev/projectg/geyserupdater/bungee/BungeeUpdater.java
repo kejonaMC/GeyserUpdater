@@ -39,17 +39,22 @@ public class BungeeUpdater extends Plugin implements UpdaterBootstrap {
             return;
         }
 
+        // Ensure we get disabled last
+        new PluginMapModifier().run(updater.getLogger(), this);
+
         this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         new Metrics(this, 10203);
     }
 
     @Override
     public void onDisable() {
-        try {
-            updater.shutdown();
-        } catch (IOException e) {
-            UpdaterLogger.getLogger().error("Failed to install ALL updates:");
-            e.printStackTrace();
+        if (updater != null) {
+            try {
+                updater.shutdown();
+            } catch (IOException e) {
+                UpdaterLogger.getLogger().error("Failed to install ALL updates:");
+                e.printStackTrace();
+            }
         }
     }
 

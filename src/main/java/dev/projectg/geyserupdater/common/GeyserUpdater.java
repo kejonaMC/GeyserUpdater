@@ -29,6 +29,19 @@ public class GeyserUpdater {
     private final UpdateManager updateManager;
     private final UpdaterConfiguration config;
 
+    /**
+     * @param dataFolder The data folder for GeyserUpdater
+     * @param downloadFolder The default directory to download updates to. Updatables may override it.
+     * @param installFolder The default directory to move downloads to whenever GeyserUpdater is shown down. Updatables may override it.
+     * @param bootstrap The {@link UpdaterBootstrap} platform implemenetation
+     * @param logger The {@link UpdaterLogger} platform implemenetation
+     * @param scheduler The {@link UpdaterScheduler} platform implemenetation
+     * @param playerHandler The {@link PlayerHandler} platform implemenetation
+     * @param version The version of GeyserUpdater
+     * @param geyserArtifact The artifact link for Geyser. For example: "bootstrap/velocity/target/Geyser-Velocity.jar"
+     * @param floodgateArtifact The artifact link for Floodgate. For example: "bootstrap/velocity/target/floodgate-velocity.jar"
+     * @throws IOException If there was an exception loading the config. {@link this#shutdown()} Should not be called if this exception is thrown.
+     */
     public GeyserUpdater(Path dataFolder,
                          Path downloadFolder,
                          Path installFolder,
@@ -105,8 +118,6 @@ public class GeyserUpdater {
 
         UpdaterLogger.getLogger().debug("Installing plugins from the cache.");
         Files.createDirectories(installFolder);
-
-        // todo: find a way to make sure we are shutdown last (to not modify files still being used)
 
         // Only move files that we have tracked
         for (Updatable updatable : updateManager.getTrackedUpdatables()) {
