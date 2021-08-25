@@ -63,14 +63,10 @@ public enum PluginId {
     }
 
     /**
-     * @return A class from the plugin. Will throw an {@link AssertionError} if the class is not available, i.e. the plugin is not loaded.
+     * @return A class from the plugin. Will throw an {@link ClassNotFoundException} if the class is not available, i.e. the plugin is not loaded.
      */
-    public Class<?> getPluginClass() {
-        try {
-            return Class.forName(pluginClassName);
-        } catch (ClassNotFoundException e) {
-            throw new AssertionError("Failed to find Class '" + pluginClassName + "' for plugin: " + this.name() + ". Is the plugin loaded?");
-        }
+    public Class<?> getPluginClass() throws ClassNotFoundException {
+        return Class.forName(pluginClassName);
     }
 
     /**

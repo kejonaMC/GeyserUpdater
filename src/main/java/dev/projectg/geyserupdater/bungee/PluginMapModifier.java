@@ -9,6 +9,7 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 public class PluginMapModifier {
 
     private ScheduledTask task = null;
+
+    private final String resultMessage = "This may result in errors and inability to apply updates during the shutdown process.";
 
     /**
      * Place a {@link Plugin} at the top of BungeeCord's LinkedHashMap of plugins. This will result in the plugin starting in the normal order, but being disabled last.
@@ -37,7 +40,7 @@ public class PluginMapModifier {
             plugins = ReflectionUtils.getFieldValue(pluginManager, LinkedHashMap.class, "plugins");
         } catch (IllegalAccessException | NoSuchFieldException | ClassCastException e) {
             logger.error("Failed to get necessary private fields to modify BungeeCord's plugin list order");
-            logger.error("This may result in errors and inability to apply updates during the shutdown process.");
+            logger.error(resultMessage);
             e.printStackTrace();
             return;
         }
@@ -45,27 +48,35 @@ public class PluginMapModifier {
         // modify the plugin map once it is no longer being iterated over by BungeeCord to avoid ConcurrentModificationException.
         // onEnable() is called by BungeeCord when iterating over the plugin list, so we must modify it after bungeecord is done enabling ALL plugins
         // the listeners List is populated after all plugin enabling is finished.
-        task = bungeeCord.getScheduler().schedule(plugin, new Runnable() {
-            @Override
-            public void run() {
-                if (bungeeCord.isRunning) {
-                    if (!listeners.isEmpty()) {
-                        LinkedHashMap<String, Plugin> sortedPlugins = new LinkedHashMap<>();
-                        String updaterName = plugin.getDescription().getName();
-                        sortedPlugins.put(updaterName, plugins.get(updaterName)); // put ourselves at the very start, which means we disable last
-                        sortedPlugins.putAll(plugins); // put the rest of the plugins in the default order
+        task = bungeeCord.getScheduler().schedule(plugin, () -> {
+            if (bungeeCord.isRunning) {
+                if (!listeners.isEmpty()) {
+                    LinkedHashMap<String, Plugin> sortedPlugins = new LinkedHashMap<>();
+                    String updaterName = plugin.getDescription().getName();
+                    sortedPlugins.put(updaterName, plugins.get(updaterName)); // put ourselves at the very start, which means we disable last
+                    sortedPlugins.putAll(plugins); // put the rest of the plugins in the default order
 
-                        synchronized (plugins) {
-                            plugins.clear();
-                            plugins.putAll(sortedPlugins);
-                        }
-
-                        logger.info("Successfully modified the order of BungeeCord's plugin Map.");
-                        task.cancel();
+                    Set<String> originalOrder = null;
+                    if (logger.isDebug()) {
+                        originalOrder = plugins.keySet();
                     }
-                } else {
-                    throw new IllegalStateException("BungeeCord shutdown before we were able to modify the plugin list order");
+
+                    synchronized (plugins) {
+                        plugins.clear();
+                        plugins.putAll(sortedPlugins);
+                    }
+
+                    logger.info("Successfully modified the order of BungeeCord's plugin Map.");
+                    if (logger.isDebug()) {
+                        logger.debug("Original order: " + originalOrder);
+                        logger.debug("New order: " + plugins.keySet());
+                    }
+                    task.cancel();
                 }
+            } else {
+                logger.error("BungeeCord began shutdown before we were able to modify the plugin list order!");
+                logger.error(resultMessage);
+                task.cancel();
             }
         }, 2, 5, TimeUnit.SECONDS);
     }

@@ -42,25 +42,41 @@ public class UpdateManager {
 
         for (PluginId pluginId : PluginId.values()) {
             if (pluginId.isEnable()) {
-                // Get the git.properties
-                InputStream is = pluginId.getPluginClass().getClassLoader().getResourceAsStream("git.properties");
-                if (is == null) {
-                    throw new AssertionError("Unable to find resource 'git.properties' for plugin: " + pluginId.name());
+                String name = pluginId.name();
+
+                // todo: move getting the local build number and branch into PluginId
+
+                // Get the inputstream of the git.properties
+                InputStream is;
+                try {
+                    Class<?> clazz = pluginId.getPluginClass();
+
+                    is = clazz.getClassLoader().getResourceAsStream("git.properties");
+                    if (is == null) {
+                        logger.error("Unable to find resource 'git.properties' for plugin: " + name);
+                        continue;
+                    }
+                } catch (ClassNotFoundException e) {
+                    logger.error("Unable to find class for " + name + ", is it loaded? Unable to update.");
+                    continue;
                 }
 
+                // load the inputstream into a Properties
                 Properties gitProperties = new Properties();
                 try {
                     gitProperties.load(is);
                     is.close();
                 } catch (IOException e) {
-                    logger.error("Failed to get git.properties for plugin: " + pluginId.name() + ". Unable to update.");
+                    logger.error("Failed to get git.properties for plugin: " + name + ". Unable to update.");
                     e.printStackTrace();
+                    continue;
                 }
 
+                // Get the build number and branch
                 String buildNumberString = gitProperties.getProperty("git.build.number");
                 String branch = gitProperties.getProperty("git.branch");
                 if (buildNumberString == null || branch == null) {
-                    UpdaterLogger.getLogger().error("Failed to find build number or branch in git Properties '" + gitProperties + "' of plugin '" + pluginId.name() + "'. Not updating.");
+                    UpdaterLogger.getLogger().error("Failed to find build number or branch in git Properties '" + gitProperties + "' of plugin '" + name + "'. Not updating.");
                     continue;
                 }
 
@@ -75,7 +91,7 @@ public class UpdateManager {
                 try {
                     buildProvider = new JenkinsBuildProvider(pluginId.getLatestBuildNumber());
                 } catch (MalformedURLException e) {
-                    UpdaterLogger.getLogger().error("Failed to create build number checker for " + pluginId + ". Not updating.");
+                    UpdaterLogger.getLogger().error("Failed to create build number checker for " + name + ". Not updating.");
                     e.printStackTrace();
                     continue;
                 }
@@ -87,12 +103,12 @@ public class UpdateManager {
                     JenkinsHashProvider jenkinsHashProvider = new JenkinsHashProvider(pluginId.getLatestFileLink() + "/*fingerprint*/");
                     hashComparer = new IdentityComparer<>(localHashProvider, jenkinsHashProvider);
                 } catch (MalformedURLException e) {
-                    UpdaterLogger.getLogger().error("Failure while getting location of file for " + pluginId.name() + ". It will be possible to update it, but not to compare file hashes.");
+                    UpdaterLogger.getLogger().error("Failure while getting location of file for " + name + ". It will be possible to update it, but not to compare file hashes.");
                     e.printStackTrace();
                 }
 
                 register(new Updatable(
-                        pluginId.name(),
+                        name,
                         new IdentityComparer<>(buildNumber, buildProvider),
                         hashComparer,
                         pluginId.getLatestFileLink(),
