@@ -33,6 +33,8 @@ public class JavaUtilUpdaterLogger implements UpdaterLogger {
         logger.info(message);
     }
 
+    // todo: try to making debug/trace logging labbeled correctly. check how floodgate does it
+
     @Override
     public void trace(String message) {
         logger.info(message);
