@@ -34,21 +34,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.SpigotMC.BungeeCord</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>bda1605627</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.SpigotMC.BungeeCord</groupId>
             <artifactId>bungeecord-proxy</artifactId>
-            <!-- Provides easier access to BungeeCord class unavailable in the api -->
+            <!-- Provides easier access to BungeeCord classes unavailable in the api -->
             <version>a7c6ede</version>
             <scope>provided</scope>
         </dependency>
@@ -129,7 +123,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.fasterxml.jackson</pattern>
-                                    <shadedPattern>dev.projectg.geyserupdater.shaded</shadedPattern>
+                                    <shadedPattern>dev.projectg.geyserupdater.shaded.jackson</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
