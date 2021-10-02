@@ -1,6 +1,6 @@
 package dev.projectg.geyserupdater.bungee;
 
-import dev.projectg.geyserupdater.common.PlayerHandler;
+import dev.projectg.geyserupdater.common.PlayerManager;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class BungeePlayerHandler implements PlayerHandler {
+public class BungeePlayerHandler implements PlayerManager {
 
     @Override
     public @NotNull List<UUID> getOnlinePlayers() {

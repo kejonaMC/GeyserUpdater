@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
-public interface PlayerHandler {
+public interface PlayerManager {
 
     @Nonnull
     List<UUID> getOnlinePlayers();

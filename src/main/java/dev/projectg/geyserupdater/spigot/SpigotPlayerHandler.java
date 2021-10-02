@@ -1,6 +1,6 @@
 package dev.projectg.geyserupdater.spigot;
 
-import dev.projectg.geyserupdater.common.PlayerHandler;
+import dev.projectg.geyserupdater.common.PlayerManager;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SpigotPlayerHandler implements PlayerHandler {
+public class SpigotPlayerHandler implements PlayerManager {
 
     private final Server server;
 

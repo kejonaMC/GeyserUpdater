@@ -25,7 +25,7 @@ public class GeyserUpdater {
     private final Path installFolder;
     private final UpdaterLogger logger;
     private final UpdaterScheduler scheduler;
-    private final PlayerHandler playerHandler;
+    private final PlayerManager playerManager;
     private final UpdateManager updateManager;
     private final UpdaterConfiguration config;
 
@@ -36,7 +36,7 @@ public class GeyserUpdater {
      * @param bootstrap The {@link UpdaterBootstrap} platform implemenetation
      * @param logger The {@link UpdaterLogger} platform implemenetation
      * @param scheduler The {@link UpdaterScheduler} platform implemenetation
-     * @param playerHandler The {@link PlayerHandler} platform implemenetation
+     * @param playerManager The {@link PlayerManager} platform implemenetation
      * @param version The version of GeyserUpdater
      * @param geyserArtifact The artifact link for Geyser. For example: "bootstrap/velocity/target/Geyser-Velocity.jar"
      * @param floodgateArtifact The artifact link for Floodgate. For example: "bootstrap/velocity/target/floodgate-velocity.jar"
@@ -48,7 +48,7 @@ public class GeyserUpdater {
                          UpdaterBootstrap bootstrap,
                          UpdaterLogger logger,
                          UpdaterScheduler scheduler,
-                         PlayerHandler playerHandler,
+                         PlayerManager playerManager,
                          String version,
                          String geyserArtifact,
                          String floodgateArtifact) throws IOException {
@@ -56,7 +56,7 @@ public class GeyserUpdater {
         this.installFolder = installFolder;
         this.logger = logger;
         this.scheduler  = scheduler;
-        this.playerHandler = playerHandler;
+        this.playerManager = playerManager;
         this.version = version;
 
         INSTANCE = this;
@@ -157,5 +157,9 @@ public class GeyserUpdater {
     }
     public UpdaterScheduler getScheduler() {
         return scheduler;
+    }
+
+    public PlayerManager getPlayerHandler() {
+        return playerManager;
     }
 }

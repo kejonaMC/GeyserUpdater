@@ -1,6 +1,6 @@
 package dev.projectg.geyserupdater.velocity;
 
-import dev.projectg.geyserupdater.common.PlayerHandler;
+import dev.projectg.geyserupdater.common.PlayerManager;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class VelocityPlayerHandler implements PlayerHandler {
+public class VelocityPlayerHandler implements PlayerManager {
 
     private final ProxyServer proxyServer;
 
