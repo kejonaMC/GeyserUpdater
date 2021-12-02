@@ -1,8 +1,8 @@
 package com.projectg.geyserupdater.common.util;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
-import org.geysermc.connector.utils.FileUtils;
-import org.geysermc.connector.utils.WebUtils;
+import org.geysermc.geyser.util.WebUtils;
+import org.geysermc.geyser.util.FileUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
