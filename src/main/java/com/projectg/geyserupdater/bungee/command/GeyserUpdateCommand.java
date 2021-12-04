@@ -23,8 +23,7 @@ public class GeyserUpdateCommand extends Command {
     public void execute(CommandSender commandSender, String[] args) {
         UpdaterLogger logger = UpdaterLogger.getLogger();
 
-        if (commandSender instanceof ProxiedPlayer) {
-            ProxiedPlayer player = (ProxiedPlayer) commandSender;
+        if (commandSender instanceof ProxiedPlayer player) {
             try {
                 player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + Messages.Command.CHECK_START));
                 boolean isLatest = GeyserProperties.isLatestBuild();

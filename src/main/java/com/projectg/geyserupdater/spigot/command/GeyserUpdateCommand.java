@@ -22,8 +22,7 @@ public class GeyserUpdateCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         UpdaterLogger logger = UpdaterLogger.getLogger();
 
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             if (command.getName().equalsIgnoreCase("geyserupdate") && player.hasPermission("gupdater.geyserupdate")) {
                 sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + Messages.Command.CHECK_START);
                 try {
