@@ -1,8 +1,8 @@
 package com.projectg.geyserupdater.common.util;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import org.geysermc.geyser.GeyserImpl;
 import org.geysermc.geyser.util.WebUtils;
-import org.geysermc.geyser.util.FileUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -40,7 +40,7 @@ public class GeyserProperties {
     public static String getGeyserGitPropertiesValue(String propertyKey) throws IOException {
         UpdaterLogger.getLogger().debug("Running getGeyserGitPropertiesValue()");
         Properties gitProperties = new Properties();
-        gitProperties.load(FileUtils.getResource("git.properties"));
+        gitProperties.load(GeyserImpl.getInstance().getBootstrap().getResource("git.properties"));
         return gitProperties.getProperty(propertyKey);
     }
 
