@@ -82,6 +82,10 @@ This is the message that is sent to all players when `Auto-Restart-Server` is go
 [Velocity stats](https://bstats.org/plugin/velocity/GeyserUpdater/10673)
 
 ## Release History
+* 1.6.1
+    * Update for Geyser's resource system refactor (Build #943, commit [763743a](https://github.com/GeyserMC/Geyser/commit/763743a845796e4619ba596b82d4eabb39045448))  
+* 1.6.0
+    * Update for Geyser 2.0, bump to Java 16 
 * 1.5.0
     * This update breaks existing configurations. Please rename or delete the old one to generate a new configuration.
     * Add option to automatically check for updates on a custom interval.
