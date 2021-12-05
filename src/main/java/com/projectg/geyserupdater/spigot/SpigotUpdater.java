@@ -25,7 +25,7 @@ public class SpigotUpdater extends JavaPlugin {
     public static ConfigurationJackson config;
     @Override
     public void onEnable() {
-        config = new Configuration(getDataFolder().toPath()).configGetter(this.getDataFolder().toPath());
+        config = new Configuration().configSetup(this.getDataFolder().toPath());
         plugin = this;
         new JavaUtilUpdaterLogger(getLogger());
         new Metrics(this, 10202);

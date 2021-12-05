@@ -4,6 +4,7 @@ import com.projectg.geyserupdater.bungee.command.GeyserUpdateCommand;
 import com.projectg.geyserupdater.bungee.listeners.BungeeJoinListener;
 import com.projectg.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.projectg.geyserupdater.bungee.util.bstats.Metrics;
+import com.projectg.geyserupdater.common.configurate.Configuration;
 import com.projectg.geyserupdater.common.configurate.ConfigurationJackson;
 import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
@@ -32,7 +33,7 @@ public final class BungeeUpdater extends Plugin {
     @Override
     public void onEnable() {
         plugin = this;
-        config = new com.projectg.geyserupdater.common.configurate.Configuration(getDataFolder().toPath()).configGetter(this.getDataFolder().toPath());
+        config = new Configuration().configSetup(this.getDataFolder().toPath());
         logger = new JavaUtilUpdaterLogger(getLogger());
         new Metrics(this, 10203);
 

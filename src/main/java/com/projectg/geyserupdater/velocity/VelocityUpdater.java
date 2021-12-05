@@ -57,7 +57,8 @@ public class VelocityUpdater {
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        config = new Configuration(dataDirectory).configGetter(dataDirectory);
+        config = new Configuration().configSetup(this.dataDirectory);
+
         metricsFactory.make(this, 10673);
         new Slf4jUpdaterLogger(baseLogger);
 
@@ -204,9 +205,6 @@ public class VelocityUpdater {
     }
     public ProxyServer getProxyServer() {
         return server;
-    }
-    public Path getDataDirectory() {
-        return dataDirectory;
     }
 }
 

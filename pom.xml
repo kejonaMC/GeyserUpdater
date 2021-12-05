@@ -14,7 +14,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
-        <jackson.version>2.12.4</jackson.version>
+        <jackson.version>2.13.0</jackson.version>
     </properties>
 
     <repositories>

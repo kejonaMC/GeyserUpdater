@@ -11,12 +11,14 @@ import java.nio.file.Path;
 
 public class Configuration {
 
-    public Configuration(Path path) {
-        createConfig(path);
-    }
-    public ConfigurationJackson configGetter (Path dataDirectory) {
-        ConfigurationJackson config = new ConfigurationJackson();
+    /**
+     * Load GeyserUpdater Config
+     *
+     * @param dataDirectory The config's directory
+     */
+    public ConfigurationJackson configSetup(Path dataDirectory) {
         createConfig(dataDirectory);
+        ConfigurationJackson config = new ConfigurationJackson();
         try {
             final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
            config = mapper.readValue(new File(dataDirectory + "\\" + "config.yml"), ConfigurationJackson.class);
@@ -27,7 +29,7 @@ public class Configuration {
     }
 
     /**
-     * Load GeyserUpdater config
+     * Create GeyserUpdater Config
      *
      * @param path The config's directory
      */
