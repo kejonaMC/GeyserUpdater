@@ -28,7 +28,7 @@ public class GeyserSpigotDownloader {
 
         UpdaterLogger.getLogger().debug("Attempting to download a new build of Geyser.");
 
-        boolean doRestart = plugin.getConfig().getBoolean("Auto-Restart-Server");
+        boolean doRestart = SpigotUpdater.config.getAutoRestartServer();
 
         // Start the process async
         new BukkitRunnable() {
@@ -105,7 +105,7 @@ public class GeyserSpigotDownloader {
     private static void restartServer() {
         logger.warn("The server will be restarting in 10 seconds!");
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', SpigotUpdater.config.getRestartMessagePlayers()));
         }
         // Attempt to restart the server 10 seconds after the message
         new BukkitRunnable() {

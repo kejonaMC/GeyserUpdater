@@ -19,7 +19,7 @@ public class ConfigurationJackson {
     public void setAutoRestart(Boolean autoRestart) {
         this.autoRestartGeyser = autoRestart;
     }
-    public Boolean getAutoRestartGeyser() {
+    public Boolean getAutoRestartServer() {
         return autoRestartGeyser;
     }
 
@@ -53,11 +53,11 @@ public class ConfigurationJackson {
 
     // Ints
     @JsonProperty("Auto-Update-Interval")
-    private Integer autoUpdateInterval;
-    public void setAutoUpdateInterval(int updateInterval) {
+    private Long autoUpdateInterval;
+    public void setAutoUpdateInterval(Long updateInterval) {
         this.autoUpdateInterval = updateInterval;
     }
-    public int getAutoUpdateInterval() {
+    public Long getAutoUpdateInterval() {
         return autoUpdateInterval;
     }
 
