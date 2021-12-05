@@ -29,7 +29,8 @@ public class SpigotUpdater extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        ConfigurationJackson config = new Configuration().configGetter(plugin.getDataFolder().toPath());
+        new Configuration(this.getDataFolder().toPath());
+        ConfigurationJackson config = new ConfigurationJackson();
         // config.getAutoRestartGeyser()....
         plugin = this;
         new JavaUtilUpdaterLogger(getLogger());

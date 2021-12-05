@@ -13,6 +13,9 @@ import java.nio.file.Path;
 
 public class Configuration {
 
+    public Configuration(Path path) {
+        createConfig(path);
+    }
     public ConfigurationJackson configGetter (Path dataDirectory) {
         ConfigurationJackson config = new ConfigurationJackson();
         createConfig(dataDirectory);
