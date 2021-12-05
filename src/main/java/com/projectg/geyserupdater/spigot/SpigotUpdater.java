@@ -1,5 +1,7 @@
 package com.projectg.geyserupdater.spigot;
 
+import com.projectg.geyserupdater.common.configurate.Configuration;
+import com.projectg.geyserupdater.common.configurate.ConfigurationJackson;
 import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
@@ -27,6 +29,8 @@ public class SpigotUpdater extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        ConfigurationJackson config = new Configuration().configGetter(plugin.getDataFolder().toPath());
+        // config.getAutoRestartGeyser()....
         plugin = this;
         new JavaUtilUpdaterLogger(getLogger());
         new Metrics(this, 10202);
