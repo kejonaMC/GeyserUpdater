@@ -8,7 +8,8 @@ Please follow the guidelines below for any code you wish to contribute, we are a
 
 ```java
 public class LongClassName {
-    private static final int AIR_ITEM = 0; // Static item names should be capitalized
+
+    private static final int CONSTANT = 0; // Constants should be capitalized
 
     public Int2IntMap items = new Int2IntOpenHashMap(); // Use the interface as the class type but initialize with the implementation.
 
@@ -20,7 +21,6 @@ public class LongClassName {
     @RandomAnnotation(stuff = true, moreStuff = "might exist")
     public void applyStuff() {
         Variable variable = new Variable();
-        Variable otherVariable = new Variable();
 
         if (condition) {
 	        // Do stuff.
@@ -29,11 +29,12 @@ public class LongClassName {
         }
 
         switch (value) {
-            case 0:
+            case 0: // Intentional fallthrough
+            case 1:
                 stuff();
                 break;
-            case 1:
-                differentStuff();
+	    case 2:
+	        differentStuff();
                 break;
         }
     }
