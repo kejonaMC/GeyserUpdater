@@ -9,7 +9,7 @@
 
 # GeyserUpdater
 ### GeyserUpdater is a plugin that downloads and applies new builds of Geyser on Spigot/CraftBukkit, BungeeCord, and Velocity either manually or automatically.
-##### Supports Minecraft 1.8 〜 1.17
+##### Supports Minecraft 1.8 〜 1.18
 
 If you'd like, click [here](https://discord.gg/xXzzdAXa2b) to join our Discord server! You can come here to receive support, ask about contributing, get GitHub feeds, or just simply hang out. Please do not ping anyone that doesn't have the "Pingable" role!
 
@@ -83,7 +83,7 @@ This is the message that is sent to all players when `Auto-Restart-Server` is go
 
 ## Release History
 * 1.6.1
-    * Update for Geyser's resource system refactor (Build #943, commit [763743a](https://github.com/GeyserMC/Geyser/commit/763743a845796e4619ba596b82d4eabb39045448))  
+    * Update for Geyser's resource system refactor (Build #943, commit [763743a](https://github.com/GeyserMC/Geyser/commit/763743a845796e4619ba596b82d4eabb39045448))
 * 1.6.0
     * Update for Geyser 2.0, bump to Java 16 
 * 1.5.0
