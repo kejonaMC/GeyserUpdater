@@ -10,6 +10,7 @@ import dev.projectg.geyserupdater.spigot.util.bstats.Metrics;
 
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
+import space.arim.dazzleconf.error.InvalidConfigException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -37,7 +38,7 @@ public class SpigotUpdater extends JavaPlugin implements UpdaterBootstrap {
                     "bootstrap/spigot/target/Geyser-Spigot.jar",
                     "bootstrap/spigot/target/floodgate-spigot.jar"
                     );
-        } catch (IOException e) {
+        } catch (IOException | InvalidConfigException e) {
             getLogger().severe("Failed to start GeyserUpdater! Disabling...");
             e.printStackTrace();
             return;

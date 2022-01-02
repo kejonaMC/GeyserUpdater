@@ -4,18 +4,8 @@
 # NOTICE: Please read the README on our github page for full information regarding these options!
 # https://github.com/ProjectG-Plugins/GeyserUpdater
 
-default-updates:
-  geyser:
-    enable: true
-    auto-check: true
-    auto-update: false
-  floodgate:
-    enable: false
-    auto-check: true
-    auto-update: false
-
 # The interval in hours between each auto update check.
-auto-update-interval: 24
+auto-check-interval: 24
 # The maximum amount of seconds that a download is allowed to run for. Increase if you are running into issues on a slow internet connection.
 download-time-limit: 180
 # Delete the downloaded file if the file hash of the downloaded file did not match what the download server provided.
@@ -25,7 +15,7 @@ delete-on-fail: true
 
 # If enabled, GeyserUpdater will attempt to restart the server 10 seconds after a new version of Geyser has been successfully downloaded.
 # If you aren't using a hosting provider or a server wrapper, you will need a restart script.
-auto-restart-server: false
+restart-server: false
 # When enabled, GeyserUpdater will automatically generate a restart script for you. If you are using CraftBukkit or a proxy
 # you will need to use the generated script to start your server! If you are using a hosting provider or a server wrapper you probably don't need this.
 auto-script-generating: false
@@ -36,3 +26,38 @@ restart-message-players: "§2This server will be restarting in 10 seconds!"
 enable-debug: false
 # Please do not change this version value!
 config-version: 3
+
+
+modules:
+  GeyserHub:
+    enable: true
+    auto-check: true
+    auto-update: false
+    version:
+      jenkins:
+        # Requires plugin to have a git.properties containing a git.build.number value
+        project: "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master"
+      spigot:
+        # Compares version of plugin that the platform provides vs the latest version on SpigotMC
+        resource: 88555
+      github:
+        id:
+
+    download:
+      literal:
+        # Allows specifying a static download location and file
+        file: "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar"
+      spigot:
+        # Downloads file from a SpigotMC listing. The download link provided on SpigotMC must lead to an immediate file download.
+        resource: 88555
+
+presets:
+  geyser:
+    enable: true
+    auto-check: true
+    auto-update: true
+    custom:
+      # Certain presets may require or allow additional data
+      branch: master
+      compare-hash: true
+

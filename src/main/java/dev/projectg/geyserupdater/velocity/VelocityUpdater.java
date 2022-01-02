@@ -16,6 +16,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import org.slf4j.Logger;
+import space.arim.dazzleconf.error.InvalidConfigException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -42,7 +43,7 @@ public class VelocityUpdater implements UpdaterBootstrap {
     }
 
     @Subscribe
-    public void onProxyInitialization(ProxyInitializeEvent event) throws IOException {
+    public void onProxyInitialization(ProxyInitializeEvent event) throws IOException, InvalidConfigException {
 
         updater = new GeyserUpdater(
                 dataDirectory,

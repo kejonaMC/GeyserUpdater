@@ -1,13 +1,14 @@
 package dev.projectg.geyserupdater.common;
 
+import dev.projectg.geyserupdater.common.config.Configurator;
 import dev.projectg.geyserupdater.common.config.UpdaterConfiguration;
 import dev.projectg.geyserupdater.common.logger.UpdaterLogger;
 import dev.projectg.geyserupdater.common.scheduler.UpdaterScheduler;
 import dev.projectg.geyserupdater.common.update.PluginId;
 import dev.projectg.geyserupdater.common.update.Updatable;
 import dev.projectg.geyserupdater.common.update.UpdateManager;
-import dev.projectg.geyserupdater.common.util.FileUtils;
-import dev.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;
+import dev.projectg.geyserupdater.common.util.SpigotUtils;
+import space.arim.dazzleconf.error.InvalidConfigException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -51,7 +52,7 @@ public class GeyserUpdater {
                          PlayerManager playerManager,
                          String version,
                          String geyserArtifact,
-                         String floodgateArtifact) throws IOException {
+                         String floodgateArtifact) throws IOException, InvalidConfigException {
         this.downloadFolder = downloadFolder;
         this.installFolder = installFolder;
         this.logger = logger;
@@ -63,7 +64,7 @@ public class GeyserUpdater {
 
         // Meta version checking
         scheduler.run(() -> {
-            String latestVersion = SpigotResourceUpdateChecker.getVersion(88555);
+            String latestVersion = SpigotUtils.getVersion(88555);
             if (latestVersion == null || latestVersion.isEmpty()) {
                 logger.error("Failed to determine the latest GeyserUpdater version!");
             } else {
@@ -76,16 +77,16 @@ public class GeyserUpdater {
         }, true);
 
         // Load the config
-        config = FileUtils.loadConfig(dataFolder.resolve("config.yml"));
-        if (config.isIncorrectVersion()) {
-            throw new IllegalStateException("Your copy of config.yml is outdated (your version: " + config.getConfigVersion() + ", latest version: " + UpdaterConfiguration.DEFAULT_CONFIG_VERSION + "). Please delete it and let a fresh copy of config.yml be regenerated!");
+        config = Configurator.loadConfig(dataFolder.resolve("config.yml"));
+        if (UpdaterConfiguration.DEFAULT_VERSION != config.version()) {
+            throw new IllegalStateException("Your copy of config.yml is outdated (your version: " + config.version() + ", latest version: " + UpdaterConfiguration.DEFAULT_VERSION + "). Please delete it and let a fresh copy of config.yml be regenerated!");
         }
-        if (config.isEnableDebug()) {
+        if (config.enableDebug()) {
             logger.enableDebug();
         }
 
         // Make startup script if enabled
-        if (config.isGenerateRestartScript()) {
+        if (config.generateRestartScript()) {
             try {
                 logger.debug("Attempting to create restart script");
                 bootstrap.createRestartScript();

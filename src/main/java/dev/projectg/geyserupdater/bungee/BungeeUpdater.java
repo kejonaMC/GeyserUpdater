@@ -9,6 +9,7 @@ import dev.projectg.geyserupdater.common.logger.UpdaterLogger;
 
 import dev.projectg.geyserupdater.common.util.ScriptCreator;
 import net.md_5.bungee.api.plugin.Plugin;
+import space.arim.dazzleconf.error.InvalidConfigException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -33,7 +34,7 @@ public class BungeeUpdater extends Plugin implements UpdaterBootstrap {
                     "bootstrap/bungeecord/target/Geyser-BungeeCord.jar",
                     "bootstrap/bungee/target/floodgate-bungee.jar"
             );
-        } catch (IOException e) {
+        } catch (IOException | InvalidConfigException e) {
             getLogger().severe("Failed to start GeyserUpdater! Disabling...");
             e.printStackTrace();
             return;

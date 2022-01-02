@@ -71,17 +71,10 @@ public enum PluginId {
 
     /**
      * Load the enable, autoCheck, and autoUpdate configuration settings into the enum values.
-     * {@link UpdaterConfiguration#getDefaultUpdates()} should contain entries whose keys are equal an enum value's name in lowercase
+     * {@link JacksonConfiguration#getUpdateEntries()} should contain entries whose keys are equal an enum value's name in lowercase
      * @param config The config to load from
      */
     public static void loadSettings(UpdaterConfiguration config) {
-        for (PluginId plugin : PluginId.values()) {
-            UpdaterConfiguration.DefaultUpdate settings = config.getDefaultUpdates().get(plugin.name().toLowerCase());
-            if (settings != null) {
-                plugin.enable = settings.isEnable();
-                plugin.autoCheck = settings.isAutoCheck();
-                plugin.autoUpdate = settings.isAutoUpdate();
-            }
-        }
+        throw new UnsupportedOperationException();
     }
 }
