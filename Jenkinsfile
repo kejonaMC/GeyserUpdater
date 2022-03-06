@@ -14,7 +14,7 @@ pipeline {
         stage('Post') {
             steps {
                 archiveArtifacts 'target/GeyserUpdater*.jar'
-                discordSend description: "**Build:** [${currentBuild.id}](${env.BUILD_URL})\n **Status:** [${currentBuild.currentResult}]" , footer: 'ProjectG', link: env.BUILD_URL, result: currentBuild.currentResult, title: "${env.JOB_NAME}", webhookURL: "webhook"
+                discordSend description: "**Build:** [${currentBuild.id}](${env.BUILD_URL})\n **Status:** [${currentBuild.currentResult}]" , footer: 'ProjectG', link: env.BUILD_URL, result: currentBuild.currentResult, title: "${env.JOB_NAME}", webhookURL: "${env.DISCORD_WEBHOOK}"
                   }
 
                 }
