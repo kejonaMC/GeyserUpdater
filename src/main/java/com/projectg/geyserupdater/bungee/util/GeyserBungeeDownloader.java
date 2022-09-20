@@ -60,7 +60,7 @@ public class GeyserBungeeDownloader {
     private static boolean downloadGeyser() {
         String fileUrl;
         try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/bungeecord/target/Geyser-BungeeCord.jar";
+            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/bungeecord/build/libs/Geyser-BungeeCord.jar";
         } catch (IOException e) {
             logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
             e.printStackTrace();
