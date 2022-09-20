@@ -65,7 +65,7 @@ public class GeyserVelocityDownloader {
     private static boolean downloadGeyser() {
         String fileUrl;
         try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/velocity/target/Geyser-Velocity.jar";
+            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/velocity/build/libs/Geyser-Velocity.jar";
         } catch (IOException e) {
             logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
             e.printStackTrace();
