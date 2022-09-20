@@ -75,7 +75,7 @@ public class GeyserSpigotDownloader {
     private static boolean downloadGeyser() {
         String fileUrl;
         try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar";
+            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/spigot/build/libs/Geyser-Spigot.jar";
         } catch (IOException e) {
             logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
             e.printStackTrace();
