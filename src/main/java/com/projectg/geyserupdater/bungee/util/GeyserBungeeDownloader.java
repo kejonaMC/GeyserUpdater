@@ -2,8 +2,8 @@ package com.projectg.geyserupdater.bungee.util;
 
 import com.projectg.geyserupdater.bungee.BungeeUpdater;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class GeyserBungeeDownloader {
     private static BungeeUpdater plugin;
     private static UpdaterLogger logger;
+    private static final String platformName = "bungeecord";
 
     /**
      * Download the latest build of Geyser from Jenkins CI for the currently used branch.
@@ -58,17 +59,10 @@ public class GeyserBungeeDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl;
-        try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/bungeecord/build/libs/Geyser-BungeeCord.jar";
-        } catch (IOException e) {
-            logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
-            e.printStackTrace();
-            return false;
-        }
+        String fileUrl = Constants.GEYSER_DOWNLOAD_LINK + platformName;
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar";
         try {
-            FileUtils.downloadFile(fileUrl, outputPath);
+            FileUtils.downloadFile(fileUrl, outputPath, platformName);
         } catch (IOException e) {
             logger.error("Failed to download the newest build of Geyser");
             e.printStackTrace();

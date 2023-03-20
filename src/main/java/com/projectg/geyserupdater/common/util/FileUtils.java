@@ -1,11 +1,12 @@
 package com.projectg.geyserupdater.common.util;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+import com.google.common.io.ByteSource;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.pojo.Root;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -13,7 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileUtils {
-    // TODO: this whole cached thing only works if you're using checkFile for one file...
 
     /**
      * Epoch time of that last occurrence that {@link #checkFile(String, boolean)} directly checked a file. Returns a value of 0 if the check file method has never been called.
@@ -58,10 +58,12 @@ public class FileUtils {
      * @param fileURL the url of the file
      * @param outputPath the path of the output file to write to
      */
-    public static void downloadFile(String fileURL, String outputPath) throws IOException {
+    public static boolean downloadFile(String fileURL, String outputPath, String platformName) throws IOException {
         // TODO: better download code?
+        UpdaterLogger logger = UpdaterLogger.getLogger();
+        logger.debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
 
-        UpdaterLogger.getLogger().debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
+        // TODO: this whole cached thing only works if you're using checkFile for one file...
 
         Path outputDirectory = Paths.get(outputPath).getParent();
         Files.createDirectories(outputDirectory);
@@ -85,6 +87,45 @@ public class FileUtils {
         // close streams
         is.close();
         os.close();
+
+        // Checking file checksum
+        logger.debug("Checking if the file SHA256 is the same as the SHA256 endpoint.");
+
+        ServerPlatform serverPlatform = ServerPlatform.valueOf(platformName);
+        String Sha256 = null;
+        switch (serverPlatform) {
+            case spigot -> Sha256 = new Root().downloads.spigot.sha256;
+            case bungeecord -> Sha256 = new Root().downloads.bungeecord.sha256;
+            case velocity -> Sha256 = new Root().downloads.velocity.sha256;
+        }
+
+        File file = new File(outputDirectory.toUri());
+        ByteSource byteSource = com.google.common.io.Files.asByteSource(file);
+        HashCode hc = byteSource.hash(Hashing.sha256());
+        String checksum = hc.toString();
+
+        if (Sha256 == null) {
+            return false;
+        }
+
+        if (Sha256.equals(checksum)) {
+            logger.debug("Checksum matches!");
+            return true;
+        } else {
+            if (file.delete()) {
+                logger.info("Deleted the defective build: " + file.getName());
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private enum ServerPlatform {
+        spigot,
+        bungeecord,
+        velocity
     }
 }
+
+
 

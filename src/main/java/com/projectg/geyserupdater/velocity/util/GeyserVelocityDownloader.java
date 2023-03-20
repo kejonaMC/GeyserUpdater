@@ -1,8 +1,8 @@
 package com.projectg.geyserupdater.velocity.util;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.velocity.VelocityUpdater;
 
 import com.velocitypowered.api.proxy.Player;
@@ -18,6 +18,7 @@ public class GeyserVelocityDownloader {
     private static VelocityUpdater plugin;
     private static ProxyServer server;
     private static UpdaterLogger logger;
+    private static final String platformName = "velocity";
 
     /**
      * Download the latest build of Geyser from Jenkins CI for the currently used branch.
@@ -63,17 +64,10 @@ public class GeyserVelocityDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl;
-        try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/velocity/build/libs/Geyser-Velocity.jar";
-        } catch (IOException e) {
-            logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
-            e.printStackTrace();
-            return false;
-        }
+        String fileUrl = Constants.GEYSER_DOWNLOAD_LINK + platformName;
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar";
         try {
-            FileUtils.downloadFile(fileUrl, outputPath);
+            FileUtils.downloadFile(fileUrl, outputPath, platformName);
         } catch (IOException e) {
             logger.error("Failed to download the newest build of Geyser");
             e.printStackTrace();
