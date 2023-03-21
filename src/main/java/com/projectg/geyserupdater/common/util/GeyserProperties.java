@@ -3,12 +3,8 @@ package com.projectg.geyserupdater.common.util;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.pojo.Root;
 import org.geysermc.geyser.GeyserImpl;
-import org.geysermc.geyser.util.WebUtils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 public class GeyserProperties {
 

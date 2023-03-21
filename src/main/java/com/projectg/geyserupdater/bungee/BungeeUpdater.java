@@ -16,7 +16,6 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import org.geysermc.geyser.util.WebUtils;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.FileInputStream;

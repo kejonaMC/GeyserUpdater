@@ -20,7 +20,6 @@ import com.moandjiezana.toml.Toml;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.geyser.util.WebUtils;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 
 import com.velocitypowered.api.event.PostOrder;
