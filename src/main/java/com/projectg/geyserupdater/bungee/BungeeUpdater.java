@@ -5,15 +5,13 @@ import com.projectg.geyserupdater.bungee.command.GeyserUpdateCommand;
 import com.projectg.geyserupdater.bungee.listeners.BungeeJoinListener;
 import com.projectg.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.projectg.geyserupdater.bungee.util.bstats.Metrics;
+import com.projectg.geyserupdater.common.config.Configurate;
 import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.pojo.Root;
 import com.projectg.geyserupdater.common.util.*;
 
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 import org.geysermc.geyser.util.WebUtils;
 import org.json.JSONObject;
 
@@ -29,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public final class BungeeUpdater extends Plugin {
 
     private static BungeeUpdater plugin;
-    private Configuration configuration;
+    private Configurate config;
     private UpdaterLogger logger;
     private static Root root;
 
@@ -39,8 +37,14 @@ public final class BungeeUpdater extends Plugin {
         logger = new JavaUtilUpdaterLogger(getLogger());
         new Metrics(this, 10203);
 
-        this.loadConfig();
-        if (getConfig().getBoolean("Enable-Debug", false)) {
+        try {
+            config = Configurate.configuration(this.getDataFolder().toPath());
+        } catch (IOException e) {
+            UpdaterLogger.getLogger().error("Could not create config.yml! " + e.getMessage());
+            onDisable();
+        }
+
+        if (config.getEnableDebug()) {
             UpdaterLogger.getLogger().info("Trying to enable debug logging.");
             UpdaterLogger.getLogger().enableDebug();
         }
@@ -62,7 +66,7 @@ public final class BungeeUpdater extends Plugin {
         getProxy().getPluginManager().registerListener(this, new BungeeJoinListener());
 
         // Make startup script
-        if (configuration.getBoolean("Auto-Script-Generating")) {
+        if (config.getAutoScriptGenerating()) {
             try {
                 // Tell the createScript method that a loop is necessary because bungee has no restart system.
                 ScriptCreator.createRestartScript(true);
@@ -71,7 +75,7 @@ public final class BungeeUpdater extends Plugin {
             }
         }
         // Auto update Geyser if enabled
-        if (configuration.getBoolean("Auto-Update-Geyser")) {
+        if (config.getAutoUpdateGeyser()) {
             scheduleAutoUpdate();
         }
         // Check if downloaded Geyser file exists periodically
@@ -112,22 +116,11 @@ public final class BungeeUpdater extends Plugin {
     }
 
     /**
-     * Load GeyserUpdater's config, create it if it doesn't exist
-     */
-    public void loadConfig() {
-        try {
-            configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(Config.startConfig(this, "config.yml"));
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    /**
      * Check the config version of GeyserUpdater
      */
     public void checkConfigVersion(){
         //Change version number only when editing config.yml!
-         if (configuration.getInt("Config-Version", 0) != 2){
+         if (config.getConfigVersion() != 2){
             logger.error("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
          }
     }
@@ -171,7 +164,7 @@ public final class BungeeUpdater extends Plugin {
                 logger.error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
                 e.printStackTrace();
             }
-        }, 1, getConfig().getLong("Auto-Update-Interval", 24L) * 60, TimeUnit.MINUTES);
+        }, 1, config.getAutoUpdateInterval() * 60, TimeUnit.MINUTES);
     }
 
     /**
@@ -214,7 +207,7 @@ public final class BungeeUpdater extends Plugin {
         return plugin;
     }
     public static Root getRoot() { return root; }
-    public Configuration getConfig() {
-        return configuration;
+    public Configurate getConfig() {
+        return config;
     }
 }

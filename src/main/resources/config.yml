@@ -1,8 +1,7 @@
 # GeyserUpdater
-# Made by Jens & YHDiamond
 
-# NOTICE: Please read the README on our github page for full information regarding these options!
-# https://github.com/ProjectG-Plugins/GeyserUpdater
+# NOTICE: Please read the README on our GitHub page for full information regarding these options!
+# https://github.com/kejonaMC/GeyserUpdater
 
 # If enabled, GeyserUpdater will check for new Geyser builds on server start, and on the interval specified by Auto-Update-Interval. If a new build exists, it will be downloaded.
 Auto-Update-Geyser: false

@@ -1,6 +1,7 @@
 package com.projectg.geyserupdater.velocity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.projectg.geyserupdater.common.config.Configurate;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.pojo.Root;
 import com.projectg.geyserupdater.common.util.Constants;
@@ -14,8 +15,6 @@ import com.projectg.geyserupdater.velocity.util.GeyserVelocityDownloader;
 import com.projectg.geyserupdater.velocity.util.bstats.Metrics;
 
 import com.google.inject.Inject;
-
-import com.moandjiezana.toml.Toml;
 
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.geyser.util.WebUtils;
@@ -35,7 +34,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -49,7 +47,7 @@ public class VelocityUpdater {
     private final ProxyServer server;
     private final Logger baseLogger;
     private final Path dataDirectory;
-    private final Toml config;
+    private Configurate config;
     private final Metrics.Factory metricsFactory;
     private static Root root;
 
@@ -59,7 +57,6 @@ public class VelocityUpdater {
         this.server  = server;
         this.baseLogger = baseLogger;
         this.dataDirectory = folder;
-        this.config = loadConfig(dataDirectory);
         this.metricsFactory = metricsFactory;
     }
 
@@ -68,7 +65,13 @@ public class VelocityUpdater {
         metricsFactory.make(this, 10673);
         new Slf4jUpdaterLogger(baseLogger);
 
-        if (getConfig().getBoolean("Enable-Debug", false)) {
+        try {
+            config = Configurate.configuration(dataDirectory);
+        } catch (IOException e) {
+            UpdaterLogger.getLogger().error("Could not create config.yml! " + e.getMessage());
+        }
+
+        if (config.getEnableDebug()) {
             UpdaterLogger.getLogger().info("Trying to enable debug logging.");
             UpdaterLogger.getLogger().enableDebug();
         }
@@ -90,7 +93,7 @@ public class VelocityUpdater {
         server.getEventManager().register(this, new VelocityJoinListener());
 
         // Make startup script if enabled
-        if (config.getBoolean("Auto-Script-Generating")) {
+        if (config.getAutoScriptGenerating()) {
             try {
                 ScriptCreator.createRestartScript(true);
             } catch (IOException e) {
@@ -98,7 +101,7 @@ public class VelocityUpdater {
             }
         }
         // Auto update Geyser if enabled in the config
-        if (config.getBoolean("Auto-Update-Geyser")) {
+        if (config.getAutoUpdateGeyser()) {
             scheduleAutoUpdate();
         }
         // Check if downloaded Geyser file exists periodically
@@ -142,39 +145,11 @@ public class VelocityUpdater {
     }
 
     /**
-     * Load GeyserUpdater's config
-     *
-     * @param path The config's directory
-     * @return The configuration
-     */
-    private Toml loadConfig(Path path) {
-        File folder = path.toFile();
-        File file = new File(folder, "config.toml");
-
-        if (!file.exists()) {
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
-            }
-            try (InputStream input = getClass().getResourceAsStream("/" + file.getName())) {
-                if (input != null) {
-                    Files.copy(input, file.toPath());
-                } else {
-                    file.createNewFile();
-                }
-            } catch (IOException exception) {
-                exception.printStackTrace();
-                return null;
-            }
-        }
-        return new Toml().read(file);
-    }
-
-    /**
      * Check the config version of GeyserUpdater
      */
     public void checkConfigVersion() {
         //Change version number only when editing config.yml!
-        if (getConfig().getLong("Config-Version", 0L).compareTo(2L) != 0) {
+        if (config.getConfigVersion() != 2) {
             UpdaterLogger.getLogger().warn("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
         }
     }
@@ -201,7 +176,7 @@ public class VelocityUpdater {
                     }
                 })
                 .delay(1L, TimeUnit.MINUTES)
-                .repeat(getConfig().getLong("Auto-Update-Interval", 24L), TimeUnit.HOURS)
+                .repeat(config.getAutoUpdateInterval(), TimeUnit.HOURS)
                 .schedule();
     }
 
@@ -252,7 +227,7 @@ public class VelocityUpdater {
     public Path getDataDirectory() {
         return dataDirectory;
     }
-    public Toml getConfig() {
+    public Configurate getConfig() {
         return config;
     }
 
