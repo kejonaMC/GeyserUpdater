@@ -3,8 +3,10 @@ package com.projectg.geyserupdater.common.util;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
+import com.projectg.geyserupdater.bungee.BungeeUpdater;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
-import com.projectg.geyserupdater.common.pojo.Root;
+import com.projectg.geyserupdater.spigot.SpigotUpdater;
+import com.projectg.geyserupdater.velocity.VelocityUpdater;
 
 import java.io.*;
 import java.net.URL;
@@ -89,31 +91,30 @@ public class FileUtils {
         os.close();
 
         // Checking file checksum
-        logger.debug("Checking if the file SHA256 is the same as the SHA256 endpoint.");
-
         ServerPlatform serverPlatform = ServerPlatform.valueOf(platformName);
         String Sha256 = null;
         switch (serverPlatform) {
-            case spigot -> Sha256 = new Root().downloads.spigot.sha256;
-            case bungeecord -> Sha256 = new Root().downloads.bungeecord.sha256;
-            case velocity -> Sha256 = new Root().downloads.velocity.sha256;
+            case spigot -> Sha256 = SpigotUpdater.getRoot().downloads.spigot.sha256;
+            case bungeecord -> Sha256 = BungeeUpdater.getRoot().downloads.bungeecord.sha256;
+            case velocity -> Sha256 = VelocityUpdater.getRoot().downloads.velocity.sha256;
         }
 
-        File file = new File(outputDirectory.toUri());
+        File file = new File(outputPath);
         ByteSource byteSource = com.google.common.io.Files.asByteSource(file);
         HashCode hc = byteSource.hash(Hashing.sha256());
         String checksum = hc.toString();
 
         if (Sha256 == null) {
+            logger.error("SHA256 returned a null");
             return false;
         }
 
         if (Sha256.equals(checksum)) {
-            logger.debug("Checksum matches!");
+            logger.debug("SHA256 Checksum matches!");
             return true;
         } else {
             if (file.delete()) {
-                logger.info("Deleted the defective build: " + file.getName());
+                logger.info("Please report this to KejonaMC Staff, SHA256 did not match, deleted the defective build: " + file.getName());
                 return false;
             }
         }

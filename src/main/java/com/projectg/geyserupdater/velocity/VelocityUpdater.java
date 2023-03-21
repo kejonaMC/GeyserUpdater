@@ -1,6 +1,9 @@
 package com.projectg.geyserupdater.velocity;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.pojo.Root;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.common.util.ScriptCreator;
@@ -15,6 +18,9 @@ import com.google.inject.Inject;
 import com.moandjiezana.toml.Toml;
 
 import org.geysermc.connector.GeyserConnector;
+import org.geysermc.geyser.util.WebUtils;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 
 import com.velocitypowered.api.event.PostOrder;
@@ -46,6 +52,7 @@ public class VelocityUpdater {
     private final Path dataDirectory;
     private final Toml config;
     private final Metrics.Factory metricsFactory;
+    private static Root root;
 
     @Inject
     public VelocityUpdater(ProxyServer server, Logger baseLogger, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
@@ -69,6 +76,14 @@ public class VelocityUpdater {
 
         checkConfigVersion();
         // todo: meta version checking
+
+        try {
+            org.json.JSONObject json = new JSONObject(WebUtils.getBody(Constants.GEYSER_BASE_URL + Constants.GEYSER_LATEST_MASTER_ENDPOINT));
+            ObjectMapper om = new ObjectMapper();
+            root = om.readValue(json.toString(), Root.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         // Register our only command
         server.getCommandManager().register("geyserupdate", new GeyserUpdateCommand());
@@ -231,6 +246,7 @@ public class VelocityUpdater {
     public static VelocityUpdater getPlugin() {
         return plugin;
     }
+    public static Root getRoot() { return root; }
     public ProxyServer getProxyServer() {
         return server;
     }
@@ -240,6 +256,7 @@ public class VelocityUpdater {
     public Toml getConfig() {
         return config;
     }
+
 }
 
 

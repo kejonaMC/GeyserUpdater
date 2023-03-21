@@ -1,7 +1,10 @@
 package com.projectg.geyserupdater.spigot;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.pojo.Root;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.spigot.command.GeyserUpdateCommand;
@@ -17,6 +20,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.geysermc.geyser.util.WebUtils;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +29,7 @@ import java.util.Objects;
 
 public class SpigotUpdater extends JavaPlugin {
     private static SpigotUpdater plugin;
+    private static Root root;
 
     @Override
     public void onEnable() {
@@ -40,6 +46,14 @@ public class SpigotUpdater extends JavaPlugin {
         checkConfigVersion();
         // Check our version
         checkUpdaterVersion();
+
+        try {
+            JSONObject json = new JSONObject(WebUtils.getBody(Constants.GEYSER_BASE_URL + Constants.GEYSER_LATEST_MASTER_ENDPOINT));
+            ObjectMapper om = new ObjectMapper();
+            root = om.readValue(json.toString(), Root.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         Objects.requireNonNull(getCommand("geyserupdate")).setExecutor(new GeyserUpdateCommand());
         getCommand("geyserupdate").setPermission("gupdater.geyserupdate");
@@ -150,4 +164,5 @@ public class SpigotUpdater extends JavaPlugin {
     public static SpigotUpdater getPlugin() {
         return plugin;
     }
+    public static Root getRoot() { return root; }
 }

@@ -1,20 +1,22 @@
 package com.projectg.geyserupdater.bungee;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectg.geyserupdater.bungee.command.GeyserUpdateCommand;
 import com.projectg.geyserupdater.bungee.listeners.BungeeJoinListener;
 import com.projectg.geyserupdater.bungee.util.GeyserBungeeDownloader;
 import com.projectg.geyserupdater.bungee.util.bstats.Metrics;
 import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
-import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
-import com.projectg.geyserupdater.common.util.ScriptCreator;
+import com.projectg.geyserupdater.common.pojo.Root;
+import com.projectg.geyserupdater.common.util.*;
 
-import com.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import org.geysermc.geyser.util.WebUtils;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +32,7 @@ public final class BungeeUpdater extends Plugin {
     private static BungeeUpdater plugin;
     private Configuration configuration;
     private UpdaterLogger logger;
+    private static Root root;
 
     @Override
     public void onEnable() {
@@ -46,6 +49,14 @@ public final class BungeeUpdater extends Plugin {
         this.checkConfigVersion();
         // Check GeyserUpdater version
         this.checkUpdaterVersion();
+
+        try {
+            org.json.JSONObject json = new JSONObject(WebUtils.getBody(Constants.GEYSER_BASE_URL + Constants.GEYSER_LATEST_MASTER_ENDPOINT));
+            ObjectMapper om = new ObjectMapper();
+            root = om.readValue(json.toString(), Root.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         this.getProxy().getPluginManager().registerCommand(this, new GeyserUpdateCommand());
         // Player alert if a restart is required when they join
@@ -203,6 +214,7 @@ public final class BungeeUpdater extends Plugin {
     public static BungeeUpdater getPlugin() {
         return plugin;
     }
+    public static Root getRoot() { return root; }
     public Configuration getConfig() {
         return configuration;
     }

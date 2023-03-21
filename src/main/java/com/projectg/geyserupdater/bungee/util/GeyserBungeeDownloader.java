@@ -59,13 +59,12 @@ public class GeyserBungeeDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl = Constants.GEYSER_DOWNLOAD_LINK + platformName;
+        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + platformName;
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar";
         try {
             FileUtils.downloadFile(fileUrl, outputPath, platformName);
         } catch (IOException e) {
-            logger.error("Failed to download the newest build of Geyser");
-            e.printStackTrace();
+            logger.error("Failed to download the newest build of Geyser" + e.getMessage());
             return false;
         }
 
