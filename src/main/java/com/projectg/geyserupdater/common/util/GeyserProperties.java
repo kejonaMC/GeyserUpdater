@@ -22,8 +22,6 @@ public class GeyserProperties {
         // getLatestGeyserBuildNumberFromDownloadPage(getGeyserGitPropertiesValue("git.branch"));
         int downloadPageBuildNumber = getLatestGeyserBuildNumberFromDownloadPage();
         int localBuildNumber = Integer.parseInt(getGeyserGitPropertiesValue("git.build.number"));
-        System.out.println("buildnmr from download page api: " + downloadPageBuildNumber);
-        System.out.println("buildnmr from gitProperties: " + localBuildNumber);
         // Compare build numbers.
         // We treat higher build numbers as "out of date" here because Geyser's build numbers have been (accidentally) reset in the past.
         // Self-compiled builds of Geyser simply do not have a `git.build.number` value, so it is /very/ unlikely that a user will ever have a Git build number higher than upstream anyway.

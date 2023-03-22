@@ -1,16 +1,16 @@
-# GeyserUpdater
-
 # NOTICE: Please read the README on our GitHub page for full information regarding these options!
 # https://github.com/kejonaMC/GeyserUpdater
 
 # If enabled, GeyserUpdater will check for new Geyser builds on server start, and on the interval specified by Auto-Update-Interval. If a new build exists, it will be downloaded.
 Auto-Update-Geyser: false
+
 # The interval in hours between each auto update check.
 Auto-Update-Interval: 24
 
 # If enabled, GeyserUpdater will attempt to restart the server 10 seconds after a new version of Geyser has been successfully downloaded.
 # If you aren't using a hosting provider or a server wrapper, you will need a restart script.
 Auto-Restart-Server: false
+
 # When enabled, GeyserUpdater will automatically generate a restart script for you. If you are using CraftBukkit or a proxy
 # you will need to use the generated script to start your server! If you are using a hosting provider or a server wrapper you probably don't need this.
 Auto-Script-Generating: false
