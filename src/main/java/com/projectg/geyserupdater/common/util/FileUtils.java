@@ -1,19 +1,19 @@
 package com.projectg.geyserupdater.common.util;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+import com.google.common.io.ByteSource;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
-import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileUtils {
-    // TODO: this whole cached thing only works if you're using checkFile for one file...
 
     /**
      * Epoch time of that last occurrence that {@link #checkFile(String, boolean)} directly checked a file. Returns a value of 0 if the check file method has never been called.
@@ -58,33 +58,51 @@ public class FileUtils {
      * @param fileURL the url of the file
      * @param outputPath the path of the output file to write to
      */
-    public static void downloadFile(String fileURL, String outputPath) throws IOException {
-        // TODO: better download code?
+    public static void downloadFile(String fileURL, String outputPath, String platformName) throws IOException {
+        UpdaterLogger logger = UpdaterLogger.getLogger();
+        logger.debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
 
-        UpdaterLogger.getLogger().debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
+        // TODO: this whole cached thing only works if you're using checkFile for one file...
 
         Path outputDirectory = Paths.get(outputPath).getParent();
         Files.createDirectories(outputDirectory);
-
-        OutputStream os;
-        InputStream is;
-        // create a url object
+        // Download Jar file
         URL url = new URL(fileURL);
-        // connection to the file
-        URLConnection connection = url.openConnection();
-        // get input stream to the file
-        is = connection.getInputStream();
-        // get output stream to download file
-        os = new FileOutputStream(outputPath);
-        final byte[] b = new byte[2048];
-        int length;
-        // read from input stream and write to output stream
-        while ((length = is.read(b)) != -1) {
-            os.write(b, 0, length);
+        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+        FileOutputStream fos = new FileOutputStream(outputPath);
+        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        fos.close();
+        rbc.close();
+        // Checking file checksum
+        ServerPlatform serverPlatform = ServerPlatform.valueOf(platformName);
+        String Sha256 = null;
+        switch (serverPlatform) {
+            case spigot -> Sha256 = new GeyserAPI().endPoints().downloads.spigot.sha256;
+            case bungeecord -> Sha256 = new GeyserAPI().endPoints().downloads.bungeecord.sha256;
+            case velocity -> Sha256 = new GeyserAPI().endPoints().downloads.velocity.sha256;
         }
-        // close streams
-        is.close();
-        os.close();
+        // Manually Hash the files bytecode to match hash from Geyser API
+        File file = new File(outputPath);
+        ByteSource byteSource = com.google.common.io.Files.asByteSource(file);
+        HashCode hc = byteSource.hash(Hashing.sha256());
+        String checksum = hc.toString();
+
+        if (Sha256 != null && Sha256.equals(checksum)) {
+            logger.debug("SHA256 Checksum matches!");
+        } else {
+            // If the checksum failed we delete the broken build.
+            if (file.delete()) {
+                logger.info("Please report this to KejonaMC Staff, SHA256 did not match, deleted the defective build: " + file.getName());
+            }
+        }
+    }
+
+    private enum ServerPlatform {
+        spigot,
+        bungeecord,
+        velocity
     }
 }
+
+
 

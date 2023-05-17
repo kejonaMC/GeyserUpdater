@@ -1,5 +1,6 @@
 package com.projectg.geyserupdater.spigot;
 
+import com.projectg.geyserupdater.common.config.Configurate;
 import com.projectg.geyserupdater.common.logger.JavaUtilUpdaterLogger;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.FileUtils;
@@ -12,18 +13,15 @@ import com.projectg.geyserupdater.common.util.SpigotResourceUpdateChecker;
 import com.projectg.geyserupdater.spigot.util.bstats.Metrics;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
 public class SpigotUpdater extends JavaPlugin {
     private static SpigotUpdater plugin;
+    private static Configurate config = null;
 
     @Override
     public void onEnable() {
@@ -31,8 +29,14 @@ public class SpigotUpdater extends JavaPlugin {
         new JavaUtilUpdaterLogger(getLogger());
         new Metrics(this, 10202);
 
-        loadConfig();
-        if (getConfig().getBoolean("Enable-Debug", false)) {
+        try {
+            config = Configurate.configuration(this.getDataFolder().toPath());
+        } catch (IOException e) {
+            UpdaterLogger.getLogger().error("Could not create config.yml! " + e.getMessage());
+            onDisable();
+        }
+
+        if (config.getEnableDebug()) {
             UpdaterLogger.getLogger().info("Trying to enable debug logging.");
             UpdaterLogger.getLogger().enableDebug();
         }
@@ -48,7 +52,7 @@ public class SpigotUpdater extends JavaPlugin {
 
         // Check if a restart script already exists
         // We create one if it doesn't
-        if (getConfig().getBoolean("Auto-Script-Generating")) {
+        if (config.getAutoScriptGenerating()) {
             try {
                 CheckSpigotRestart.checkYml();
             } catch (Exception e) {
@@ -56,7 +60,7 @@ public class SpigotUpdater extends JavaPlugin {
             }
         }
         // If true, start auto updating now and every 24 hours
-        if (getConfig().getBoolean("Auto-Update-Geyser")) {
+        if (config.getAutoUpdateGeyser()) {
             scheduleAutoUpdate();
         }
         // Enable File Checking here. delay of 30 minutes and period of 12 hours (given in ticks)
@@ -72,28 +76,11 @@ public class SpigotUpdater extends JavaPlugin {
     }
 
     /**
-     * Load GeyserUpdater's config, create it if it doesn't exist
-     */
-    private void loadConfig() {
-        File configFile = new File(getDataFolder(), "config.yml");
-        if (!configFile.exists()) {
-            configFile.getParentFile().mkdirs();
-            saveResource("config.yml", false);
-        }
-        FileConfiguration config = new YamlConfiguration();
-        try {
-            config.load(configFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Check the config version of GeyserUpdater
      */
     public void checkConfigVersion() {
         //Change version number only when editing config.yml!
-        if (getConfig().getInt("Config-Version", 0) != 2) {
+        if (config.getConfigVersion() != 2) {
             UpdaterLogger.getLogger().warn("Your copy of config.yml is outdated. Please delete it and let a fresh copy of config.yml be regenerated!");
         }
     }
@@ -144,7 +131,7 @@ public class SpigotUpdater extends JavaPlugin {
                 }
                 // Auto-Update-Interval is in hours. We convert it into ticks
             }
-        }.runTaskTimer(this, 60 * 20, getConfig().getLong("Auto-Update-Interval", 24L) * 60 * 60 * 20);
+        }.runTaskTimer(this, 60 * 20, config.getAutoUpdateInterval() * 60 * 60 * 20);
     }
 
     public static SpigotUpdater getPlugin() {

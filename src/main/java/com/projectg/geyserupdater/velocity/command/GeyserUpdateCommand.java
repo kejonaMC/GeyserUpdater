@@ -1,6 +1,6 @@
 package com.projectg.geyserupdater.velocity.command;
 
-import com.projectg.geyserupdater.common.Messages;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.velocity.util.GeyserVelocityDownloader;
 
@@ -18,16 +18,16 @@ public class GeyserUpdateCommand implements RawCommand {
         CommandSource source = invocation.source();
 
         try {
-            source.sendMessage(Component.text(Messages.Command.CHECK_START));
+            source.sendMessage(Component.text(Constants.CHECK_START));
             boolean isLatest = GeyserProperties.isLatestBuild();
             if (isLatest) {
-                source.sendMessage(Component.text(Messages.Command.LATEST));
+                source.sendMessage(Component.text(Constants.LATEST));
             } else {
-                source.sendMessage(Component.text(Messages.Command.OUTDATED));
+                source.sendMessage(Component.text(Constants.OUTDATED));
                 GeyserVelocityDownloader.updateGeyser();
             }
         } catch (IOException e) {
-            source.sendMessage(Component.text(Messages.Command.FAIL_CHECK));
+            source.sendMessage(Component.text(Constants.FAIL_CHECK));
             e.printStackTrace();
         }
     }

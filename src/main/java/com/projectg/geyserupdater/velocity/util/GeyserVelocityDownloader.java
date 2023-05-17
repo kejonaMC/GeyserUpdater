@@ -1,8 +1,8 @@
 package com.projectg.geyserupdater.velocity.util;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.velocity.VelocityUpdater;
 
 import com.velocitypowered.api.proxy.Player;
@@ -18,6 +18,7 @@ public class GeyserVelocityDownloader {
     private static VelocityUpdater plugin;
     private static ProxyServer server;
     private static UpdaterLogger logger;
+    private static final String platformName = "velocity";
 
     /**
      * Download the latest build of Geyser from Jenkins CI for the currently used branch.
@@ -42,7 +43,7 @@ public class GeyserVelocityDownloader {
                         player.sendMessage(Component.text(successMsg).color(TextColor.fromHexString("55FF55")));
                     }
                 }
-                if (plugin.getConfig().getBoolean("Auto-Restart-Server")) {
+                if (plugin.getConfig().getAutoRestartServer()) {
                     restartServer();
                 }
             } else {
@@ -63,20 +64,12 @@ public class GeyserVelocityDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl;
-        try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/velocity/build/libs/Geyser-Velocity.jar";
-        } catch (IOException e) {
-            logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
-            e.printStackTrace();
-            return false;
-        }
+        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + platformName;
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar";
         try {
-            FileUtils.downloadFile(fileUrl, outputPath);
+            FileUtils.downloadFile(fileUrl, outputPath, platformName);
         } catch (IOException e) {
-            logger.error("Failed to download the newest build of Geyser");
-            e.printStackTrace();
+            logger.error("Failed to download the newest build of Geyser" + e.getMessage());
             return false;
         }
 
@@ -93,7 +86,7 @@ public class GeyserVelocityDownloader {
     private static void restartServer() {
         logger.warn("The server will be restarting in 10 seconds!");
         for (Player player : server.getAllPlayers()) {
-            player.sendMessage(Component.text(plugin.getConfig().getString("Restart-Message-Players")));
+            player.sendMessage(Component.text(plugin.getConfig().getRestartMessagePlayers()));
         }
         server.getScheduler()
                 .buildTask(plugin, server::shutdown)
