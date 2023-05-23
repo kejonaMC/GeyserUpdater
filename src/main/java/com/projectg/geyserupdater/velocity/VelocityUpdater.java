@@ -14,7 +14,7 @@ import com.google.inject.Inject;
 
 import com.moandjiezana.toml.Toml;
 
-import org.geysermc.connector.GeyserConnector;
+import org.geysermc.geyser.GeyserImpl;
 import org.slf4j.Logger;
 
 import com.velocitypowered.api.event.PostOrder;
@@ -100,8 +100,8 @@ public class VelocityUpdater {
 
     @Subscribe(order = PostOrder.LAST)
     public void onShutdown(ProxyShutdownEvent event) {
-        // This test isn't ideal but it'll work for now
-        if (!GeyserConnector.getInstance().getBedrockServer().isClosed()) {
+        // todo: listen for GeyserShutdownEvent instead
+        if (!GeyserImpl.getInstance().isShuttingDown()) {
             throw new UnsupportedOperationException("Cannot shutdown GeyserUpdater before Geyser has shutdown! No updates will be applied.");
         }
         try {
