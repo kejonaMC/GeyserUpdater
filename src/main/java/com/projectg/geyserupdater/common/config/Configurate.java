@@ -50,37 +50,73 @@ public class Configurate {
 
     @JsonProperty("Auto-Update-Interval")
     private long autoUpdateInterval;
+
     public long getAutoUpdateInterval() {
         return autoUpdateInterval;
     }
 
     @JsonProperty("Auto-Restart-Server")
     private boolean autoRestartServer;
+
     public boolean getAutoRestartServer() {
         return autoRestartServer;
     }
 
     @JsonProperty("Auto-Script-Generating")
     private boolean autoScriptGenerating;
+
     public boolean getAutoScriptGenerating() {
         return autoScriptGenerating;
     }
 
     @JsonProperty("Restart-Message-Players")
-    private String restartMessagePlayers;
-    public String getRestartMessagePlayers() {
+    private RestartMessagePlayers restartMessagePlayers;
+
+    public RestartMessagePlayers getRestartMessagePlayers() {
         return restartMessagePlayers;
+    }
+
+    @JsonProperty("Restart-Timer")
+    private int restartTimer;
+
+    public int getRestartTimer() {
+        return restartTimer;
     }
 
     @JsonProperty("Enable-Debug")
     private boolean enableDebug;
+
     public boolean getEnableDebug() {
         return enableDebug;
     }
 
     @JsonProperty("Config-Version")
     private int configVersion;
+
     public int getConfigVersion() {
         return configVersion;
+    }
+
+    public static class RestartMessagePlayers {
+        @JsonProperty("Warning-Low")
+        private String warningLow;
+
+        public String getWarningLow() {
+            return warningLow;
+        }
+
+        @JsonProperty("Warning-Middle")
+        private String warningMiddle;
+
+        public String getWarningMiddle() {
+            return warningMiddle;
+        }
+
+        @JsonProperty("Warning-High")
+        private String warningHigh;
+
+        public String getWarningHigh() {
+            return warningHigh;
+        }
     }
 }

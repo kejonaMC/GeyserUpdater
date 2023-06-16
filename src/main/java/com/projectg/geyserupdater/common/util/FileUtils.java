@@ -58,7 +58,7 @@ public class FileUtils {
      * @param fileURL the url of the file
      * @param outputPath the path of the output file to write to
      */
-    public static void downloadFile(String fileURL, String outputPath, String platformName) throws IOException {
+    public static void downloadFile(String fileURL, String outputPath, String platformname) throws IOException {
         UpdaterLogger logger = UpdaterLogger.getLogger();
         logger.debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
 
@@ -74,12 +74,12 @@ public class FileUtils {
         fos.close();
         rbc.close();
         // Checking file checksum
-        ServerPlatform serverPlatform = ServerPlatform.valueOf(platformName);
+        ServerPlatform serverPlatform = ServerPlatform.valueOf(platformname);
         String Sha256 = null;
         switch (serverPlatform) {
-            case spigot -> Sha256 = new GeyserAPI().endPoints().downloads.spigot.sha256;
-            case bungeecord -> Sha256 = new GeyserAPI().endPoints().downloads.bungeecord.sha256;
-            case velocity -> Sha256 = new GeyserAPI().endPoints().downloads.velocity.sha256;
+            case SPIGOT -> Sha256 = new GeyserAPI().endPoints().downloads.spigot.sha256;
+            case BUNGEECORD -> Sha256 = new GeyserAPI().endPoints().downloads.bungeecord.sha256;
+            case VELOCITY -> Sha256 = new GeyserAPI().endPoints().downloads.velocity.sha256;
         }
         // Manually Hash the files bytecode to match hash from Geyser API
         File file = new File(outputPath);
@@ -98,9 +98,9 @@ public class FileUtils {
     }
 
     private enum ServerPlatform {
-        spigot,
-        bungeecord,
-        velocity
+        SPIGOT,
+        BUNGEECORD,
+        VELOCITY
     }
 }
 

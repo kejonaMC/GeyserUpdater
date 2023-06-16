@@ -1,5 +1,6 @@
 package com.projectg.geyserupdater.spigot.util;
 
+import com.projectg.geyserupdater.common.config.Configurate;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
@@ -17,6 +18,7 @@ import java.lang.reflect.Method;
 public class GeyserSpigotDownloader {
     private static SpigotUpdater plugin;
     private static UpdaterLogger logger;
+    private static Configurate config;
     private static final String platformName = "spigot";
 
     /**
@@ -29,7 +31,7 @@ public class GeyserSpigotDownloader {
 
         UpdaterLogger.getLogger().debug("Attempting to download a new build of Geyser.");
 
-        boolean doRestart = plugin.getConfig().getBoolean("Auto-Restart-Server");
+        boolean doRestart = config.getAutoRestartServer();
 
         // Start the process async
         new BukkitRunnable() {
@@ -96,23 +98,59 @@ public class GeyserSpigotDownloader {
      * Attempt to restart the server
      */
     private static void restartServer() {
-        logger.warn("The server will be restarting in 10 seconds!");
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players")));
+        int restartTimer = config.getRestartTimer();
+
+        // Calculate the delay for the restart after all warnings
+        int restartDelay = restartTimer * 20; // Convert restartTimer to ticks (assuming 20 TPS)
+
+        // Send Warning-Low message every minute
+        int warningLowInterval = 60;
+        for (int i = restartTimer; i > warningLowInterval; i -= warningLowInterval) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    String warningLowMessage = ChatColor.translateAlternateColorCodes('&', config.getRestartMessagePlayers().getWarningLow());
+                    logger.warn(warningLowMessage);
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.sendMessage(warningLowMessage);
+                    }
+                }
+            }.runTaskLater(plugin, (restartTimer - i) * 20L);
         }
-        // Attempt to restart the server 10 seconds after the message
+
+        // Send Warning-Middle message during the last minute
+        int warningMiddleInterval = 60;
+        int warningMiddleTimer = restartTimer - warningMiddleInterval;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String warningMiddleMessage = ChatColor.translateAlternateColorCodes('&', config.getRestartMessagePlayers().getWarningMiddle());
+                logger.warn(warningMiddleMessage);
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.sendMessage(warningMiddleMessage);
+                }
+            }
+        }.runTaskLater(plugin, warningMiddleTimer * 20L);
+
+        // Send Warning-High message during the last 10 seconds
+        int warningHighTimer = restartTimer - 10;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String warningHighMessage = ChatColor.translateAlternateColorCodes('&', config.getRestartMessagePlayers().getWarningHigh());
+                logger.warn(warningHighMessage);
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.sendMessage(warningHighMessage);
+                }
+            }
+        }.runTaskLater(plugin, warningHighTimer * 20L);
+
+        // Attempt to restart the server after the specified restart timer
         new BukkitRunnable() {
             @Override
             public void run() {
                 try {
-                    Object spigotServer;
-                    try {
-                        spigotServer = SpigotUpdater.getPlugin().getServer().getClass().getMethod("spigot").invoke(SpigotUpdater.getPlugin().getServer());
-                    } catch (NoSuchMethodException e) {
-                        logger.error("You are not running Spigot (or a fork of it, such as Paper)! GeyserUpdater cannot automatically restart your server!");
-                        e.printStackTrace();
-                        return;
-                    }
+                    Object spigotServer = SpigotUpdater.getPlugin().getServer().getClass().getMethod("spigot").invoke(SpigotUpdater.getPlugin().getServer());
                     Method restartMethod = spigotServer.getClass().getMethod("restart");
                     restartMethod.setAccessible(true);
                     restartMethod.invoke(spigotServer);
@@ -124,6 +162,6 @@ public class GeyserSpigotDownloader {
                     e.printStackTrace();
                 }
             }
-        }.runTaskLater(plugin, 200); // 200 ticks is around 10 seconds (at 20 TPS)
+        }.runTaskLater(plugin, restartDelay);
     }
 }

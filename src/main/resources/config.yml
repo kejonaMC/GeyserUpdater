@@ -15,8 +15,14 @@ Auto-Restart-Server: false
 # you will need to use the generated script to start your server! If you are using a hosting provider or a server wrapper you probably don't need this.
 Auto-Script-Generating: false
 
+# Configure the time to restart server when a new build is downloaded
+Restart-Timer: 10
+
 # Configure the message that is sent to all online players warning them that the server will be restarting in 10 seconds.
-Restart-Message-Players: '&2This server will be restarting in 10 seconds!'
+Restart-Message-Players:
+  Warning-Low: '&2This server will be restarting soon!'
+  Warning-Middle: '&2Server will restart in a minute'
+  Warning-High: '&2This server is now shutting down!'
 
 # Enable debug logging
 Enable-Debug: false

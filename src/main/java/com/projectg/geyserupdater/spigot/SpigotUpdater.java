@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class SpigotUpdater extends JavaPlugin {
     private static SpigotUpdater plugin;
-    private static Configurate config = null;
+    private Configurate config = null;
 
     @Override
     public void onEnable() {
