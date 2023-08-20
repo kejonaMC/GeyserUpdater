@@ -1,8 +1,8 @@
 package com.projectg.geyserupdater.spigot.util;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.spigot.SpigotUpdater;
 
 import org.bukkit.Bukkit;
@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 public class GeyserSpigotDownloader {
     private static SpigotUpdater plugin;
     private static UpdaterLogger logger;
+    private static final String platformName = "spigot";
 
     /**
      * Download the latest build of Geyser from Jenkins CI for the currently used branch.
@@ -73,21 +74,13 @@ public class GeyserSpigotDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl;
-        try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/spigot/build/libs/Geyser-Spigot.jar";
-        } catch (IOException e) {
-            logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
-            e.printStackTrace();
-            return false;
-        }
+        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + platformName;
         // todo: make sure we use the update folder defined in bukkit.yml (it can be changed)
         String outputPath = "plugins/update/Geyser-Spigot.jar";
         try {
-            FileUtils.downloadFile(fileUrl, outputPath);
+            FileUtils.downloadFile(fileUrl, outputPath, platformName);
         } catch (IOException e) {
-            logger.error("Failed to download the newest build of Geyser");
-            e.printStackTrace();
+            logger.error("Failed to download the newest build of Geyser" + e.getMessage());
             return false;
         }
 
