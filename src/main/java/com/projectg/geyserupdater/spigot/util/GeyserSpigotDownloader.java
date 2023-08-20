@@ -17,7 +17,6 @@ import java.lang.reflect.Method;
 public class GeyserSpigotDownloader {
     private static SpigotUpdater plugin;
     private static UpdaterLogger logger;
-    private static final String platformName = "spigot";
 
     /**
      * Download the latest build of Geyser from Jenkins CI for the currently used branch.
@@ -74,11 +73,11 @@ public class GeyserSpigotDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + platformName;
+        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + FileUtils.Platform.SPIGOT.getUrlComponent();
         // todo: make sure we use the update folder defined in bukkit.yml (it can be changed)
         String outputPath = "plugins/update/Geyser-Spigot.jar";
         try {
-            FileUtils.downloadFile(fileUrl, outputPath, platformName);
+            FileUtils.downloadFile(fileUrl, outputPath, FileUtils.Platform.SPIGOT);
         } catch (IOException e) {
             logger.error("Failed to download the newest build of Geyser" + e.getMessage());
             return false;

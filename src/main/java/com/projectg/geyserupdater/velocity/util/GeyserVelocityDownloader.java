@@ -18,7 +18,6 @@ public class GeyserVelocityDownloader {
     private static VelocityUpdater plugin;
     private static ProxyServer server;
     private static UpdaterLogger logger;
-    private static final String platformName = "velocity";
 
     /**
      * Download the latest build of Geyser from Jenkins CI for the currently used branch.
@@ -64,11 +63,11 @@ public class GeyserVelocityDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + platformName;
+        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + FileUtils.Platform.VELOCITY.getUrlComponent();
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar";
 
         try {
-            FileUtils.downloadFile(fileUrl, outputPath, platformName);
+            FileUtils.downloadFile(fileUrl, outputPath, FileUtils.Platform.VELOCITY);
         } catch (IOException e) {
             logger.error("Failed to download the newest build of Geyser" + e.getMessage());
             return false;

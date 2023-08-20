@@ -4,6 +4,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.URL;
@@ -58,7 +59,7 @@ public class FileUtils {
      * @param fileURL the url of the file
      * @param outputPath the path of the output file to write to
      */
-    public static void downloadFile(String fileURL, String outputPath, String platformname) throws IOException {
+    public static void downloadFile(String fileURL, String outputPath, @NotNull Platform platform) throws IOException {
         UpdaterLogger logger = UpdaterLogger.getLogger();
         logger.debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
 
@@ -74,9 +75,8 @@ public class FileUtils {
         fos.close();
         rbc.close();
         // Checking file checksum
-        ServerPlatform serverPlatform = ServerPlatform.valueOf(platformname);
         String sha256 = null;
-        switch (serverPlatform) {
+        switch (platform) {
             case SPIGOT -> sha256 = new GeyserApi().endPoints().downloads.spigot.sha256;
             case BUNGEECORD -> sha256 = new GeyserApi().endPoints().downloads.bungeecord.sha256;
             case VELOCITY -> sha256 = new GeyserApi().endPoints().downloads.velocity.sha256;
@@ -97,9 +97,19 @@ public class FileUtils {
         }
     }
 
-    private enum ServerPlatform {
-        SPIGOT,
-        BUNGEECORD,
-        VELOCITY
+    public enum Platform {
+        SPIGOT("spigot"),
+        BUNGEECORD("bungeecord"),
+        VELOCITY("velocity");
+
+        private final String urlComponent;
+
+        Platform(String urlComponent) {
+            this.urlComponent = urlComponent;
+        }
+
+        public String getUrlComponent() {
+            return urlComponent;
+        }
     }
 }
