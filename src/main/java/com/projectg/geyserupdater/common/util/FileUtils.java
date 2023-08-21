@@ -92,9 +92,11 @@ public class FileUtils {
         if (sha256 != null && sha256.equals(checksum)) {
             logger.debug("SHA256 Checksum matches!");
         } else {
-            // If the checksum failed we delete the broken build.
+            // If the checksum failed we attempt to delete the broken build.
             if (file.delete()) {
                 logger.info("Please report this to KejonaMC Staff, SHA256 did not match, deleted the defective build: " + file.getName());
+            } else {
+                logger.error("Failed to delete the defective build, please delete manually: " + file.getName());
             }
         }
     }
