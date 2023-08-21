@@ -1,61 +1,75 @@
 package com.projectg.geyserupdater.common.json_schema;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 import java.util.ArrayList;
 import java.util.Date;
 
+
+@Getter
+@Accessors(fluent = true)
 public class EndpointResponse {
-    public String project_id;
-    public String project_name;
-    public String version;
-    public int build;
-    public Date time;
-    public String channel;
-    public boolean promoted;
-    public ArrayList<Change> changes;
-    public Downloads downloads;
+    private String project_id;
+    private String project_name;
+    private String version;
+    private int build;
+    private Date time;
+    private String channel;
+    private boolean promoted;
+    private ArrayList<Change> changes;
+    private Downloads downloads;
 
+    @Getter
     public static class Bungeecord {
-        public String name;
-        public String sha256;
+        private String name;
+        private String sha256;
     }
 
+    @Getter
     public static class Change {
-        public String commit;
-        public String summary;
-        public String message;
+        private String commit;
+        private String summary;
+        private String message;
     }
 
+    @Getter
     public static class Downloads {
-        public Bungeecord bungeecord;
-        public Fabric fabric;
-        public Spigot spigot;
-        public Sponge sponge;
-        public Standalone standalone;
-        public Velocity velocity;
+        private Bungeecord bungeecord;
+        private Fabric fabric;
+        private Spigot spigot;
+        private Sponge sponge;
+        private Standalone standalone;
+        private Velocity velocity;
     }
 
+    @Getter
     public static class Fabric {
-        public String name;
-        public String sha256;
+        private String name;
+        private String sha256;
     }
 
+    @Getter
     public static class Spigot {
-        public String name;
-        public String sha256;
+        private String name;
+        private String sha256;
     }
 
+    @Getter
     public static class Sponge {
-        public String name;
-        public String sha256;
+        private String name;
+        private String sha256;
     }
 
+    @Getter
     public static class Standalone {
-        public String name;
-        public String sha256;
+        private String name;
+        private String sha256;
     }
 
+    @Getter
     public static class Velocity {
-        public String name;
-        public String sha256;
+        private String name;
+        private String sha256;
     }
 }

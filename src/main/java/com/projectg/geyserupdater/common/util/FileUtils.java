@@ -79,9 +79,9 @@ public class FileUtils {
         // Checking file checksum
         String sha256 = null;
         switch (platform) {
-            case SPIGOT -> sha256 = new GeyserDownloadApi().data().downloads.spigot.sha256;
-            case BUNGEECORD -> sha256 = new GeyserDownloadApi().data().downloads.bungeecord.sha256;
-            case VELOCITY -> sha256 = new GeyserDownloadApi().data().downloads.velocity.sha256;
+            case SPIGOT -> sha256 = new GeyserDownloadApi().data().downloads().spigot().sha256();
+            case BUNGEECORD -> sha256 = new GeyserDownloadApi().data().downloads().bungeecord().sha256();
+            case VELOCITY -> sha256 = new GeyserDownloadApi().data().downloads().velocity().sha256();
         }
         // Manually Hash the files bytecode to match hash from Geyser API
         File file = new File(outputPath);
