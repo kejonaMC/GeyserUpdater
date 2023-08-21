@@ -9,6 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class GeyserDownloadApi {
+    private static final Gson gson = new Gson();
+
     public EndpointResponse data() {
         try {
             URL url = new URL(Constants.GEYSER_BASE_URL + Constants.GEYSER_LATEST_MASTER_ENDPOINT);
@@ -16,7 +18,6 @@ public class GeyserDownloadApi {
             connection.setRequestMethod("GET");
 
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                Gson gson = new Gson();
                 try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
                     return gson.fromJson(reader, EndpointResponse.class);
                 }
