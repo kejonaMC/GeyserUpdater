@@ -3,6 +3,7 @@ package com.projectg.geyserupdater.velocity.util;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
+import com.projectg.geyserupdater.common.util.ServerPlatform;
 import com.projectg.geyserupdater.velocity.VelocityUpdater;
 
 import com.velocitypowered.api.proxy.Player;
@@ -63,13 +64,14 @@ public class GeyserVelocityDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + FileUtils.Platform.VELOCITY.getUrlComponent();
+        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + ServerPlatform.VELOCITY.getUrlComponent();
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar";
 
         try {
-            FileUtils.downloadFile(fileUrl, outputPath, FileUtils.Platform.VELOCITY);
+            FileUtils.downloadFile(fileUrl, outputPath, ServerPlatform.VELOCITY);
         } catch (IOException e) {
             logger.error("Failed to download the newest build of Geyser" + e.getMessage());
+            logger.debug("Stack trace: " + e);
             return false;
         }
 

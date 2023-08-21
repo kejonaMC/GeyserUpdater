@@ -4,7 +4,6 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.URL;
@@ -59,7 +58,7 @@ public class FileUtils {
      * @param fileURL the url of the file
      * @param outputPath the path of the output file to write to
      */
-    public static void downloadFile(String fileURL, String outputPath, @NotNull Platform platform) throws IOException {
+    public static void downloadFile(String fileURL, String outputPath, ServerPlatform platform) throws IOException {
         UpdaterLogger logger = UpdaterLogger.getLogger();
         logger.debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
 
@@ -69,17 +68,20 @@ public class FileUtils {
         Files.createDirectories(outputDirectory);
         // Download Jar file
         URL url = new URL(fileURL);
-        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-        FileOutputStream fos = new FileOutputStream(outputPath);
-        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-        fos.close();
-        rbc.close();
+        try (
+                ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+                FileOutputStream fos = new FileOutputStream(outputPath)
+        ) {
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // Checking file checksum
         String sha256 = null;
         switch (platform) {
-            case SPIGOT -> sha256 = new GeyserApi().endPoints().downloads.spigot.sha256;
-            case BUNGEECORD -> sha256 = new GeyserApi().endPoints().downloads.bungeecord.sha256;
-            case VELOCITY -> sha256 = new GeyserApi().endPoints().downloads.velocity.sha256;
+            case SPIGOT -> sha256 = new GeyserDownloadApi().data().downloads.spigot.sha256;
+            case BUNGEECORD -> sha256 = new GeyserDownloadApi().data().downloads.bungeecord.sha256;
+            case VELOCITY -> sha256 = new GeyserDownloadApi().data().downloads.velocity.sha256;
         }
         // Manually Hash the files bytecode to match hash from Geyser API
         File file = new File(outputPath);
@@ -94,22 +96,6 @@ public class FileUtils {
             if (file.delete()) {
                 logger.info("Please report this to KejonaMC Staff, SHA256 did not match, deleted the defective build: " + file.getName());
             }
-        }
-    }
-
-    public enum Platform {
-        SPIGOT("spigot"),
-        BUNGEECORD("bungeecord"),
-        VELOCITY("velocity");
-
-        private final String urlComponent;
-
-        Platform(String urlComponent) {
-            this.urlComponent = urlComponent;
-        }
-
-        public String getUrlComponent() {
-            return urlComponent;
         }
     }
 }

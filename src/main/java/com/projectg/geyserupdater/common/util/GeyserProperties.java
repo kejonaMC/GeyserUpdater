@@ -48,6 +48,6 @@ public class GeyserProperties {
      */
     public static int getLatestGeyserBuildNumberFromDownloadPage() {
         UpdaterLogger.getLogger().debug("Running getLatestGeyserBuildNumberFromJenkins()");
-        return new GeyserApi().endPoints().build;
+        return new GeyserDownloadApi().data().build;
     }
 }
