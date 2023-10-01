@@ -84,20 +84,17 @@ public final class BungeeUpdater extends Plugin {
                 try {
                     deleteGeyserJar();
                     break;
-                } catch (IOException ioException) {
-                    logger.warn("An I/O error occurred while attempting to delete an unnecessary Geyser jar! Trying again " + (2 - i) + " more times.");
-                    ioException.printStackTrace();
+                } catch (Exception e) {
+                    logger.warn("An error occurred while attempting to delete an unnecessary Geyser jar! Trying again " + (2 - i) + " more times.");
                     try {
                         Thread.sleep(50);
-                    } catch (InterruptedException interruptException) {
-                        logger.error("Failed to delay an additional attempt!");
-                        interruptException.printStackTrace();
+                    } catch (InterruptedException interruptedException) {
+                        logger.error("Failed to delay an additional attempt!", interruptedException);
                     }
                 }
             }
-        } catch (IOException e) {
-            logger.error("An I/O error occurred while attempting to replace the current Geyser jar with the new one!");
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error("An error occurred while attempting to replace the current Geyser jar with the new one! Giving up.", e);
         }
     }
 
@@ -157,9 +154,8 @@ public final class BungeeUpdater extends Plugin {
                     logger.info("A newer build of Geyser is available! Attempting to download the latest build now...");
                     GeyserBungeeDownloader.updateGeyser();
                 }
-            } catch (IOException e) {
-                logger.error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.", e);
             }
         }, 1, getConfig().getLong("Auto-Update-Interval", 24L) * 60, TimeUnit.MINUTES);
     }

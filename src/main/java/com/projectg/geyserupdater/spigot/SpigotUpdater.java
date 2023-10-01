@@ -108,7 +108,7 @@ public class SpigotUpdater extends JavaPlugin {
             @Override
             public void run() {
                 String latestVersion = SpigotResourceUpdateChecker.getVersion();
-                if (latestVersion == null || latestVersion.length() == 0) {
+                if (latestVersion == null || latestVersion.isEmpty()) {
                     logger.error("Failed to determine the latest GeyserUpdater version!");
                 } else {
                     if (latestVersion.equals(pluginVersion)) {
@@ -138,9 +138,8 @@ public class SpigotUpdater extends JavaPlugin {
                         UpdaterLogger.getLogger().info("A newer build of Geyser is available! Attempting to download the latest build now...");
                         GeyserSpigotDownloader.updateGeyser();
                     }
-                } catch (IOException e) {
-                    UpdaterLogger.getLogger().error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    UpdaterLogger.getLogger().error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.", e);
                 }
                 // Auto-Update-Interval is in hours. We convert it into ticks
             }

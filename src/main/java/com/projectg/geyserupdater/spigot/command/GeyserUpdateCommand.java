@@ -1,7 +1,7 @@
 package com.projectg.geyserupdater.spigot.command;
 
-import com.projectg.geyserupdater.common.Messages;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.GeyserProperties;
 import com.projectg.geyserupdater.spigot.util.GeyserSpigotDownloader;
 
@@ -14,8 +14,6 @@ import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-
 public class GeyserUpdateCommand implements CommandExecutor {
 
     @Override
@@ -24,34 +22,32 @@ public class GeyserUpdateCommand implements CommandExecutor {
 
         if (sender instanceof Player player) {
             if (command.getName().equalsIgnoreCase("geyserupdate") && player.hasPermission("gupdater.geyserupdate")) {
-                sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + Messages.Command.CHECK_START);
+                sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + Constants.CHECK_START);
                 try {
                     boolean isLatest = GeyserProperties.isLatestBuild();
                     if (isLatest) {
-                        sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + Messages.Command.LATEST);
+                        sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + Constants.LATEST);
                     } else {
-                        sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + Messages.Command.OUTDATED);
+                        sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + Constants.OUTDATED);
                         GeyserSpigotDownloader.updateGeyser();
                     }
-                } catch (IOException e) {
-                    sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + Messages.Command.FAIL_CHECK);
-                    logger.error(Messages.Command.FAIL_CHECK);
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + Constants.FAIL_CHECK);
+                    logger.error(Constants.FAIL_CHECK, e);
                 }
             }
         } else if (sender instanceof ConsoleCommandSender) {
-            logger.info(Messages.Command.CHECK_START);
+            logger.info(Constants.CHECK_START);
             try {
                 boolean isLatest = GeyserProperties.isLatestBuild();
                 if (isLatest) {
-                    logger.info(Messages.Command.LATEST);
+                    logger.info(Constants.LATEST);
                 } else {
-                    logger.info(Messages.Command.OUTDATED);
+                    logger.info(Constants.OUTDATED);
                     GeyserSpigotDownloader.updateGeyser();
                 }
-            } catch (IOException e) {
-                logger.error(Messages.Command.FAIL_CHECK);
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error(Constants.FAIL_CHECK, e);
             }
         } else {
             return false;

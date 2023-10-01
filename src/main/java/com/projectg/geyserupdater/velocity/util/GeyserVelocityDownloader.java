@@ -1,8 +1,10 @@
 package com.projectg.geyserupdater.velocity.util;
 
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
+import com.projectg.geyserupdater.common.util.GeyserDownloadApi;
+import com.projectg.geyserupdater.common.util.ServerPlatform;
 import com.projectg.geyserupdater.velocity.VelocityUpdater;
 
 import com.velocitypowered.api.proxy.Player;
@@ -11,7 +13,6 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class GeyserVelocityDownloader {
@@ -63,20 +64,14 @@ public class GeyserVelocityDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl;
-        try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/velocity/build/libs/Geyser-Velocity.jar";
-        } catch (IOException e) {
-            logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
-            e.printStackTrace();
-            return false;
-        }
+        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + ServerPlatform.VELOCITY.getUrlComponent();
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar";
+
         try {
-            FileUtils.downloadFile(fileUrl, outputPath);
-        } catch (IOException e) {
-            logger.error("Failed to download the newest build of Geyser");
-            e.printStackTrace();
+            String expectedHash = new GeyserDownloadApi().data().downloads().velocity().sha256();
+            FileUtils.downloadFile(fileUrl, outputPath, expectedHash);
+        } catch (Exception e) {
+            logger.error("Failed to download the newest build of Geyser", e);
             return false;
         }
 

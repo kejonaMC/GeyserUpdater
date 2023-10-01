@@ -2,14 +2,15 @@ package com.projectg.geyserupdater.bungee.util;
 
 import com.projectg.geyserupdater.bungee.BungeeUpdater;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
-import com.projectg.geyserupdater.common.util.GeyserProperties;
 
+import com.projectg.geyserupdater.common.util.GeyserDownloadApi;
+import com.projectg.geyserupdater.common.util.ServerPlatform;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class GeyserBungeeDownloader {
@@ -58,20 +59,14 @@ public class GeyserBungeeDownloader {
      * @return true if the download was successful, false if not.
      */
     private static boolean downloadGeyser() {
-        String fileUrl;
-        try {
-            fileUrl = "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/" + GeyserProperties.getGeyserGitPropertiesValue("git.branch") + "/lastSuccessfulBuild/artifact/bootstrap/bungeecord/build/libs/Geyser-BungeeCord.jar";
-        } catch (IOException e) {
-            logger.error("Failed to get the current Geyser branch when attempting to download a new build of Geyser!");
-            e.printStackTrace();
-            return false;
-        }
+        String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + ServerPlatform.BUNGEECORD.getUrlComponent();
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar";
         try {
-            FileUtils.downloadFile(fileUrl, outputPath);
-        } catch (IOException e) {
-            logger.error("Failed to download the newest build of Geyser");
-            e.printStackTrace();
+            String expectedHash = new GeyserDownloadApi().data().downloads().bungeecord().sha256();
+            FileUtils.downloadFile(fileUrl, outputPath, expectedHash);
+        } catch (Exception e) {
+            logger.error("Failed to download the newest build of Geyser" + e.getMessage());
+            logger.debug("Stack trace: " + e);
             return false;
         }
 

@@ -36,7 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
-@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.6.1", description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"Jens"},
+@Plugin(id = "geyserupdater", name = "GeyserUpdater", version = "1.6.3", description = "Automatically or manually downloads new builds of Geyser and applies them on server restart.", authors = {"KejonaMC"},
         dependencies = {@Dependency(id = "geyser")})
 public class VelocityUpdater {
 
@@ -110,20 +110,17 @@ public class VelocityUpdater {
                 try {
                     deleteGeyserJar();
                     break;
-                } catch (IOException ioException) {
-                    UpdaterLogger.getLogger().warn("An I/O error occurred while attempting to delete an unnecessary Geyser jar! Trying again " + (2 - i) + " more times.");
-                    ioException.printStackTrace();
+                } catch (Exception e) {
+                    UpdaterLogger.getLogger().warn("An error occurred while attempting to delete an unnecessary Geyser jar! Trying again " + (2 - i) + " more times.");
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException interruptException) {
-                        UpdaterLogger.getLogger().error("Failed to delay an additional attempt!");
-                        interruptException.printStackTrace();
+                        UpdaterLogger.getLogger().error("Failed to delay an additional attempt!", interruptException);
                     }
                 }
             }
         } catch (IOException e) {
-            UpdaterLogger.getLogger().error("An I/O error occurred while attempting to replace the current Geyser jar with the new one!");
-            e.printStackTrace();
+            UpdaterLogger.getLogger().error("An error occurred while attempting to replace the current Geyser jar with the new one! Giving up.", e);
         }
     }
 
@@ -181,9 +178,8 @@ public class VelocityUpdater {
                             UpdaterLogger.getLogger().info("A newer build of Geyser is available! Attempting to download the latest build now...");
                             GeyserVelocityDownloader.updateGeyser();
                         }
-                    } catch (IOException e) {
-                        UpdaterLogger.getLogger().error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.");
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        UpdaterLogger.getLogger().error("Failed to check for updates to Geyser! We were unable to reach the Geyser build server, or your local branch does not exist on it.", e);
                     }
                 })
                 .delay(1L, TimeUnit.MINUTES)

@@ -17,6 +17,16 @@ public interface UpdaterLogger {
     void error(String message);
 
     /**
+     * Logs an error message to the console.
+     *
+     * @param message the message to log to the console
+     */
+    default void error(String message, Throwable throwable) {
+        error(message);
+        throwable.printStackTrace();
+    }
+
+    /**
      * Logs a warning message to the console.
      *
      * @param message the message to log to the console

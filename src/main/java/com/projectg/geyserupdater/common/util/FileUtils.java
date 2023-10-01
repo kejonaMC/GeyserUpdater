@@ -1,19 +1,19 @@
 package com.projectg.geyserupdater.common.util;
 
+import com.google.common.hash.Hashing;
+import com.google.common.io.ByteSource;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
-import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileUtils {
-    // TODO: this whole cached thing only works if you're using checkFile for one file...
 
     /**
      * Epoch time of that last occurrence that {@link #checkFile(String, boolean)} directly checked a file. Returns a value of 0 if the check file method has never been called.
@@ -24,6 +24,8 @@ public class FileUtils {
      * Returns a cached result of {@link #checkFile(String, boolean)}. Returns null if the method has never been called.
      */
     private static boolean cachedResult;
+
+    // todo this is absolutely abhorrent and assumes we are always downloading the same jar
 
     /**
      * Check if a file exists.
@@ -57,34 +59,46 @@ public class FileUtils {
      *
      * @param fileURL the url of the file
      * @param outputPath the path of the output file to write to
+     * @param expectedSha256 the expected sha256 hash of the downloaded file
      */
-    public static void downloadFile(String fileURL, String outputPath) throws IOException {
-        // TODO: better download code?
-
-        UpdaterLogger.getLogger().debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
+    public static void downloadFile(String fileURL, String outputPath, @Nullable String expectedSha256) throws IOException {
+        UpdaterLogger logger = UpdaterLogger.getLogger();
+        logger.debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
 
         Path outputDirectory = Paths.get(outputPath).getParent();
         Files.createDirectories(outputDirectory);
 
-        OutputStream os;
-        InputStream is;
-        // create a url object
+        // Download Jar file
         URL url = new URL(fileURL);
-        // connection to the file
-        URLConnection connection = url.openConnection();
-        // get input stream to the file
-        is = connection.getInputStream();
-        // get output stream to download file
-        os = new FileOutputStream(outputPath);
-        final byte[] b = new byte[2048];
-        int length;
-        // read from input stream and write to output stream
-        while ((length = is.read(b)) != -1) {
-            os.write(b, 0, length);
+        try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+             FileOutputStream fos = new FileOutputStream(outputPath)) {
+
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        } catch (Exception e) {
+            logger.error("Failed to download %s to %s".formatted(fileURL, outputPath), e);
         }
-        // close streams
-        is.close();
-        os.close();
+
+        if (expectedSha256 != null) {
+            // hash the file
+            File file = new File(outputPath);
+            ByteSource byteSource = com.google.common.io.Files.asByteSource(file);
+            String hash = byteSource.hash(Hashing.sha256()).toString();
+
+            // compare
+            if (expectedSha256.equals(hash)) {
+                if (logger.isDebug()) {
+                    logger.debug("Successful checksum for %s of %s".formatted(file, hash));
+                }
+            } else {
+                logger.warn("Expected a hash of %s but got %s".formatted(expectedSha256, hash));
+
+                // If the checksum failed we attempt to delete the broken build.
+                if (file.delete()) {
+                    logger.warn("Downloaded a jar whose checksum was incorrect, deleting: " + file);
+                } else {
+                    logger.error("Failed to delete a defective download, please delete manually: " + file);
+                }
+            }
+        }
     }
 }
-
