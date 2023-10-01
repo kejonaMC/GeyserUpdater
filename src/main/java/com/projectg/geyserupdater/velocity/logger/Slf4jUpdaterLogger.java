@@ -20,6 +20,11 @@ public final class Slf4jUpdaterLogger implements UpdaterLogger {
     }
 
     @Override
+    public void error(String message, Throwable throwable) {
+        logger.error(message, throwable);
+    }
+
+    @Override
     public void warn(String message) {
         logger.warn(message);
     }

@@ -5,12 +5,12 @@ import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
 
+import com.projectg.geyserupdater.common.util.GeyserDownloadApi;
 import com.projectg.geyserupdater.common.util.ServerPlatform;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class GeyserBungeeDownloader {
@@ -62,8 +62,9 @@ public class GeyserBungeeDownloader {
         String fileUrl = Constants.GEYSER_BASE_URL + Constants.GEYSER_DOWNLOAD_LINK + ServerPlatform.BUNGEECORD.getUrlComponent();
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-BungeeCord.jar";
         try {
-            FileUtils.downloadFile(fileUrl, outputPath, ServerPlatform.BUNGEECORD);
-        } catch (IOException e) {
+            String expectedHash = new GeyserDownloadApi().data().downloads().bungeecord().sha256();
+            FileUtils.downloadFile(fileUrl, outputPath, expectedHash);
+        } catch (Exception e) {
             logger.error("Failed to download the newest build of Geyser" + e.getMessage());
             logger.debug("Stack trace: " + e);
             return false;

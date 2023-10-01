@@ -14,8 +14,6 @@ import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-
 public class GeyserUpdateCommand implements CommandExecutor {
 
     @Override
@@ -33,10 +31,9 @@ public class GeyserUpdateCommand implements CommandExecutor {
                         sender.sendMessage(ChatColor.GOLD + "[GeyserUpdater] " + Constants.OUTDATED);
                         GeyserSpigotDownloader.updateGeyser();
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     sender.sendMessage(ChatColor.RED + "[GeyserUpdater] " + Constants.FAIL_CHECK);
-                    logger.error(Constants.FAIL_CHECK);
-                    e.printStackTrace();
+                    logger.error(Constants.FAIL_CHECK, e);
                 }
             }
         } else if (sender instanceof ConsoleCommandSender) {
@@ -49,9 +46,8 @@ public class GeyserUpdateCommand implements CommandExecutor {
                     logger.info(Constants.OUTDATED);
                     GeyserSpigotDownloader.updateGeyser();
                 }
-            } catch (IOException e) {
-                logger.error(Constants.FAIL_CHECK);
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error(Constants.FAIL_CHECK, e);
             }
         } else {
             return false;

@@ -17,7 +17,7 @@ public class GeyserProperties {
      * @return true if local build number equals latest build number on Geyser CI
      * @throws IOException if it fails to fetch either build number
      */
-    public static boolean isLatestBuild() throws IOException {
+    public static boolean isLatestBuild() throws Exception {
         UpdaterLogger.getLogger().debug("Running isLatestBuild()");
         // Removed get branch since current Geyser endpoints do not yet support it
         // getLatestGeyserBuildNumberFromDownloadPage(getGeyserGitPropertiesValue("git.branch"));
@@ -46,7 +46,7 @@ public class GeyserProperties {
      *
      * @return the latest build number from Geyser API
      */
-    public static int getLatestGeyserBuildNumberFromDownloadPage() {
+    public static int getLatestGeyserBuildNumberFromDownloadPage() throws Exception {
         UpdaterLogger.getLogger().debug("Running getLatestGeyserBuildNumberFromJenkins()");
         return new GeyserDownloadApi().data().build();
     }

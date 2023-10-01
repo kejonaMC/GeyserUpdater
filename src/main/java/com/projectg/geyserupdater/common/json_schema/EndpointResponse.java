@@ -3,10 +3,10 @@ package com.projectg.geyserupdater.common.json_schema;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-
+@SuppressWarnings({"UnusedDeclaration"})
 @Getter
 @Accessors(fluent = true)
 public class EndpointResponse {
@@ -17,7 +17,7 @@ public class EndpointResponse {
     private Date time;
     private String channel;
     private boolean promoted;
-    private ArrayList<Change> changes;
+    private List<Change> changes;
     private Downloads downloads;
 
     @Getter

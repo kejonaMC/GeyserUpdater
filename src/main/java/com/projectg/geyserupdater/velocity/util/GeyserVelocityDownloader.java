@@ -3,6 +3,7 @@ package com.projectg.geyserupdater.velocity.util;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
+import com.projectg.geyserupdater.common.util.GeyserDownloadApi;
 import com.projectg.geyserupdater.common.util.ServerPlatform;
 import com.projectg.geyserupdater.velocity.VelocityUpdater;
 
@@ -12,7 +13,6 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class GeyserVelocityDownloader {
@@ -68,10 +68,10 @@ public class GeyserVelocityDownloader {
         String outputPath = "plugins/GeyserUpdater/BuildUpdate/Geyser-Velocity.jar";
 
         try {
-            FileUtils.downloadFile(fileUrl, outputPath, ServerPlatform.VELOCITY);
-        } catch (IOException e) {
-            logger.error("Failed to download the newest build of Geyser" + e.getMessage());
-            logger.debug("Stack trace: " + e);
+            String expectedHash = new GeyserDownloadApi().data().downloads().velocity().sha256();
+            FileUtils.downloadFile(fileUrl, outputPath, expectedHash);
+        } catch (Exception e) {
+            logger.error("Failed to download the newest build of Geyser", e);
             return false;
         }
 

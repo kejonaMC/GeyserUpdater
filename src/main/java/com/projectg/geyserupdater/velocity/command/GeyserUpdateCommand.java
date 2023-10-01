@@ -10,8 +10,6 @@ import com.velocitypowered.api.command.RawCommand;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-
 public class GeyserUpdateCommand implements RawCommand {
 
     @Override
@@ -27,7 +25,7 @@ public class GeyserUpdateCommand implements RawCommand {
                 source.sendMessage(Component.text(Constants.OUTDATED));
                 GeyserVelocityDownloader.updateGeyser();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             source.sendMessage(Component.text(Constants.FAIL_CHECK));
             e.printStackTrace();
         }

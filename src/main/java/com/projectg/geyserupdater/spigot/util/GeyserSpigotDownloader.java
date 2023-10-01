@@ -3,6 +3,7 @@ package com.projectg.geyserupdater.spigot.util;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
 import com.projectg.geyserupdater.common.util.Constants;
 import com.projectg.geyserupdater.common.util.FileUtils;
+import com.projectg.geyserupdater.common.util.GeyserDownloadApi;
 import com.projectg.geyserupdater.common.util.ServerPlatform;
 import com.projectg.geyserupdater.spigot.SpigotUpdater;
 
@@ -11,7 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -78,10 +78,10 @@ public class GeyserSpigotDownloader {
         // todo: make sure we use the update folder defined in bukkit.yml (it can be changed)
         String outputPath = "plugins/update/Geyser-Spigot.jar";
         try {
-            FileUtils.downloadFile(fileUrl, outputPath, ServerPlatform.SPIGOT);
-        } catch (IOException e) {
-            logger.error("Failed to download the newest build of Geyser" + e.getMessage());
-            logger.debug("Stack trace: " + e);
+            String expectedHash = new GeyserDownloadApi().data().downloads().spigot().sha256();
+            FileUtils.downloadFile(fileUrl, outputPath, expectedHash);
+        } catch (Exception e) {
+            logger.error("Failed to download the newest build of Geyser", e);
             return false;
         }
 
@@ -110,19 +110,16 @@ public class GeyserSpigotDownloader {
                     try {
                         spigotServer = SpigotUpdater.getPlugin().getServer().getClass().getMethod("spigot").invoke(SpigotUpdater.getPlugin().getServer());
                     } catch (NoSuchMethodException e) {
-                        logger.error("You are not running Spigot (or a fork of it, such as Paper)! GeyserUpdater cannot automatically restart your server!");
-                        e.printStackTrace();
+                        logger.error("You are not running Spigot (or a fork of it, such as Paper)! GeyserUpdater cannot automatically restart your server!", e);
                         return;
                     }
                     Method restartMethod = spigotServer.getClass().getMethod("restart");
                     restartMethod.setAccessible(true);
                     restartMethod.invoke(spigotServer);
                 } catch (NoSuchMethodException e) {
-                    logger.error("Your server version is too old to be able to be automatically restarted!");
-                    e.printStackTrace();
+                    logger.error("Your server version is too old to be able to be automatically restarted!", e);
                 } catch (InvocationTargetException | IllegalAccessException e) {
-                    logger.error("Failed to restart the server!");
-                    e.printStackTrace();
+                    logger.error("Failed to restart the server!", e);
                 }
             }
         }.runTaskLater(plugin, 200); // 200 ticks is around 10 seconds (at 20 TPS)

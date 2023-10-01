@@ -1,9 +1,9 @@
 package com.projectg.geyserupdater.common.util;
 
-import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
 import com.projectg.geyserupdater.common.logger.UpdaterLogger;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.net.URL;
@@ -24,6 +24,8 @@ public class FileUtils {
      * Returns a cached result of {@link #checkFile(String, boolean)}. Returns null if the method has never been called.
      */
     private static boolean cachedResult;
+
+    // todo this is absolutely abhorrent and assumes we are always downloading the same jar
 
     /**
      * Check if a file exists.
@@ -57,46 +59,45 @@ public class FileUtils {
      *
      * @param fileURL the url of the file
      * @param outputPath the path of the output file to write to
+     * @param expectedSha256 the expected sha256 hash of the downloaded file
      */
-    public static void downloadFile(String fileURL, String outputPath, ServerPlatform platform) throws IOException {
+    public static void downloadFile(String fileURL, String outputPath, @Nullable String expectedSha256) throws IOException {
         UpdaterLogger logger = UpdaterLogger.getLogger();
         logger.debug("Attempting to download a file with URL and output path: " + fileURL + " , " + outputPath);
 
-        // TODO: this whole cached thing only works if you're using checkFile for one file...
-
         Path outputDirectory = Paths.get(outputPath).getParent();
         Files.createDirectories(outputDirectory);
+
         // Download Jar file
         URL url = new URL(fileURL);
-        try (
-                ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-                FileOutputStream fos = new FileOutputStream(outputPath)
-        ) {
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Checking file checksum
-        String sha256 = null;
-        switch (platform) {
-            case SPIGOT -> sha256 = new GeyserDownloadApi().data().downloads().spigot().sha256();
-            case BUNGEECORD -> sha256 = new GeyserDownloadApi().data().downloads().bungeecord().sha256();
-            case VELOCITY -> sha256 = new GeyserDownloadApi().data().downloads().velocity().sha256();
-        }
-        // Manually Hash the files bytecode to match hash from Geyser API
-        File file = new File(outputPath);
-        ByteSource byteSource = com.google.common.io.Files.asByteSource(file);
-        HashCode hc = byteSource.hash(Hashing.sha256());
-        String checksum = hc.toString();
+        try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+             FileOutputStream fos = new FileOutputStream(outputPath)) {
 
-        if (sha256 != null && sha256.equals(checksum)) {
-            logger.debug("SHA256 Checksum matches!");
-        } else {
-            // If the checksum failed we attempt to delete the broken build.
-            if (file.delete()) {
-                logger.info("Please report this to KejonaMC Staff, SHA256 did not match, deleted the defective build: " + file.getName());
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        } catch (Exception e) {
+            logger.error("Failed to download %s to %s".formatted(fileURL, outputPath), e);
+        }
+
+        if (expectedSha256 != null) {
+            // hash the file
+            File file = new File(outputPath);
+            ByteSource byteSource = com.google.common.io.Files.asByteSource(file);
+            String hash = byteSource.hash(Hashing.sha256()).toString();
+
+            // compare
+            if (expectedSha256.equals(hash)) {
+                if (logger.isDebug()) {
+                    logger.debug("Successful checksum for %s of %s".formatted(file, hash));
+                }
             } else {
-                logger.error("Failed to delete the defective build, please delete manually: " + file.getName());
+                logger.warn("Expected a hash of %s but got %s".formatted(expectedSha256, hash));
+
+                // If the checksum failed we attempt to delete the broken build.
+                if (file.delete()) {
+                    logger.warn("Downloaded a jar whose checksum was incorrect, deleting: " + file);
+                } else {
+                    logger.error("Failed to delete a defective download, please delete manually: " + file);
+                }
             }
         }
     }

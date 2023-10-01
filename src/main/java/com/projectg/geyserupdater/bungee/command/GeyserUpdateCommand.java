@@ -11,9 +11,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-import java.io.IOException;
-
-
 public class GeyserUpdateCommand extends Command {
 
     public GeyserUpdateCommand() {
@@ -33,10 +30,9 @@ public class GeyserUpdateCommand extends Command {
                     player.sendMessage(new TextComponent(ChatColor.GOLD + "[GeyserUpdater] " + Constants.OUTDATED));
                     GeyserBungeeDownloader.updateGeyser();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 player.sendMessage(new TextComponent(ChatColor.RED + "[GeyserUpdater] " + Constants.FAIL_CHECK));
-                logger.error(Constants.FAIL_CHECK);
-                e.printStackTrace();
+                logger.error(Constants.FAIL_CHECK, e);
             }
         } else {
             // TODO: filter this against command blocks
@@ -49,9 +45,8 @@ public class GeyserUpdateCommand extends Command {
                     logger.info(Constants.OUTDATED);
                     GeyserBungeeDownloader.updateGeyser();
                 }
-            } catch (IOException e) {
-                logger.error(Constants.FAIL_CHECK);
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error(Constants.FAIL_CHECK, e);
             }
         }
     }
