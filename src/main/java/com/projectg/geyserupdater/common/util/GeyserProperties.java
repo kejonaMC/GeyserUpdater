@@ -38,7 +38,7 @@ public class GeyserProperties {
     public static String getGeyserGitPropertiesValue(String propertyKey) throws IOException {
         UpdaterLogger.getLogger().debug("Running getGeyserGitPropertiesValue()");
         Properties gitProperties = new Properties();
-        gitProperties.load(GeyserImpl.getInstance().getBootstrap().getResource("git.properties"));
+        gitProperties.load(GeyserImpl.getInstance().getBootstrap().getResourceOrNull("git.properties"));
         return gitProperties.getProperty(propertyKey);
     }
 
