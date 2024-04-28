@@ -97,9 +97,10 @@ public class GeyserSpigotDownloader {
      * Attempt to restart the server
      */
     private static void restartServer() {
-        logger.warn("The server will be restarting in 10 seconds!");
+        long restartTimer = plugin.getConfig().getLong("Auto-Restart-Timer");
+        logger.warn("The server will be restarting in %d seconds!".formatted(restartTimer));
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players").formatted(restartTimer)));
         }
         // Attempt to restart the server 10 seconds after the message
         new BukkitRunnable() {
@@ -122,6 +123,6 @@ public class GeyserSpigotDownloader {
                     logger.error("Failed to restart the server!", e);
                 }
             }
-        }.runTaskLater(plugin, 200); // 200 ticks is around 10 seconds (at 20 TPS)
+        }.runTaskLater(plugin, restartTimer * 20); // 200 ticks is around 10 seconds (at 20 TPS)
     }
 }

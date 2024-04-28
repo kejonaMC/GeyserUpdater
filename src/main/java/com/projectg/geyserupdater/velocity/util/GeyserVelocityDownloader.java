@@ -86,13 +86,14 @@ public class GeyserVelocityDownloader {
      * Attempt to restart the server
      */
     private static void restartServer() {
-        logger.warn("The server will be restarting in 10 seconds!");
+        long restartTime = plugin.getConfig().getLong("Auto-Restart-Timer");
+        logger.warn("The server will be restarting in %d seconds!".formatted(restartTime));
         for (Player player : server.getAllPlayers()) {
-            player.sendMessage(Component.text(plugin.getConfig().getString("Restart-Message-Players")));
+            player.sendMessage(Component.text(plugin.getConfig().getString("Restart-Message-Players").formatted(restartTime)));
         }
         server.getScheduler()
                 .buildTask(plugin, server::shutdown)
-                .delay(10L, TimeUnit.SECONDS)
+                .delay(restartTime, TimeUnit.SECONDS)
                 .schedule();
     }
 }
