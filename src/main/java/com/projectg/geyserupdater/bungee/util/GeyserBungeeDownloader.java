@@ -84,8 +84,9 @@ public class GeyserBungeeDownloader {
     private static void restartServer() {
         long restartTime = plugin.getConfig().getLong("Auto-Restart-Timer");
         logger.warn("The server will be restarting in %d seconds!".formatted(restartTime));
+        TextComponent message = new TextComponent(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players").formatted(restartTime)));
         for (ProxiedPlayer player : plugin.getProxy().getPlayers()) {
-            player.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players").formatted(restartTime))));
+            player.sendMessage(message);
         }
         plugin.getProxy().getScheduler().schedule(plugin, () -> plugin.getProxy().stop(), restartTime, TimeUnit.SECONDS);
     }

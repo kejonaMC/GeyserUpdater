@@ -99,8 +99,9 @@ public class GeyserSpigotDownloader {
     private static void restartServer() {
         long restartTimer = plugin.getConfig().getLong("Auto-Restart-Timer");
         logger.warn("The server will be restarting in %d seconds!".formatted(restartTimer));
+        String message = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players").formatted(restartTimer));
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Restart-Message-Players").formatted(restartTimer)));
+            player.sendMessage(message);
         }
         // Attempt to restart the server 10 seconds after the message
         new BukkitRunnable() {

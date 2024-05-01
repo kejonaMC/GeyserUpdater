@@ -11,6 +11,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 
 import java.util.concurrent.TimeUnit;
@@ -88,8 +89,9 @@ public class GeyserVelocityDownloader {
     private static void restartServer() {
         long restartTime = plugin.getConfig().getLong("Auto-Restart-Timer");
         logger.warn("The server will be restarting in %d seconds!".formatted(restartTime));
+        TextComponent message = Component.text(plugin.getConfig().getString("Restart-Message-Players").formatted(restartTime));
         for (Player player : server.getAllPlayers()) {
-            player.sendMessage(Component.text(plugin.getConfig().getString("Restart-Message-Players").formatted(restartTime)));
+            player.sendMessage(message);
         }
         server.getScheduler()
                 .buildTask(plugin, server::shutdown)
