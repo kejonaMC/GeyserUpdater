@@ -124,6 +124,6 @@ public class GeyserSpigotDownloader {
                     logger.error("Failed to restart the server!", e);
                 }
             }
-        }.runTaskLater(plugin, restartTimer * 20); // 200 ticks is around 10 seconds (at 20 TPS)
+        }.runTaskLater(plugin, restartTimer * 20); // 20 ticks per second
     }
 }
