@@ -1,4 +1,3 @@
-[![Build Status](https://ci.kejonamc.dev/job/GeyserUpdater/job/main/badge/icon)](https://ci.kejonamc.dev/job/GeyserUpdater/job/main/)
 [![License](https://img.shields.io/badge/License-GPL-orange)](https://github.com/YHDiamond/GeyserUpdater/blob/main/LICENSE)
 [![bStats Spigot](https://img.shields.io/bstats/servers/10202?color=yellow&label=Spigot%20servers)](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
 [![bStats Bungee](https://img.shields.io/bstats/servers/10203?label=Bungee%20servers)](https://bstats.org/plugin/bungeecord/GeyserUpdater/10203)
@@ -19,7 +18,7 @@ If you'd like, click [here](https://discord.gg/xXzzdAXa2b) to join our Discord s
 
 Please download the plugin from [our Spigot page](https://www.spigotmc.org/resources/geyserupdater.88555/), so we can get an idea of how many people are downloading the plugin.
 
-If you don't want to use the Spigot website, you can download the plugin from [our CI](https://ci.kejonamc.dev/job/GeyserUpdater/job/main), or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
+If you don't want to use the Spigot website, you can download the plugin from [our Github](https://github.com/kejonaMC/GeyserUpdater/releases), or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
 
 ## Installation
 
