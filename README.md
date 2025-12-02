@@ -8,7 +8,7 @@
 
 # GeyserUpdater
 ### GeyserUpdater is a plugin that downloads and applies new builds of Geyser on Spigot/CraftBukkit, BungeeCord, and Velocity either manually or automatically.
-##### Supports Minecraft 1.8 〜 1.19
+##### Supports Minecraft 1.8 〜 1.21
 
 If you'd like, click [here](https://discord.gg/xXzzdAXa2b) to join our Discord server! You can come here to receive support, ask about contributing, get GitHub feeds, or just simply hang out. Please do not ping anyone that doesn't have the "Pingable" role!
 
@@ -16,9 +16,7 @@ If you'd like, click [here](https://discord.gg/xXzzdAXa2b) to join our Discord s
 
 ## Downloading
 
-Please download the plugin from [our Spigot page](https://www.spigotmc.org/resources/geyserupdater.88555/), so we can get an idea of how many people are downloading the plugin.
-
-If you don't want to use the Spigot website, you can download the plugin from [our Github](https://github.com/kejonaMC/GeyserUpdater/releases), or use the actions button in the GitHub bar and download the zip with the GeyserUpdater jar inside.
+If you don't want to use the Spigot website, you can download the plugin from [our GitHub](https://github.com/kejonaMC/GeyserUpdater/releases).
 
 ## Installation
 
@@ -39,7 +37,7 @@ Please note that for BungeeCord and Velocity, if the server is not shut down cle
 ## Configuration
 
 ### `Auto-Update-Geyser`:
-*Default:* `false`  
+*Default:* `false`
 
 If enabled, GeyserUpdater will check for new Geyser builds on server start, and on the interval specified by `Auto-Update-Interval`. If a new build exists, it will be downloaded.
 
@@ -49,29 +47,36 @@ If enabled, GeyserUpdater will check for new Geyser builds on server start, and 
 The interval in hours between each auto update check.
 
 ### `Auto-Restart-Server`:
-*Default:* `false`  
+*Default:* `false`
 
-If enabled, GeyserUpdater will attempt to restart the server 10 seconds after a new version of Geyser has been successfully downloaded. 
+If enabled, GeyserUpdater will attempt to restart the server after a new version of Geyser has been successfully downloaded.
 
 - **Spigot:** Attempts to restart using Spigot's `/restart`. A restart script _must_ be defined in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/) in order for Spigot's restart feature to work properly. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a `systemd` unit (or similar) to run the server, leave the `restart-script` value in spigot.yml blank. Your server should automatically restart without needing a script.
 
-- **BungeeCord/Velocity:** The server will simply stop. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a `systemd` unit (or similar) to run the server, your proxy should automatically restart. If not, you can use a script to *start* the proxy that will make it start again once it has stopped. 
+- **BungeeCord/Velocity:** The server will simply stop. If you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a `systemd` unit (or similar) to run the server, your proxy should automatically restart. If not, you can use a script to *start* the proxy that will make it start again once it has stopped.
 
 ### `Auto-Script-Generating`:
-*Default:* `false`  
+*Default:* `false`
 
 Do not use this if you are using a hosting provider, a [server wrapper](https://minecraftservers.fandom.com/wiki/Server_wrappers), or a `systemd` unit (or similar) to run your server.
 
-When enabled, a restart script named `ServerRestartScript.sh` (macOS, Linux) or `ServerRestartScript.bat` (Windows) will be generated for you. It will attempt to use the same JVM flags that your server started with. Although it should typically work without any issue, it is recommended to verify and modify the generated script to your liking. 
+When enabled, a restart script named `ServerRestartScript.sh` (macOS, Linux) or `ServerRestartScript.bat` (Windows) will be generated for you. It will attempt to use the same JVM flags that your server started with. Although it should typically work without any issue, it is recommended to verify and modify the generated script to your liking.
 
-- **Spigot:** The `restart-script` value in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/) will be automatically set to use the generated restart script. This will allow Spigot's restart feature to work if you have `Auto-Restart-Server` enabled, and if you run `/restart`. If you are running your server on Linux, it is recommended to modify the script so that your server starts in a [screen](https://www.gnu.org/software/screen/) or [tmux](https://github.com/tmux/tmux/wiki) session so that you can attach to the console of the server after it has restarted. 
+- **Spigot:** The `restart-script` value in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/) will be automatically set to use the generated restart script. This will allow Spigot's restart feature to work if you have `Auto-Restart-Server` enabled, and if you run `/restart`. If you are running your server on Linux, it is recommended to modify the script so that your server starts in a [screen](https://www.gnu.org/software/screen/) or [tmux](https://github.com/tmux/tmux/wiki) session so that you can attach to the console of the server after it has restarted.
 
-- **BungeeCord/Velocity:** You must use the generated script to start the proxy. This will make the server restart after it has stopped. 
+- **BungeeCord/Velocity:** You must use the generated script to start the proxy. This will make the server restart after it has stopped.
 
 ### `Restart-Message-Players`:
-*Default:* `'&2This server will be restarting in 10 seconds!'`  
+*Default:* `'&2This server will be restarting in 30 seconds!'`
 
-This is the message that is sent to all players when `Auto-Restart-Server` is going to restart the server in 10 seconds. 
+This is the message that is sent to all players when `Auto-Restart-Server` is going to restart the server in 30 seconds.
+
+### `Restart-Timer`:
+*Default:* `30`
+
+The countdown in seconds before the server restarts.
+
+
 
 ## bStats
 [Spigot stats](https://bstats.org/plugin/bukkit/GeyserUpdater/10202)
@@ -82,42 +87,42 @@ This is the message that is sent to all players when `Auto-Restart-Server` is go
 
 ## Release History
 * 1.6.1
-    * Update for Geyser's resource system refactor (Build #943, commit [763743a](https://github.com/GeyserMC/Geyser/commit/763743a845796e4619ba596b82d4eabb39045448))
+  * Update for Geyser's resource system refactor (Build #943, commit [763743a](https://github.com/GeyserMC/Geyser/commit/763743a845796e4619ba596b82d4eabb39045448))
 * 1.6.0
-    * Update for Geyser 2.0, bump to Java 16 
+  * Update for Geyser 2.0, bump to Java 16
 * 1.5.0
-    * This update breaks existing configurations. Please rename or delete the old one to generate a new configuration.
-    * Add option to automatically check for updates on a custom interval.
-    * Add debug logger config option.
-    * All warn and error log messages are now coloured correctly (if the platform supports it).
+  * This update breaks existing configurations. Please rename or delete the old one to generate a new configuration.
+  * Add option to automatically check for updates on a custom interval.
+  * Add debug logger config option.
+  * All warn and error log messages are now coloured correctly (if the platform supports it).
 * 1.4.0
-    * Any branch of Geyser that is available on their Jenkins CI can now be updated.
-    * Added support for CraftBukkit.
-    * Added support for non-default Bukkit/Spigot world-containers
-    * Important bugfixes, general increase in quality and better documentation.
+  * Any branch of Geyser that is available on their Jenkins CI can now be updated.
+  * Added support for CraftBukkit.
+  * Added support for non-default Bukkit/Spigot world-containers
+  * Important bugfixes, general increase in quality and better documentation.
 * 1.3.0
-    * Added Velocity support.
+  * Added Velocity support.
 * 1.2.0
-    * Added Restart script generating depended on OS, and setting it up on spigot.yml.
-    * Added config version check.
+  * Added Restart script generating depended on OS, and setting it up on spigot.yml.
+  * Added config version check.
 * 1.1.0
-    * Added message if GeyserUpdater has an available update on startup
+  * Added message if GeyserUpdater has an available update on startup
 * 1.0.0
-    * Full release! (No changes but we decided we are ready for it now, we will still update more if we need to)
+  * Full release! (No changes but we decided we are ready for it now, we will still update more if we need to)
 * 0.2.6
-    * Add warning for players in config option
+  * Add warning for players in config option
 * 0.2.5
-    * Added bStats support
+  * Added bStats support
 * 0.2.4
-    * Added auto restart on Spigot/Bungeecord after downloading update.
-    * If you use this build you will need to regenerate config.yml file due to changes!
+  * Added auto restart on Spigot/Bungeecord after downloading update.
+  * If you use this build you will need to regenerate config.yml file due to changes!
 * 0.2.2
-    * Mini-rework > Common classes.
-    * Jenkins CI has been setup.
-    * Pipeline has been added.
+  * Mini-rework > Common classes.
+  * Jenkins CI has been setup.
+  * Pipeline has been added.
 * 0.1.0
-    * Merged Spigot & Bungeecord updater into 1 plugin.
-    * Added maven
+  * Merged Spigot & Bungeecord updater into 1 plugin.
+  * Added maven
 
 
 Special thanks to:
